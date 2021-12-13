@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -18,17 +17,16 @@ public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String POOL_PROPERTY_FILE = "pool.properties";
     private static final String POOL_SIZE_PROPERTY = "size";
-    private static final int DEFAULT_POOL_SIZE = 5;
+    private static final int DEFAULT_POOL_SIZE = 4;
     private static final int POOL_SIZE;
     private static final AtomicBoolean isCreated = new AtomicBoolean(false);
-    private static final Lock lock = new ReentrantLock(true);
+    private static final Lock creationLock = new ReentrantLock(true);
     private static BlockingDeque<ProxyConnection> freeConnections;
     private static BlockingDeque<ProxyConnection> takenConnections;
     private static ConnectionPool instance;
 
     static {
-        Locale locale = new Locale("en", "EN");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(POOL_PROPERTY_FILE, locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(POOL_PROPERTY_FILE);
         String poolSize;
         if (resourceBundle.containsKey(POOL_SIZE_PROPERTY)) {
             poolSize = resourceBundle.getString(POOL_SIZE_PROPERTY);
@@ -61,12 +59,12 @@ public class ConnectionPool {
     public static ConnectionPool getInstance() {
         if (!isCreated.get()) {
             try {
-                lock.lock();
+                creationLock.lock();
                 if (isCreated.compareAndSet(false, true)) {
                     instance = new ConnectionPool();
                 }
             } finally {
-                lock.unlock();
+                creationLock.unlock();
             }
         }
         return instance;

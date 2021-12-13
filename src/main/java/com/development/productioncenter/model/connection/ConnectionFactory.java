@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 class ConnectionFactory {
@@ -21,28 +20,32 @@ class ConnectionFactory {
     private static final String PASSWORD;
 
     static {
-        Locale locale = new Locale("en", "EN");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(DATABASE_PROPERTY_FILE, locale);
-        if (!resourceBundle.containsKey(DATABASE_DRIVER_PROPERTY)) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(DATABASE_PROPERTY_FILE);
+        String driver;
+        if (resourceBundle.containsKey(DATABASE_DRIVER_PROPERTY)) {
+            driver = resourceBundle.getString(DATABASE_DRIVER_PROPERTY);
+        } else {
             LOGGER.fatal("Error of retrieving driver property value");
             throw new RuntimeException("Error of retrieving driver property value");
         }
-        String driver = resourceBundle.getString(DATABASE_DRIVER_PROPERTY);
-        if (!resourceBundle.containsKey(DATABASE_URL_PROPERTY)) {
+        if (resourceBundle.containsKey(DATABASE_URL_PROPERTY)) {
+            URL = resourceBundle.getString(DATABASE_URL_PROPERTY);
+        } else {
             LOGGER.fatal("Error of retrieving url property value");
             throw new RuntimeException("Error of retrieving url property value");
         }
-        URL = resourceBundle.getString(DATABASE_URL_PROPERTY);
-        if (!resourceBundle.containsKey(DATABASE_USER_PROPERTY)) {
+        if (resourceBundle.containsKey(DATABASE_USER_PROPERTY)) {
+            USER = resourceBundle.getString(DATABASE_USER_PROPERTY);
+        } else {
             LOGGER.fatal("Error of retrieving user property value");
             throw new RuntimeException("Error of retrieving user property value");
         }
-        USER = resourceBundle.getString(DATABASE_USER_PROPERTY);
-        if (!resourceBundle.containsKey(DATABASE_PASSWORD_PROPERTY)) {
+        if (resourceBundle.containsKey(DATABASE_PASSWORD_PROPERTY)) {
+            PASSWORD = resourceBundle.getString(DATABASE_PASSWORD_PROPERTY);
+        } else {
             LOGGER.fatal("Error of retrieving password property value");
             throw new RuntimeException("Error of retrieving password property value");
         }
-        PASSWORD = resourceBundle.getString(DATABASE_PASSWORD_PROPERTY);
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException exception) {
