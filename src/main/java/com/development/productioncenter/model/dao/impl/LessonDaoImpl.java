@@ -1,13 +1,12 @@
 package com.development.productioncenter.model.dao.impl;
 
 import com.development.productioncenter.model.connection.ConnectionPool;
-import com.development.productioncenter.model.dao.ColumnName;
 import com.development.productioncenter.model.dao.LessonDao;
 import com.development.productioncenter.entity.Lesson;
 import com.development.productioncenter.exception.DaoException;
+import com.development.productioncenter.model.dao.mapper.impl.LessonMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LessonDaoImpl implements LessonDao {
@@ -28,8 +27,8 @@ public class LessonDaoImpl implements LessonDao {
 
     @Override
     public boolean add(Lesson lesson) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_LESSON)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_LESSON)) {
             preparedStatement.setString(1, lesson.getCourse().toString());
             preparedStatement.setString(2, lesson.getWeekDay());
             preparedStatement.setString(3, lesson.getStartTime().toString());
@@ -39,15 +38,13 @@ public class LessonDaoImpl implements LessonDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding lesson: " + exception);
             throw new DaoException("Error has occurred while adding lesson: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public boolean update(Lesson lesson) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_LESSON)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_LESSON)) {
             preparedStatement.setString(1, lesson.getWeekDay());
             preparedStatement.setString(2, lesson.getStartTime().toString());
             preparedStatement.setInt(3, lesson.getDuration());
@@ -57,38 +54,32 @@ public class LessonDaoImpl implements LessonDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating lesson: " + exception);
             throw new DaoException("Error has occurred while updating lesson: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public boolean delete(Lesson lesson) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_LESSON)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_LESSON)) {
             preparedStatement.setLong(1, lesson.getId());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while deleting lesson: " + exception);
             throw new DaoException("Error has occurred while deleting lesson: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public List<Lesson> findAll() throws DaoException {
         List<Lesson> lessons;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_LESSONS);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            lessons = retrieveLessons(resultSet);
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_LESSONS)) {
+            lessons = LessonMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding lessons: " + exception);
             throw new DaoException("Error has occurred while finding lessons: ", exception);
-        } finally {
-            close(connection);
         }
         return lessons;
     }
@@ -96,17 +87,15 @@ public class LessonDaoImpl implements LessonDao {
     @Override
     public List<Lesson> findLessonsByCourse(long courseId) throws DaoException {
         List<Lesson> lessons;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_COURSE)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_COURSE)) {
             preparedStatement.setLong(1, courseId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                lessons = retrieveLessons(resultSet);
+                lessons = LessonMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding lessons by course: " + exception);
             throw new DaoException("Error has occurred while finding lessons by course: ", exception);
-        } finally {
-            close(connection);
         }
         return lessons;
     }
@@ -114,17 +103,15 @@ public class LessonDaoImpl implements LessonDao {
     @Override
     public List<Lesson> findLessonsByWeekDay(String weekDay) throws DaoException {
         List<Lesson> lessons;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_WEEK_DAY)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_WEEK_DAY)) {
             preparedStatement.setString(1, weekDay);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                lessons = retrieveLessons(resultSet);
+                lessons = LessonMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding lessons by week day: " + exception);
             throw new DaoException("Error has occurred while finding lessons by week day: ", exception);
-        } finally {
-            close(connection);
         }
         return lessons;
     }
@@ -132,17 +119,15 @@ public class LessonDaoImpl implements LessonDao {
     @Override
     public List<Lesson> findLessonsByStartTime(Time startTime) throws DaoException {
         List<Lesson> lessons;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_START_TIME)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_START_TIME)) {
             preparedStatement.setTime(1, startTime);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                lessons = retrieveLessons(resultSet);
+                lessons = LessonMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding lessons by start time: " + exception);
             throw new DaoException("Error has occurred while finding lessons by start time: ", exception);
-        } finally {
-            close(connection);
         }
         return lessons;
     }
@@ -150,36 +135,16 @@ public class LessonDaoImpl implements LessonDao {
     @Override
     public List<Lesson> findLessonsByDuration(int minDuration, int maxDuration) throws DaoException {
         List<Lesson> lessons;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_DURATION)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_DURATION)) {
             preparedStatement.setInt(1, minDuration);
             preparedStatement.setInt(2, maxDuration);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                lessons = retrieveLessons(resultSet);
+                lessons = LessonMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding lessons by duration: " + exception);
             throw new DaoException("Error has occurred while finding lessons by duration: ", exception);
-        } finally {
-            close(connection);
-        }
-        return lessons;
-    }
-
-    public List<Lesson> retrieveLessons(ResultSet resultSet) throws DaoException {
-        List<Lesson> lessons = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                Lesson lesson = new Lesson();
-                lesson.getCourse().setId(resultSet.getLong(ColumnName.LESSON_ID));
-                lesson.setWeekDay(resultSet.getString(ColumnName.LESSON_WEEK_DAY));
-                lesson.setStartTime(resultSet.getTime(ColumnName.LESSON_START_TIME));
-                lesson.setDuration(resultSet.getInt(ColumnName.LESSON_DURATION));
-                lessons.add(lesson);
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while retrieving lessons' data from database: " + exception);
-            throw new DaoException("Error has occurred while retrieving lessons' data from database: ", exception);
         }
         return lessons;
     }

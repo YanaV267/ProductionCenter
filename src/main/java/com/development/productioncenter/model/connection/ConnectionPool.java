@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String POOL_PROPERTY_FILE = "pool.properties";
+    private static final String POOL_PROPERTY_FILE = "pool";
     private static final String POOL_SIZE_PROPERTY = "size";
     private static final int DEFAULT_POOL_SIZE = 4;
     private static final int POOL_SIZE;

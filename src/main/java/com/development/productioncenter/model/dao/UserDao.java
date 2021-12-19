@@ -7,9 +7,10 @@ import com.development.productioncenter.exception.DaoException;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao extends BaseDao<User> {
-    List<User> findUsersByLogin(String login) throws DaoException;
+    Optional<User> findUserByLogin(String login) throws DaoException;
 
     List<User> findUsersBySurname(String surname) throws DaoException;
 

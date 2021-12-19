@@ -7,10 +7,7 @@ import com.development.productioncenter.entity.BankCard;
 import com.development.productioncenter.exception.DaoException;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class BankCardDaoImpl implements BankCardDao {
@@ -28,8 +25,8 @@ public class BankCardDaoImpl implements BankCardDao {
 
     @Override
     public boolean update(BankCard bankCard) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BANK_CARD_BALANCE)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BANK_CARD_BALANCE)) {
             preparedStatement.setLong(1, bankCard.getCardNumber());
             preparedStatement.setBigDecimal(2, bankCard.getBalance());
             preparedStatement.execute();
@@ -37,8 +34,6 @@ public class BankCardDaoImpl implements BankCardDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while checking bank card: " + exception);
             throw new DaoException("Error has occurred while checking bank card: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
@@ -54,10 +49,10 @@ public class BankCardDaoImpl implements BankCardDao {
 
     @Override
     public boolean checkBankCard(BankCard bankCard) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD)) {
             preparedStatement.setLong(1, bankCard.getCardNumber());
-            preparedStatement.setDate(2, bankCard.getExpirationDate());
+            preparedStatement.setDate(2, Date.valueOf(bankCard.getExpirationDate()));
             preparedStatement.setString(3, bankCard.getOwnerName());
             preparedStatement.setInt(4, bankCard.getCvvNumber());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -68,8 +63,6 @@ public class BankCardDaoImpl implements BankCardDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while checking bank card: " + exception);
             throw new DaoException("Error has occurred while checking bank card: ", exception);
-        } finally {
-            close(connection);
         }
         return false;
     }
@@ -77,10 +70,10 @@ public class BankCardDaoImpl implements BankCardDao {
     @Override
     public BigDecimal findBalance(BankCard bankCard) throws DaoException {
         BigDecimal balance;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD_BALANCE)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD_BALANCE)) {
             preparedStatement.setLong(1, bankCard.getCardNumber());
-            preparedStatement.setDate(2, bankCard.getExpirationDate());
+            preparedStatement.setDate(2, Date.valueOf(bankCard.getExpirationDate()));
             preparedStatement.setString(3, bankCard.getOwnerName());
             preparedStatement.setInt(4, bankCard.getCvvNumber());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -89,8 +82,6 @@ public class BankCardDaoImpl implements BankCardDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while retrieving bank card balance: " + exception);
             throw new DaoException("Error has occurred while retrieving bank card balance: ", exception);
-        } finally {
-            close(connection);
         }
         return balance;
     }

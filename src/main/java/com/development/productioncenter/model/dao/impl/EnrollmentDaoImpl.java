@@ -5,13 +5,12 @@ import com.development.productioncenter.entity.Enrollment;
 import com.development.productioncenter.entity.EnrollmentStatus;
 import com.development.productioncenter.entity.User;
 import com.development.productioncenter.model.connection.ConnectionPool;
-import com.development.productioncenter.model.dao.ColumnName;
 import com.development.productioncenter.model.dao.EnrollmentDao;
 
 import com.development.productioncenter.exception.DaoException;
+import com.development.productioncenter.model.dao.mapper.impl.EnrollmentMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EnrollmentDaoImpl implements EnrollmentDao {
@@ -61,8 +60,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
     @Override
     public boolean add(Enrollment enrollment) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ENROLLMENT)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ENROLLMENT)) {
             preparedStatement.setLong(1, enrollment.getUser().getId());
             preparedStatement.setLong(2, enrollment.getCourse().getId());
             preparedStatement.setInt(3, enrollment.getLessonAmount());
@@ -71,19 +70,17 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding enrollment: " + exception);
             throw new DaoException("Error has occurred while adding enrollment: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public boolean update(Enrollment enrollment) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT)) {
             preparedStatement.setLong(1, enrollment.getUser().getId());
             preparedStatement.setLong(2, enrollment.getCourse().getId());
             preparedStatement.setInt(3, enrollment.getLessonAmount());
-            preparedStatement.setDate(4, enrollment.getReservationDateTime());
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(enrollment.getReservationDateTime()));
             preparedStatement.setString(5, enrollment.getEnrollmentStatus().getStatus());
             preparedStatement.setLong(6, enrollment.getId());
             preparedStatement.execute();
@@ -91,15 +88,13 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating enrollment data: " + exception);
             throw new DaoException("Error has occurred while updating enrollment data: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT_STATUS)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT_STATUS)) {
             preparedStatement.setString(1, enrollment.getEnrollmentStatus().getStatus());
             preparedStatement.setLong(2, enrollment.getUser().getId());
             preparedStatement.execute();
@@ -107,51 +102,43 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating enrollment status: " + exception);
             throw new DaoException("Error has occurred while updating enrollment status: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     public boolean checkEnrollmentReservationStatus() throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_CHECK_ENROLLMENT_RESERVATION_STATUS)) {
-            preparedStatement.execute();
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.execute(SQL_CHECK_ENROLLMENT_RESERVATION_STATUS);
             return true;
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while checking enrollment reservation status: " + exception);
             throw new DaoException("Error has occurred while checking enrollment reservation status: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public boolean delete(Enrollment enrollment) throws DaoException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ENROLLMENT)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ENROLLMENT)) {
             preparedStatement.setLong(1, enrollment.getId());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while deleting enrollment: " + exception);
             throw new DaoException("Error has occurred while deleting enrollment: ", exception);
-        } finally {
-            close(connection);
         }
     }
 
     @Override
     public List<Enrollment> findAll() throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_ENROLLMENTS);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
-            enrollments = retrieveLessons(resultSet);
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ENROLLMENTS)) {
+            enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding enrollment: " + exception);
             throw new DaoException("Error has occurred while adding enrollment: ", exception);
-        } finally {
-            close(connection);
         }
         return enrollments;
     }
@@ -159,18 +146,16 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
             preparedStatement.setString(1, user.getSurname());
             preparedStatement.setString(2, user.getName());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = retrieveLessons(resultSet);
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments: " + exception);
             throw new DaoException("Error has occurred while finding enrollments: ", exception);
-        } finally {
-            close(connection);
         }
         return enrollments;
     }
@@ -178,18 +163,16 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByCourse(Course course) throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {
             preparedStatement.setString(1, course.getActivity().getCategory());
             preparedStatement.setString(2, course.getActivity().getType());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = retrieveLessons(resultSet);
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by course: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by course: ", exception);
-        } finally {
-            close(connection);
         }
         return enrollments;
     }
@@ -197,18 +180,16 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByLessonAmount(int minAmount, int maxAmount) throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT)) {
             preparedStatement.setLong(1, minAmount);
             preparedStatement.setLong(2, maxAmount);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = retrieveLessons(resultSet);
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by lesson amount: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by lesson amount: ", exception);
-        } finally {
-            close(connection);
         }
         return enrollments;
     }
@@ -216,17 +197,15 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByReservationDatetime(Date dateTime) throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_RESERVATION_DATETIME)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_RESERVATION_DATETIME)) {
             preparedStatement.setDate(1, dateTime);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = retrieveLessons(resultSet);
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by reservation datetime: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by reservation datetime: ", exception);
-        } finally {
-            close(connection);
         }
         return enrollments;
     }
@@ -234,39 +213,15 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException {
         List<Enrollment> enrollments;
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_STATUS)) {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_STATUS)) {
             preparedStatement.setString(1, status.getStatus());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = retrieveLessons(resultSet);
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by status: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by status: ", exception);
-        } finally {
-            close(connection);
-        }
-        return enrollments;
-    }
-
-    public List<Enrollment> retrieveLessons(ResultSet resultSet) throws DaoException {
-        List<Enrollment> enrollments = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                Enrollment enrollment = new Enrollment();
-                enrollment.setId(resultSet.getLong(ColumnName.ENROLLMENT_ID));
-                enrollment.getUser().setSurname(resultSet.getString(ColumnName.USER_SURNAME));
-                enrollment.getUser().setName(resultSet.getString(ColumnName.USER_NAME));
-                enrollment.getCourse().getActivity().setCategory(resultSet.getString(ColumnName.ACTIVITY_CATEGORY));
-                enrollment.getCourse().getActivity().setCategory(resultSet.getString(ColumnName.ACTIVITY_TYPE));
-                enrollment.setLessonAmount(resultSet.getInt(ColumnName.ENROLLMENT_LESSON_AMOUNT));
-                enrollment.setReservationDateTime(resultSet.getDate(ColumnName.ENROLLMENT_RESERVATION_DATETIME));
-                enrollment.setEnrollmentStatus(EnrollmentStatus.valueOf(resultSet.getString(ColumnName.ENROLLMENT_STATUS).toUpperCase()));
-                enrollments.add(enrollment);
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while retrieving enrollments' data from database: " + exception);
-            throw new DaoException("Error has occurred while retrieving enrollments' data from database: ", exception);
         }
         return enrollments;
     }

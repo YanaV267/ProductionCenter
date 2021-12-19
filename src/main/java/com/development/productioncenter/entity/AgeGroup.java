@@ -52,4 +52,26 @@ public class AgeGroup extends AbstractEntity {
         sb.append(", maxAge=").append(maxAge).append("}");
         return sb.toString();
     }
+
+    public static class AgeGroupBuilder {
+        private final AgeGroup ageGroup;
+
+        public AgeGroupBuilder() {
+            ageGroup = new AgeGroup();
+        }
+
+        public AgeGroupBuilder setMinAge(int minAge) {
+            ageGroup.minAge = minAge;
+            return this;
+        }
+
+        public AgeGroupBuilder setMaxAge(int maxAge) {
+            ageGroup.maxAge = maxAge;
+            return this;
+        }
+
+        public AgeGroup build() {
+            return ageGroup;
+        }
+    }
 }

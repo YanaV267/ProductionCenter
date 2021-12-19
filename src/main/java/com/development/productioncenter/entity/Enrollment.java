@@ -1,12 +1,12 @@
 package com.development.productioncenter.entity;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Enrollment extends AbstractEntity {
     private User user;
     private Course course;
     private int lessonAmount;
-    private Date reservationDateTime;
+    private LocalDateTime reservationDateTime;
     private EnrollmentStatus enrollmentStatus;
 
     public Enrollment() {
@@ -38,11 +38,11 @@ public class Enrollment extends AbstractEntity {
         this.lessonAmount = lessonAmount;
     }
 
-    public Date getReservationDateTime() {
+    public LocalDateTime getReservationDateTime() {
         return reservationDateTime;
     }
 
-    public void setReservationDateTime(Date reservationDateTime) {
+    public void setReservationDateTime(LocalDateTime reservationDateTime) {
         this.reservationDateTime = reservationDateTime;
     }
 
@@ -99,5 +99,47 @@ public class Enrollment extends AbstractEntity {
         sb.append(", reservationDateTime=").append(reservationDateTime);
         sb.append(", enrollmentStatus=").append(enrollmentStatus);
         return sb.toString();
+    }
+
+    public static class EnrollmentBuilder {
+        private final Enrollment enrollment;
+
+        public EnrollmentBuilder() {
+            enrollment = new Enrollment();
+        }
+
+        public EnrollmentBuilder setId(Long id) {
+            enrollment.setId(id);
+            return this;
+        }
+
+        public EnrollmentBuilder setUser(User user) {
+            enrollment.user = user;
+            return this;
+        }
+
+        public EnrollmentBuilder setCourse(Course course) {
+            enrollment.course = course;
+            return this;
+        }
+
+        public EnrollmentBuilder setLessonAmount(int lessonAmount) {
+            enrollment.lessonAmount = lessonAmount;
+            return this;
+        }
+
+        public EnrollmentBuilder setReservationDateTime(LocalDateTime reservationDateTime) {
+            enrollment.reservationDateTime = reservationDateTime;
+            return this;
+        }
+
+        public EnrollmentBuilder setEnrollmentStatus(EnrollmentStatus enrollmentStatus) {
+            enrollment.enrollmentStatus = enrollmentStatus;
+            return this;
+        }
+
+        public Enrollment build() {
+            return enrollment;
+        }
     }
 }

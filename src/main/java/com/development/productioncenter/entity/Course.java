@@ -128,4 +128,56 @@ public class Course extends AbstractEntity {
         sb.append("', courseStatus").append(courseStatus);
         return sb.toString();
     }
+
+    public static class CourseBuilder {
+        private final Course course;
+
+        public CourseBuilder() {
+            course = new Course();
+        }
+
+        public CourseBuilder setId(Long id) {
+            course.setId(id);
+            return this;
+        }
+
+        public CourseBuilder setDescription(String description) {
+            course.description = description;
+            return this;
+        }
+
+        public CourseBuilder setActivity(Activity activity) {
+            course.activity = activity;
+            return this;
+        }
+
+        public CourseBuilder setAgeGroup(AgeGroup ageGroup) {
+            course.ageGroup = ageGroup;
+            return this;
+        }
+
+        public CourseBuilder setTeacher(User teacher) {
+            course.teacher = teacher;
+            return this;
+        }
+
+        public CourseBuilder setLessonPrice(BigDecimal lessonPrice) {
+            course.lessonPrice = lessonPrice;
+            return this;
+        }
+
+        public CourseBuilder setStudentAmount(int studentAmount) {
+            course.studentAmount = studentAmount;
+            return this;
+        }
+
+        public CourseBuilder setCourseStatus(CourseStatus courseStatus) {
+            course.courseStatus = courseStatus;
+            return this;
+        }
+
+        public Course build() {
+            return course;
+        }
+    }
 }

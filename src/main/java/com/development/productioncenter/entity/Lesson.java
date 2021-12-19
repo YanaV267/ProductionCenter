@@ -1,11 +1,11 @@
 package com.development.productioncenter.entity;
 
-import java.sql.Time;
+import java.time.LocalTime;
 
 public class Lesson extends AbstractEntity {
     private Course course;
     private String weekDay;
-    private Time startTime;
+    private LocalTime startTime;
     private int duration;
 
     public Lesson() {
@@ -28,11 +28,11 @@ public class Lesson extends AbstractEntity {
         this.weekDay = weekDay;
     }
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 

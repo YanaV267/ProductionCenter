@@ -2,6 +2,7 @@ package com.development.productioncenter.model.dao;
 
 import com.development.productioncenter.entity.AbstractEntity;
 import com.development.productioncenter.exception.DaoException;
+import com.development.productioncenter.model.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,18 +29,12 @@ public interface BaseDao<T extends AbstractEntity> {
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while closing statement: " + exception);
-            throw new RuntimeException("Error has occurred while closing statement: ", exception);
         }
     }
 
     default void close(Connection connection) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while closing connection: " + exception);
-            throw new RuntimeException("Error has occurred while closing connection: ", exception);
+        if (connection != null) {
+            ConnectionPool.getInstance().releaseConnection(connection);
         }
     }
 }

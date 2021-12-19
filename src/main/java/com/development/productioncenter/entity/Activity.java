@@ -55,4 +55,26 @@ public class Activity extends AbstractEntity {
         sb.append("', type='").append(type).append("'}");
         return sb.toString();
     }
+
+    public static class ActivityBuilder {
+        private final Activity activity;
+
+        public ActivityBuilder() {
+            activity = new Activity();
+        }
+
+        public ActivityBuilder setCategory(String category) {
+            activity.category = category;
+            return this;
+        }
+
+        public ActivityBuilder setType(String type) {
+            activity.type = type;
+            return this;
+        }
+
+        public Activity build() {
+            return activity;
+        }
+    }
 }

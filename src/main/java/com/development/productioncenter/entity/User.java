@@ -141,4 +141,56 @@ public class User extends AbstractEntity {
         sb.append(", userStatus=").append(userStatus).append("}");
         return sb.toString();
     }
+
+    public static class UserBuilder {
+        private final User user;
+
+        public UserBuilder() {
+            user = new User();
+        }
+
+        public UserBuilder setLogin(String login) {
+            user.login = login;
+            return this;
+        }
+
+        public UserBuilder setPassword(String password) {
+            user.password = password;
+            return this;
+        }
+
+        public UserBuilder setSurname(String surname) {
+            user.surname = surname;
+            return this;
+        }
+
+        public UserBuilder setName(String name) {
+            user.name = name;
+            return this;
+        }
+
+        public UserBuilder setEmail(String email) {
+            user.email = email;
+            return this;
+        }
+
+        public UserBuilder setPhoneNumber(BigInteger phoneNumber) {
+            user.phoneNumber = phoneNumber;
+            return this;
+        }
+
+        public UserBuilder setUserRole(UserRole userRole) {
+            user.userRole = userRole;
+            return this;
+        }
+
+        public UserBuilder setUserStatus(UserStatus userStatus) {
+            user.userStatus = userStatus;
+            return this;
+        }
+
+        public User build() {
+            return user;
+        }
+    }
 }

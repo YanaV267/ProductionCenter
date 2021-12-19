@@ -1,11 +1,11 @@
 package com.development.productioncenter.entity;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class BankCard extends AbstractEntity {
     private long cardNumber;
-    private Date expirationDate;
+    private LocalDate expirationDate;
     private String ownerName;
     private int cvvNumber;
     private BigDecimal balance;
@@ -22,11 +22,11 @@ public class BankCard extends AbstractEntity {
         this.cardNumber = cardNumber;
     }
 
-    public Date getExpirationDate() {
+    public LocalDate getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
 

@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 
 class ConnectionFactory {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DATABASE_PROPERTY_FILE = "database.properties";
+    private static final String DATABASE_PROPERTY_FILE = "database";
     private static final String DATABASE_URL_PROPERTY = "url";
     private static final String DATABASE_DRIVER_PROPERTY = "driver";
     private static final String DATABASE_USER_PROPERTY = "user";
