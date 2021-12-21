@@ -1,0 +1,198 @@
+@font-face {
+    font-family: 'Century Gothic';
+    src: url(gothic.ttf);
+}
+
+* {
+    font-family: 'Century Gothic';
+}
+
+a:active, a:hover, a {
+    text-decoration: none;
+    color:white;
+}
+
+header {
+    background-color: rgba(33, 52, 87, 0.35);
+    height: 70px;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    margin-top: 5px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+div.stage {
+    height: 3px;
+    background: #ffffff;
+    opacity: 0;
+    animation: 4s move infinite;
+    animation-delay: 1s;
+}
+
+#stage1 {
+    margin-top: 5px;
+    width: 25px;
+    animation-delay: 4s;
+    animation-name: stage1;
+}
+
+#stage2 {
+    margin-top: 5px;
+    width: 35px;
+    animation-delay: 3s;
+    animation-name: stage2;
+}
+
+#stage3 {
+    margin-top: 5px;
+    width: 45px;
+    animation-delay: 2s;
+    animation-name: stage3;
+}
+
+#stage4 {
+    margin-top: 5px;
+    width: 55px;
+    animation-name: stage4;
+}
+
+@keyframes stage1 {
+    25% {
+        opacity: 1;
+    }
+
+    26% {
+        opacity: 0;
+    }
+}
+
+@keyframes stage2 {
+    50% {
+        opacity: 1;
+    }
+
+    51% {
+        opacity: 0;
+    }
+}
+
+@keyframes stage3 {
+    75% {
+        opacity: 1;
+    }
+
+    76% {
+        opacity: 0;
+    }
+}
+
+@keyframes stage4 {
+    100% {
+        opacity: 1;
+    }
+}
+
+#headerTitle {
+    margin-left: 20px;
+    width: 180px;
+    cursor: default;
+    font-size: 12px;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+    margin-left: 220px;
+    margin-right: 170px;
+}
+
+#menu div {
+    margin-right: 35px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+}
+
+#menu1::after, #menu2::after, #menu3::after, #menu4::after, #account p:after {
+    display: block;
+    content: "";
+    background-color: white;
+    height: 2px;
+    width: 0;
+    position: absolute;
+    transition: width 0.3s ease-in-out;
+}
+
+#menu1::after, #menu2::after, #menu3::after, #menu4::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#menu1:hover:after, #menu2:hover:after, #menu3:hover:after, #menu4:hover:after {
+    width: 100%;
+}
+
+#account {
+    height: 37px;
+    line-height: 37px;
+}
+
+#account img {
+    height: 30px;
+    width: 31px;
+    opacity: 0.85;
+}
+
+#account:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#account div {
+    display: none;
+    position: absolute;
+    top: 55px;
+    background-color: rgba(27, 38, 59, 0.93);
+    border-radius: 5px;
+    width: 120px;
+    padding-bottom: 5px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+#account div p {
+    color: white;
+    font-size: 13px;
+    margin: 5px;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
+}
+
+#account div p:after {
+    background-color: white;
+}
+
+#account:hover div {
+    display: block;
+}
+
+body {
+    margin: 0;
+    background-blend-mode: color;
+    background: rgba(8, 10, 114, 0.644) url(../pics/back.jpg);
+    background-size: cover;
+}
+
+p:hover {
+    cursor: pointer;
+}

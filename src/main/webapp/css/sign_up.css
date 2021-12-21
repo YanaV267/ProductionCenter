@@ -1,0 +1,76 @@
+form {
+    border-radius: 14px;
+    background: rgba(214, 233, 255, 0.7);
+    position: absolute;
+    left: 270px;
+    top: 150px;
+    padding-bottom: 40px;
+    color: rgb(11, 35, 78);
+}
+
+form > * {
+    margin: 10px 10px 10px 52px;
+}
+
+p.title {
+    margin-left: 75px;
+    margin-bottom: 30px;
+    margin-top: 45px;
+    cursor: default;
+    letter-spacing: 2px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+input {
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    padding: 5px 5px 5px 7px;
+    height: 34px;
+    width: 290px;
+    margin-bottom: 7px;
+    margin-top: 10px;
+}
+
+input:focus {
+    outline: 0.4px solid rgba(115, 140, 224, 0.795);
+}
+
+input[type="submit"], input[type="button"] {
+    width: 140px;
+    height: 34px;
+    margin-top: 25px;
+    margin-left: 75px;
+    background-color: rgb(190, 188, 14);
+    border-color: rgb(146, 144, 11);
+    color: white;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    cursor: pointer;
+}
+
+form, #page1, #page2 {
+    height: 330px;
+    width: 400px;
+}
+
+#reg {
+    transition: 0.5s;
+    transform-style: preserve-3d;
+}
+
+#page1, #page2 {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+}
+
+#page1 {
+    z-index: 2;
+}
+
+#page2 {
+    left: -105px;
+    transform: rotateY(180deg);
+}
