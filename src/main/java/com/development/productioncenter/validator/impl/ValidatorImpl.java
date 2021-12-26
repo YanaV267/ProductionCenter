@@ -2,8 +2,13 @@ package com.development.productioncenter.validator.impl;
 
 import com.development.productioncenter.validator.Validator;
 
+import java.util.Map;
+
+import static com.development.productioncenter.controller.command.RequestParameter.*;
+
 public class ValidatorImpl implements Validator {
     private static final ValidatorImpl INSTANCE = new ValidatorImpl();
+    private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String LOGIN_REGEX = "[a-zA-Z][A-Za-z0-9]{4,29}";
     private static final String PASSWORD_REGEX = "[a-zA-Z][A-Za-z0-9]{7,29}";
     private static final String SURNAME_REGEX = "[А-ЯA-Z][а-яa-z]{1,20}";
@@ -46,5 +51,34 @@ public class ValidatorImpl implements Validator {
     @Override
     public boolean checkNumber(String number) {
         return number != null && number.matches(NUMBER_REGEX);
+    }
+
+    @Override
+    public boolean checkUserData(Map<String, String> userData) {
+        if (!checkLogin(userData.get(LOGIN_PARAMETER))) {
+            userData.put(LOGIN_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        if (!checkPassword(userData.get(PASSWORD_PARAMETER))) {
+            userData.put(PASSWORD_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        if (!checkSurname(userData.get(SURNAME_PARAMETER))) {
+            userData.put(SURNAME_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        if (!checkName(userData.get(NAME_PARAMETER))) {
+            userData.put(NAME_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        if (!checkEmail(userData.get(EMAIL_PARAMETER))) {
+            userData.put(EMAIL_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        if (!checkNumber(userData.get(PHONE_NUMBER_PARAMETER))) {
+            userData.put(PHONE_NUMBER_PARAMETER, INCORRECT_VALUE_PARAMETER);
+            return false;
+        }
+        return true;
     }
 }

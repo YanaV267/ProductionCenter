@@ -7,7 +7,7 @@ import com.development.productioncenter.exception.ServiceException;
 import com.development.productioncenter.model.dao.UserDao;
 import com.development.productioncenter.model.dao.impl.UserDaoImpl;
 import com.development.productioncenter.model.service.UserService;
-import com.development.productioncenter.util.Encoder;
+import com.development.productioncenter.util.PasswordEncoder;
 import com.development.productioncenter.validator.Validator;
 import com.development.productioncenter.validator.impl.ValidatorImpl;
 import org.apache.logging.log4j.LogManager;
@@ -22,14 +22,16 @@ import static com.development.productioncenter.controller.command.RequestParamet
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final UserDao userDao = new UserDaoImpl();
-    private static final Validator validator = ValidatorImpl.getInstance();
+    private static final String NUMBER_REMOVING_SYMBOLS_REGEX = "[+()-]";
+    private static final String NUMBER_REPLACEMENT_REGEX = "";
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
+        Validator validator = ValidatorImpl.getInstance();
         try {
             if (validator.checkLogin(login) && validator.checkPassword(password)) {
                 Optional<User> user = userDao.findUserByLogin(login);
-                Optional<String> encodedPassword = Encoder.getInstance().encode(password);
+                Optional<String> encodedPassword = PasswordEncoder.getInstance().encode(password);
                 if (user.isPresent() && encodedPassword.isPresent() && user.get().getPassword().equals(encodedPassword.get())) {
                     return user;
                 }
@@ -44,16 +46,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean registerUser(Map<String, String> userData) throws ServiceException {
         try {
-            if (validator.checkLogin(userData.get(LOGIN_PARAMETER)) && validator.checkPassword(userData.get(PASSWORD_PARAMETER)) &&
-                    validator.checkSurname(userData.get(SURNAME_PARAMETER)) && validator.checkName(userData.get(NAME_PARAMETER)) &&
-                    validator.checkEmail(userData.get(EMAIL_PARAMETER)) && validator.checkNumber(userData.get(PHONE_NUMBER_PARAMETER))) {
+            if (ValidatorImpl.getInstance().checkUserData(userData)) {
                 Optional<User> foundUser = userDao.findUserByLogin(userData.get(LOGIN_PARAMETER));
                 if (foundUser.isPresent() || !userData.get(PASSWORD_PARAMETER).equals(userData.get(REPEATED_PASSWORD_PARAMETER))) {
                     return false;
                 }
-                Optional<String> password = Encoder.getInstance().encode(userData.get(PASSWORD_PARAMETER));
+                Optional<String> password = PasswordEncoder.getInstance().encode(userData.get(PASSWORD_PARAMETER));
                 if (password.isPresent()) {
-                    BigInteger phoneNumber = new BigInteger(userData.get(PHONE_NUMBER_PARAMETER).replaceAll("[+()-]", ""));
+                    BigInteger phoneNumber = new BigInteger(
+                            userData.get(PHONE_NUMBER_PARAMETER).replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
                     User user = new User.UserBuilder()
                             .setLogin(userData.get(LOGIN_PARAMETER))
                             .setPassword(password.get())

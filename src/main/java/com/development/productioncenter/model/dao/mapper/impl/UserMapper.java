@@ -1,6 +1,7 @@
 package com.development.productioncenter.model.dao.mapper.impl;
 
 import com.development.productioncenter.entity.User;
+import com.development.productioncenter.entity.UserRole;
 import com.development.productioncenter.model.dao.mapper.Mapper;
 
 import java.math.BigInteger;
@@ -32,6 +33,7 @@ public class UserMapper implements Mapper<User> {
                     .setName(resultSet.getString(USER_NAME))
                     .setEmail(resultSet.getString(USER_EMAIL))
                     .setPhoneNumber(BigInteger.valueOf(resultSet.getInt(USER_PHONE_NUMBER)))
+                    .setUserRole(UserRole.valueOf(resultSet.getString(USER_ROLE).toUpperCase()))
                     .build();
             users.add(user);
         }

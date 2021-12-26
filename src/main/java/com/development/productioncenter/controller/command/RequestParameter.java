@@ -1,6 +1,8 @@
 package com.development.productioncenter.controller.command;
 
 public final class RequestParameter {
+    public static final String COMMAND_PARAMETER = "command";
+    public static final String LANGUAGE = "language";
     public static final String LOGIN_PARAMETER = "login";
     public static final String PASSWORD_PARAMETER = "password";
     public static final String REPEATED_PASSWORD_PARAMETER = "repeated_password";

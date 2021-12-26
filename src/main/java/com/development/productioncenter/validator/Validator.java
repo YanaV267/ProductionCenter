@@ -1,5 +1,7 @@
 package com.development.productioncenter.validator;
 
+import java.util.Map;
+
 public interface Validator {
     boolean checkLogin(String login);
 
@@ -12,4 +14,6 @@ public interface Validator {
     boolean checkEmail(String email);
 
     boolean checkNumber(String number);
+
+    boolean checkUserData(Map<String, String> userData);
 }

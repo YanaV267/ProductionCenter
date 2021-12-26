@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.development.productioncenter.model.dao.ColumnName.*;
-import static com.development.productioncenter.model.dao.ColumnName.ENROLLMENT_STATUS;
 
 public class EnrollmentMapper implements Mapper<Enrollment> {
     private static final EnrollmentMapper INSTANCE = new EnrollmentMapper();

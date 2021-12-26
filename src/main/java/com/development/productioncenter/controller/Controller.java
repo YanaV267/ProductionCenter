@@ -1,20 +1,17 @@
 package com.development.productioncenter.controller;
 
-import com.development.productioncenter.controller.command.Command;
-import com.development.productioncenter.controller.command.CommandProvider;
+import com.development.productioncenter.controller.command.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
-    private static final Logger LOGGER = LogManager.getLogger();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
@@ -26,8 +23,13 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Command command = CommandProvider.getInstance().defineCommand(request);
-        String page = command.execute(request);
-        request.getRequestDispatcher(page).forward(request, response);
+        String commandType = request.getParameter(RequestParameter.COMMAND_PARAMETER);
+        Command command = CommandProvider.getInstance().defineCommand(commandType);
+        Router router = command.execute(request);
+        switch (router.getType()) {
+            case FORWARD -> request.getRequestDispatcher(router.getPage()).forward(request, response);
+            case REDIRECT -> response.sendRedirect(request.getContextPath() + router.getPage());
+            default -> request.getRequestDispatcher(PagePath.ERROR_404).forward(request, response);
+        }
     }
 }

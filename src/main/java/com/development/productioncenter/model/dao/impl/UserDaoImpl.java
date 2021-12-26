@@ -23,17 +23,19 @@ public class UserDaoImpl implements UserDao {
             "UPDATE users SET login = ?, password = ?, surname = ?, name = ?, email = ?, phone_number = ?, status = ?, role = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
     private static final String SQL_SELECT_ALL_USERS =
-            "SELECT login, password, surname, name, email, phone_number FROM users";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users";
     private static final String SQL_SELECT_USERS_BY_LOGIN =
-            "SELECT login, password, surname, name, email, phone_number FROM users WHERE login = ?";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE login = ?";
     private static final String SQL_SELECT_USERS_BY_SURNAME =
-            "SELECT login, password, surname, name, email, phone_number FROM users WHERE surname = ?";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE surname = ?";
+    private static final String SQL_SELECT_USERS_BY_EMAIL =
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE email = ?";
     private static final String SQL_SELECT_USERS_BY_PHONE_NUMBER =
-            "SELECT login, password, surname, name, email, phone_number FROM users WHERE phone_number = ?";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE phone_number = ?";
     private static final String SQL_SELECT_USERS_BY_STATUS =
-            "SELECT login, password, surname, name, email, phone_number FROM users WHERE status = ?";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
-            "SELECT login, password, surname, name, email, phone_number FROM users WHERE role = ?";
+            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
 
     @Override
     public boolean add(User user) throws DaoException {
@@ -131,6 +133,22 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Error has occurred while finding users by surname: ", exception);
         }
         return users;
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) throws DaoException {
+        List<User> users;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                users = UserMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user by email: " + exception);
+            throw new DaoException("Error has occurred while finding user by email: ", exception);
+        }
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override

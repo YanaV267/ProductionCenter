@@ -1,8 +1,6 @@
-package com.development.productioncenter.controller.command.impl;
+package com.development.productioncenter.controller.command.impl.signing;
 
-import com.development.productioncenter.controller.command.Command;
-import com.development.productioncenter.controller.command.PagePath;
-import com.development.productioncenter.controller.command.SessionAttribute;
+import com.development.productioncenter.controller.command.*;
 import com.development.productioncenter.entity.User;
 import com.development.productioncenter.exception.ServiceException;
 import com.development.productioncenter.model.service.UserService;
@@ -21,22 +19,26 @@ public class SignInCommand implements Command {
     private final UserService userService = new UserServiceImpl();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String login = request.getParameter(LOGIN_PARAMETER);
         String password = request.getParameter(PASSWORD_PARAMETER);
         try {
             Optional<User> user = userService.findUser(login, password);
             if (user.isPresent()) {
+                request.setAttribute(RequestAttribute.SIGN_IN_ERROR, false);
+                session.setAttribute(SessionAttribute.LOGIN, user.get().getLogin());
                 session.setAttribute(SessionAttribute.ROLE, user.get().getUserRole().getRole());
-                return PagePath.HOME;
+                return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {
-                session.setAttribute(SessionAttribute.LOGIN_ERROR, true);
-                return PagePath.SIGN_IN;
+                request.setAttribute(RequestAttribute.USER_LOGIN, login);
+                request.setAttribute(RequestAttribute.USER_PASSWORD, password);
+                request.setAttribute(RequestAttribute.SIGN_IN_ERROR, true);
+                return new Router(PagePath.SIGN_IN, Router.RouterType.REDIRECT);
             }
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while signing in: " + exception);
-            return PagePath.ERROR;
+            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
     }
 }
