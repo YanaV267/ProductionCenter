@@ -2,6 +2,6 @@
 <!DOCTYPE html>
 <html>
 <body>
-<jsp:forward page="pages/home.jsp"/>
+<jsp:forward page="pages/main/home.jsp"/>
 </body>
 </html>

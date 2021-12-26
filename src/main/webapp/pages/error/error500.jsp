@@ -9,7 +9,9 @@ Request from ${pageContext.errorData.requestURI} is failed<br/>
 Status code : ${pageContext.errorData.statusCode}<br/>
 Servlet name : ${pageContext.errorData.servletName}<br/>
 Exception: ${pageContext.exception}<br/>
-Message from exception: ${pageContext.exception.message}<br/>
+<c:forEach var="trace" items="${pageContext.exception.stackTrace}">
+    ${trace}<br/>
+</c:forEach>
 <a href="${pageContext.request.contextPath}/index.jsp">Back to home page</a>
 </body>
 </html>

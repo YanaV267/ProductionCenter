@@ -2,31 +2,34 @@
     position: fixed;
     top: 0;
     left: 0;
-    display: flex;
     width: 100vw;
     height: 100vh;
-    padding: 30px;
+    display: flex;
     background-color: rgba(0, 0, 0, 0.5);
     visibility: hidden;
 }
 
 #modal-content {
-    width: 100%;
-    height: 100%;
-    max-width: 500px;
-    max-height: 400px;
-    margin-top: 100px;
-    margin-left: 350px;
+    width: 350px;
+    height: 150px;
+    margin: 200px auto;
+    padding-left: 30px;
     color: rgb(8, 10, 114);
     background-color: rgba(224, 239, 255, 0.95);
     border-radius: 14px;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 65px;
 }
 
 .close {
     float: right;
     width: 35px;
     height: 35px;
-    color: rgb(8, 10, 114);
+    color: rgb(163, 9, 9);
+    font-weight: bold;
     text-align: center;
     line-height: 31px;
     cursor: pointer;
@@ -36,7 +39,7 @@
 
 .close:after {
     display: block;
-    border: 0.7px solid rgb(8, 10, 114);
+    border: 2px solid rgb(163, 9, 9);
     border-radius: 50%;
     content: 'X';
     transition: all 0.6s;

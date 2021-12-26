@@ -1,0 +1,81 @@
+form {
+    min-height: 440px;
+    height: auto;
+    width: 650px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin: 50px auto;
+    color: rgb(11, 35, 78);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    width: 730px;
+    margin: 40px 40px 40px 280px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+
+p#title {
+    margin: 40px auto 20px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 350px;
+}
+
+p.subtitle {
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+form>div {
+    border: solid 1px rgb(5, 27, 68);
+    background-color: rgba(214, 233, 255, 0.5);
+    border-radius: 10px;
+    padding: 5px 25px 10px;
+    margin-top: 20px;
+    width: 570px;
+}
+
+form>div>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+form>div>div>p {
+    font-size: 15px;
+    margin-bottom: 5px;
+    cursor: default;
+    width: 220px;
+}
+
+form img {
+    height: 70px;
+    width: 70px;
+    margin-left: 15px;
+}
+
+#header p {
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+#header p:first-child{
+    width: 85px;
+}

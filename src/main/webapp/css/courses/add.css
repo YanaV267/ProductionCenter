@@ -1,0 +1,107 @@
+form {
+    height: 450px;
+    width: 850px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    margin: -485px auto 0;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    height: 480px;
+    width: 850px;
+    margin: 30px 30px 30px 225px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+#courseProps {
+    display: flex;
+    flex-direction: row;
+}
+
+#courseProps>div {
+    margin-left: 40px;
+    margin-right: 10px;
+}
+
+#courseProps>div:last-child {
+    margin-right: 40px;
+    width: 420px;
+}
+
+#courseProps>div:last-child p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#courseProps p {
+    cursor: default;
+}
+
+#time {
+    display: flex;
+    flex-direction: row;
+}
+
+#time div {
+    width: 110px;
+    margin-right: 30px;
+}
+
+#time input, #courseProps>div:last-child input {
+    width: 65px;
+    margin-left: 22px;
+    margin-top: 3px;
+}
+
+#time div:last-child input {
+    width: 50px;
+}
+
+#courseProps>div:last-child {
+    margin-top: 10px;
+}
+
+#courseProps>div:last-child input {
+    margin-bottom: 5px;
+}
+
+input:not(#weekdays input):not([type="submit"]), textarea {
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    height: 17px;
+    outline: none;
+    padding: 5px 5px 5px 7px;
+}
+
+#age {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+#age input {
+    max-width: 45px;
+}
+
+input[type="submit"] {
+    margin: 30px auto 0;
+    min-height: 30px;
+}
+
+input:focus {
+    outline: 0.4px solid rgba(115, 140, 224, 0.795);
+}
+
+textarea {
+    height: 70px;
+    width: 480px;
+    margin-left: 40px;
+    padding: 10px
+}

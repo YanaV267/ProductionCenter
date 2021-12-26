@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Century Gothic';
-    src: url(gothic.ttf);
+    src: url(../gothic.ttf);
 }
 
 * {
@@ -101,7 +101,7 @@ div.stage {
 
 #headerTitle {
     margin-left: 20px;
-    width: 180px;
+    width: 150px;
     cursor: default;
     font-size: 12px;
 }
@@ -110,7 +110,7 @@ div.stage {
     display: flex;
     flex-direction: row;
     margin-left: 220px;
-    margin-right: 170px;
+    width: 600px;
 }
 
 #menu div {
@@ -122,7 +122,7 @@ div.stage {
     position: relative;
 }
 
-#menu1::after, #menu2::after, #menu3::after, #menu4::after, #account p:after {
+#menu1::after, #menu2::after, #menu3::after, #menu4::after, #account p:after, #language p:after {
     display: block;
     content: "";
     background-color: white;
@@ -147,6 +147,7 @@ div.stage {
 }
 
 #account img {
+    margin-top: 4px;
     height: 30px;
     width: 31px;
     opacity: 0.85;
@@ -166,7 +167,7 @@ div.stage {
     width: 120px;
     padding-bottom: 5px;
     box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
-    z-index: 1;
+    z-index: 3;
 }
 
 #account div p {
@@ -186,10 +187,56 @@ div.stage {
     display: block;
 }
 
+
+#language {
+    margin-left: 15px;
+}
+
+#language>p {
+    font-size: 15px;
+}
+
+#language div {
+    display: none;
+    position: absolute;
+    top: 55px;
+    background-color: rgba(27, 38, 59, 0.93);
+    border-radius: 5px;
+    width: 40px;
+    padding-bottom: 5px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2);
+    z-index: 3;
+}
+
+#language div p {
+    color: white;
+    font-size: 13px;
+    margin: 5px;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
+}
+
+#language div p::after {
+    background-color: white;
+}
+
+#language:hover div {
+    display: block;
+}
+
+#language p:hover {
+    cursor: pointer;
+}
+
+#language div p:hover::after {
+    width: 48%;
+}
+
 body {
     margin: 0;
     background-blend-mode: color;
-    background: rgba(8, 10, 114, 0.644) url(../pics/back.jpg);
+    background: rgba(8, 10, 114, 0.644) url(../../pics/back.jpg);
     background-size: cover;
 }
 

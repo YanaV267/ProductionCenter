@@ -1,0 +1,78 @@
+form {
+    min-height: 340px;
+    height: auto;
+    width: 650px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin: -430px auto 100px;
+    color: rgb(11, 35, 78);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    height: 380px;
+    width: 730px;
+    margin: 80px 80px 80px 280px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+
+p#title {
+    margin: 40px auto;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 300px;
+}
+
+form img {
+    width: 150px;
+    height: 150px;
+}
+
+form>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 360px;
+}
+
+form>div>div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+form>div>div:last-child>div {
+    display: flex;
+    flex-direction: column;
+}
+
+form>div>div:last-child>div:first-child {
+    text-align: right;
+    width: 100px;
+    margin-left: 60px;
+}
+
+form>div>div:last-child>div:last-child {
+    text-align: left;
+    margin-left: 15px;
+}
+
+form>div>div:last-child>div:last-child div:nth-child(4) {
+    margin-top: 10px;
+}
+
+form>div>div:last-child>div div {
+    margin-bottom: 15px;
+}
