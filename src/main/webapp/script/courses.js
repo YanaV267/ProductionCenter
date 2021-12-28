@@ -1,4 +1,4 @@
-$('button').prop('disabled', true);
+$('input[type=submit]').prop('disabled', true);
 
 $('tr').on('click', function () {
     if ($(this).children('th').length !== 0)
@@ -11,8 +11,12 @@ $('tr').on('click', function () {
     });
     if (!hasClass) {
         $(this).toggleClass('color');
-        $('button').prop('disabled', false);
+        $('input[type=submit]').prop('disabled', false);
     } else {
-        $('button').prop('disabled', true);
+        $('input[type=submit]').prop('disabled', true);
     }
 });
+
+let heightValue = $('form').height() + 40;
+$('#rect').css('height', heightValue - 15);
+$('form').css('margin-top', heightValue - heightValue * 2);

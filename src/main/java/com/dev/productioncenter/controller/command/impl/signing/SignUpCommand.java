@@ -1,0 +1,52 @@
+package com.dev.productioncenter.controller.command.impl.signing;
+
+import com.dev.productioncenter.controller.command.Command;
+import com.dev.productioncenter.controller.command.PagePath;
+import com.dev.productioncenter.controller.command.RequestAttribute;
+import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.model.service.UserService;
+import com.dev.productioncenter.exception.ServiceException;
+import com.dev.productioncenter.model.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestParameter.*;
+
+public class SignUpCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SIGN_UP_ERROR_MESSAGE_KEY = "error.sign_up";
+    private final UserService userService = new UserServiceImpl();
+
+    @Override
+    public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, String> userData = new HashMap<>();
+        userData.put(LOGIN, request.getParameter(LOGIN));
+        userData.put(PASSWORD, request.getParameter(PASSWORD));
+        userData.put(REPEATED_PASSWORD, request.getParameter(REPEATED_PASSWORD));
+        userData.put(SURNAME, request.getParameter(SURNAME));
+        userData.put(NAME, request.getParameter(NAME));
+        userData.put(EMAIL, request.getParameter(EMAIL));
+        userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
+        try {
+            if (userService.registerUser(userData)) {
+                request.setAttribute(SIGN_UP_ERROR, false);
+                return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
+            } else {
+                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(SIGN_UP_ERROR, true);
+                request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
+            }
+        } catch (ServiceException exception) {
+            LOGGER.error("Error has occurred while signing in: " + exception);
+            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
+        }
+    }
+}

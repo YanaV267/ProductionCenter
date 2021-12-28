@@ -1,7 +1,0 @@
-#account div p:nth-child(1):hover:after {
-    width: 27%;
-}
-
-#account div p:nth-child(2):hover:after {
-    width: 70%;
-}
