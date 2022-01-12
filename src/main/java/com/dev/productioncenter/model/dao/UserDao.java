@@ -5,6 +5,7 @@ import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.entity.UserStatus;
 
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,7 @@ public interface UserDao extends BaseDao<User> {
 
     List<User> findUsersByRole(UserRole role) throws DaoException;
 
+    boolean updatePicture(String login, InputStream pictureStream) throws DaoException;
+
+    Optional<InputStream> loadPicture(String login) throws DaoException;
 }

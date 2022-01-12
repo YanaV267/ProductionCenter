@@ -64,6 +64,13 @@ public class ValidatorImpl implements Validator {
             userData.put(PASSWORD, INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
+        isValid = checkUserPersonalData(userData) && isValid;
+        return isValid;
+    }
+
+    @Override
+    public boolean checkUserPersonalData(Map<String, String> userData) {
+        boolean isValid = true;
         if (!checkSurname(userData.get(SURNAME))) {
             userData.put(SURNAME, INCORRECT_VALUE_PARAMETER);
             isValid = false;

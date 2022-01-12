@@ -10,6 +10,7 @@ public final class ColumnName {
     public static final String USER_PHONE_NUMBER = "phone_number";
     public static final String USER_STATUS = "status";
     public static final String USER_ROLE = "role";
+    public static final String USER_PROFILE_PICTURE = "profile_picture";
 
     public static final String AGE_GROUP_ID = "id_age_group";
     public static final String AGE_GROUP_MIN_AGE = "min_age";

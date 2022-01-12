@@ -2,13 +2,11 @@ package com.dev.productioncenter.controller.command.impl.signing;
 
 import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestAttribute;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,12 +18,14 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class SignUpCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SIGN_UP_CONFIRM_MESSAGE_KEY = "confirm.sign_up";
     private static final String SIGN_UP_ERROR_MESSAGE_KEY = "error.sign_up";
+    private static final String LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY = "error.login_availability";
+    private static final String EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY = "error.email_availability";
     private final UserService userService = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
         Map<String, String> userData = new HashMap<>();
         userData.put(LOGIN, request.getParameter(LOGIN));
         userData.put(PASSWORD, request.getParameter(PASSWORD));
@@ -35,12 +35,21 @@ public class SignUpCommand implements Command {
         userData.put(EMAIL, request.getParameter(EMAIL));
         userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
         try {
+            if (!userService.isLoginAvailable(userData.get(LOGIN))) {
+                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
+            }
+            if (!userService.isEmailAvailable(userData.get(EMAIL))) {
+                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
+            }
             if (userService.registerUser(userData)) {
-                request.setAttribute(SIGN_UP_ERROR, false);
+                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(USER_DATA, userData);
-                request.setAttribute(SIGN_UP_ERROR, true);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }

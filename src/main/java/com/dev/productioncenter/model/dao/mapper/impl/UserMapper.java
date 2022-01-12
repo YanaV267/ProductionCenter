@@ -31,7 +31,7 @@ public class UserMapper implements Mapper<User> {
                     .setSurname(resultSet.getString(ColumnName.USER_SURNAME))
                     .setName(resultSet.getString(ColumnName.USER_NAME))
                     .setEmail(resultSet.getString(ColumnName.USER_EMAIL))
-                    .setPhoneNumber(BigInteger.valueOf(resultSet.getInt(ColumnName.USER_PHONE_NUMBER)))
+                    .setPhoneNumber(BigInteger.valueOf(resultSet.getLong(ColumnName.USER_PHONE_NUMBER)))
                     .setUserRole(UserRole.valueOf(resultSet.getString(ColumnName.USER_ROLE).toUpperCase()))
                     .build();
             users.add(user);

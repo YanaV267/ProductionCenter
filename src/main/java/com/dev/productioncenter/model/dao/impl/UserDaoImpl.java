@@ -3,6 +3,7 @@ package com.dev.productioncenter.model.dao.impl;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
+import com.dev.productioncenter.model.dao.ColumnName;
 import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.mapper.impl.UserMapper;
 import com.dev.productioncenter.entity.UserRole;
@@ -10,6 +11,7 @@ import com.dev.productioncenter.entity.UserStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.sql.*;
 import java.util.List;
@@ -20,12 +22,13 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_INSERT_USER =
             "INSERT INTO users(login, password, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_USER =
-            "UPDATE users SET login = ?, password = ?, surname = ?, name = ?, email = ?, phone_number = ?, status = ?, role = ? WHERE login = ?";
+            "UPDATE users SET password = ?, surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
+    private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
     private static final String SQL_SELECT_ALL_USERS =
             "SELECT login, password, surname, name, email, phone_number, role FROM users";
     private static final String SQL_SELECT_USERS_BY_LOGIN =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE login = ?";
+            "SELECT login, password, surname, name, email, phone_number, role, profile_picture FROM users WHERE login = ?";
     private static final String SQL_SELECT_USERS_BY_SURNAME =
             "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE surname = ?";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
@@ -36,6 +39,14 @@ public class UserDaoImpl implements UserDao {
             "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
+    private static final UserDaoImpl INSTANCE = new UserDaoImpl();
+
+    private UserDaoImpl() {
+    }
+
+    public static UserDaoImpl getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean add(User user) throws DaoException {
@@ -46,7 +57,7 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getName());
             preparedStatement.setString(5, user.getEmail());
-            preparedStatement.setInt(6, user.getPhoneNumber().intValue());
+            preparedStatement.setLong(6, user.getPhoneNumber().longValue());
             preparedStatement.setString(7, user.getUserRole().getRole());
             preparedStatement.execute();
             return true;
@@ -64,15 +75,27 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(2, user.getSurname());
             preparedStatement.setString(3, user.getName());
             preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setInt(5, user.getPhoneNumber().intValue());
-            preparedStatement.setString(6, user.getUserStatus().getStatus());
-            preparedStatement.setString(7, user.getUserRole().getRole());
-            preparedStatement.setString(8, user.getLogin());
+            preparedStatement.setLong(5, user.getPhoneNumber().longValue());
+            preparedStatement.setString(6, user.getLogin());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating user's data: " + exception);
             throw new DaoException("Error has occurred while updating user's data: ", exception);
+        }
+    }
+
+    @Override
+    public boolean updatePicture(String login, InputStream pictureStream) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE_PICTURE)) {
+            preparedStatement.setBlob(1, pictureStream);
+            preparedStatement.setString(2, login);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user's picture: " + exception);
+            throw new DaoException("Error has occurred while updating user's picture: ", exception);
         }
     }
 
@@ -87,6 +110,22 @@ public class UserDaoImpl implements UserDao {
             LOGGER.error("Error has occurred while deleting user: " + exception);
             throw new DaoException("Error has occurred while deleting user: ", exception);
         }
+    }
+
+    public Optional<InputStream> loadPicture(String login) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(resultSet.getBlob(ColumnName.USER_PROFILE_PICTURE).getBinaryStream());
+                }
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while loading user profile picture: " + exception);
+            throw new DaoException("Error has occurred while loading user profile picture: ", exception);
+        }
+        return Optional.empty();
     }
 
     @Override

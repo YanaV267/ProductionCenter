@@ -2,6 +2,7 @@ package com.dev.productioncenter.controller;
 
 import com.dev.productioncenter.controller.command.*;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/controller")
+@MultipartConfig(maxRequestSize = 1024 * 1024 * 10)
 public class Controller extends HttpServlet {
 
     @Override

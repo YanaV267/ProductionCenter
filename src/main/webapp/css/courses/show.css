@@ -6,29 +6,51 @@ input[type="submit"]:enabled {
     background-color: rgb(190, 188, 14);
 }
 
-table {
-    border-collapse: collapse;
+#all {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-row-gap: 1vw;
     margin-left: auto;
     margin-right: 35px;
-    cursor: pointer;
-    border: solid 1px rgb(11, 35, 78);
 }
 
-th {
-    font-weight: normal;
+#all>div:nth-child(-n+4) {
     font-size: 15px;
+    cursor: default;
 }
 
-td {
+#all>div:not(:nth-child(-n+4)) {
     font-size: 14px;
+    cursor: pointer;
 }
 
-th, td {
-    border: solid 1.5px rgb(11, 35, 78);
-    padding: 3px 7px;
+#all>div {
+    text-align: center;
+    border-top: 1px solid rgb(11, 35, 78);
+    border-bottom: 1px solid rgb(11, 35, 78);
+    padding: 0.8em;
+}
+
+#all>div:nth-child(4n+1) {
+    border-left: 1px solid rgb(11, 35, 78);
+    border-radius: 15px 0 0 15px;
+}
+
+#all>div:nth-child(4n) {
+    border-right: 1px solid rgb(11, 35, 78);
+    border-radius: 0 15px 15px 0;
 }
 
 .color {
-    border: solid 2.5px rgb(5, 27, 68);
+    border-top-width: 2px!important;
+    border-bottom-width: 2px!important;
     background-color: rgba(254, 255, 235, 0.8);
+}
+
+div.color:nth-child(4n+1) {
+    border-left-width: 2px!important;
+}
+
+div.color:nth-child(4n) {
+    border-right-width: 2px!important;
 }

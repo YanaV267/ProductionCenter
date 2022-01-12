@@ -1,19 +1,23 @@
-$('input[type=submit]').prop('disabled', true);
+$('input[type=submit]:last-child').prop('disabled', true);
 
-$('tr').on('click', function () {
-    if ($(this).children('th').length !== 0)
-        return;
+$('#all>div:not(:nth-child(-n+4))').on('click', function () {
+    let row = Math.trunc($(this).index() / 4);
     let hasClass;
-    if ($(this).hasClass('color'))
-        hasClass = true;
-    $('tr').each(function () {
-        $(this).removeClass('color');
+    $('#all>div').each(function () {
+        if (Math.trunc($(this).index() / 4) !== row)
+            $(this).removeClass('color');
     });
+    for (let i = 1; i < 5; i++) {
+        if ($(`#all>div:nth-child(${4 * row + i})`).hasClass('color'))
+            hasClass = true;
+        $(`#all>div:nth-child(${4 * row + i})`).removeClass('color');
+    }
     if (!hasClass) {
-        $(this).toggleClass('color');
-        $('input[type=submit]').prop('disabled', false);
+        for (let i = 1; i < 5; i++)
+            $(`#all>div:nth-child(${4 * row + i})`).toggleClass('color');
+        $('input[type=submit]:last-child').prop('disabled', false);
     } else {
-        $('input[type=submit]').prop('disabled', true);
+        $('input[type=submit]:last-child').prop('disabled', true);
     }
 });
 

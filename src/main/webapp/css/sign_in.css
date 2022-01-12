@@ -1,17 +1,28 @@
 form {
     height: 310px;
     width: 400px;
-    border-radius: 14px;
+    border-radius: 10px;
     background: rgba(214, 233, 255, 0.7);
     position: absolute;
-    left: 270px;
-    top: 150px;
+    left: 280px;
+    top: 180px;
     padding-top: 40px;
     color: rgb(11, 35, 78);
+    z-index: 2;
+}
+
+#rect {
+    width: 400px;
+    height: 350px;
+    margin: 70px 70px 70px 240px;
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
 }
 
 form > * {
-    margin: 10px 10px 10px 45px;
+    margin: 10px 10px 10px 52px;
 }
 
 p#title {
@@ -47,7 +58,7 @@ input:focus {
     line-height: 35px;
 }
 
-#reg {
+div#reg {
     display: flex;
     flex-direction: row;
     margin-left: 29px;
@@ -55,6 +66,7 @@ input:focus {
 
 #reg p {
     font-size: 15px;
+    color: rgb(11, 35, 78);
 }
 
 #reg img {

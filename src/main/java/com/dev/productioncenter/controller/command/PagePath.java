@@ -7,7 +7,8 @@ public final class PagePath {
     public static final String SIGN_IN = "/pages/sign_in.jsp";
     public static final String SIGN_UP = "/pages/sign_up.jsp";
     public static final String SHOW_COURSES = "/pages/courses/show.jsp";
-    public static final String ACCOUNT = "/pages/account.jsp";
+    public static final String ACCOUNT = "/pages/account/account.jsp";
+    public static final String UPDATE_ACCOUNT_DATA = "/pages/account/update_account_data.jsp";
     public static final String ACTIVITIES = "/pages/activities.jsp";
     public static final String TIMETABLE = "/pages/timetable.jsp";
 

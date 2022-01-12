@@ -63,6 +63,14 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = ?";
+    private static final CourseDaoImpl INSTANCE = new CourseDaoImpl();
+
+    private CourseDaoImpl() {
+    }
+
+    public static CourseDaoImpl getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean add(Course course) throws DaoException {

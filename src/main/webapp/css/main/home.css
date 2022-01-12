@@ -9,7 +9,7 @@
 
 a:active, a:hover, a {
     text-decoration: none;
-    color:white;
+    color: white;
 }
 
 header {
@@ -101,7 +101,7 @@ div.stage {
 
 #headerTitle {
     margin-left: 20px;
-    width: 150px;
+    width: 180px;
     cursor: default;
     font-size: 12px;
 }
@@ -110,7 +110,7 @@ div.stage {
     display: flex;
     flex-direction: row;
     margin-left: 220px;
-    width: 600px;
+    margin-right: 170px;
 }
 
 #menu div {
@@ -118,11 +118,12 @@ div.stage {
     height: 30px;
     line-height: 30px;
     text-align: center;
+    align-self: center;
     cursor: pointer;
     position: relative;
 }
 
-#menu1::after, #menu2::after, #menu3::after, #menu4::after, #account p:after, #language p:after {
+#menu1::after, #menu2 p::after, #menu3::after, #menu4::after, #account p::after, #language p::after {
     display: block;
     content: "";
     background-color: white;
@@ -132,22 +133,22 @@ div.stage {
     transition: width 0.3s ease-in-out;
 }
 
-#menu1::after, #menu2::after, #menu3::after, #menu4::after {
+#menu1::after, #menu3::after, #menu4::after {
     left: 50%;
     transform: translateX(-50%);
 }
 
-#menu1:hover:after, #menu2:hover:after, #menu3:hover:after, #menu4:hover:after {
+#menu1:hover:after, #menu3:hover:after, #menu4:hover:after {
     width: 100%;
 }
 
 #account {
-    height: 37px;
-    line-height: 37px;
+    height: 40px;
+    line-height: 40px;
 }
 
 #account img {
-    margin-top: 4px;
+    margin-top: 5px;
     height: 30px;
     width: 31px;
     opacity: 0.85;
@@ -158,11 +159,11 @@ div.stage {
     cursor: pointer;
 }
 
-#account div {
+#account div, #menu2 div {
     display: none;
     position: absolute;
     top: 55px;
-    background-color: rgba(27, 38, 59, 0.93);
+    background-color: rgba(28, 39, 55, 0.93);
     border-radius: 5px;
     width: 120px;
     padding-bottom: 5px;
@@ -170,29 +171,57 @@ div.stage {
     z-index: 3;
 }
 
-#account div p {
+#menu2 div {
+    background-color: rgba(31, 38, 51, 0.93);
+}
+
+#menu2 div {
+    top: 39px;
+    height: 75px;
+}
+
+#account div p, #menu2 div p {
     color: white;
     font-size: 13px;
     margin: 5px;
-    width: auto;
+    width: fit-content;
     height: 30px;
     line-height: 30px;
+    text-align: left;
 }
 
-#account div p:after {
+#account div p:after, #menu2 div p:after {
     background-color: white;
 }
 
-#account:hover div {
+#account:hover div, #menu2:hover div {
     display: block;
 }
 
+#account p:hover, #menu2 p:hover {
+    cursor: pointer;
+}
+
+#menu2 p:nth-child(1):hover:after {
+    width: 64%;
+}
+
+#menu2 p:nth-child(2):hover:after {
+    width: 73%;
+}
+
+body {
+    margin: 0;
+    background-blend-mode: color;
+    background: rgba(8, 10, 114, 0.644) url(../../pics/back.jpg);
+    background-size: cover;
+}
 
 #language {
     margin-left: 15px;
 }
 
-#language>p {
+#language > p {
     font-size: 15px;
 }
 
@@ -231,15 +260,4 @@ div.stage {
 
 #language div p:hover::after {
     width: 48%;
-}
-
-body {
-    margin: 0;
-    background-blend-mode: color;
-    background: rgba(8, 10, 114, 0.644) url(../../pics/back.jpg);
-    background-size: cover;
-}
-
-p:hover {
-    cursor: pointer;
 }

@@ -7,9 +7,14 @@
 <div id="menu">
     <div id="menu1"><a href="${pageContext.request.contextPath}/controller?command=go_to_home">
         <fmt:message key="header.home" bundle="${ rb }"/></a></div>
-    <div id="menu2"><a href="${pageContext.request.contextPath}/controller?command=go_to_courses">
-        <fmt:message key="header.courses" bundle="${ rb }"/></a></div>
-    <%--        TODO: Направления добавить в выпадающее--%>
+    <div id="menu2"><fmt:message key="header.courses" bundle="${ rb }"/>
+        <div>
+            <p><a href="${pageContext.request.contextPath}/controller?command=go_to_courses">
+                <fmt:message key="header.all_courses" bundle="${ rb }"/></a></p>
+            <p><a href="${pageContext.request.contextPath}/controller?command=go_to_activities">
+                <fmt:message key="header.activities" bundle="${ rb }"/></a></p>
+        </div>
+    </div>
     <div id="menu3"><a href="${pageContext.request.contextPath}/controller?command=go_to_enrollments">
         <fmt:message key="header.enrollments" bundle="${ rb }"/></a></div>
     <div id="menu4"><a href="${pageContext.request.contextPath}/controller?command=go_to_teachers">

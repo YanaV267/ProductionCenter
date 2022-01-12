@@ -1,11 +1,22 @@
 form {
-    border-radius: 14px;
-    background: rgba(214, 233, 255, 0.7);
+    border-radius: 10px;
+    background: rgba(214, 233, 255, 0.8);
     position: absolute;
     left: 270px;
-    top: 150px;
+    top: 170px;
     padding-bottom: 40px;
     color: rgb(11, 35, 78);
+    z-index: 2;
+}
+
+#rect {
+    width: 400px;
+    height: 350px;
+    margin: 60px 60px 60px 230px;
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
 }
 
 form > * {
@@ -39,20 +50,50 @@ input:focus {
 input[type="submit"], input[type="button"] {
     width: 140px;
     height: 34px;
-    margin-top: 25px;
-    margin-left: 75px;
     background-color: rgb(190, 188, 14);
     border-color: rgb(146, 144, 11);
     color: white;
+}
+
+#next input{
+    margin-top: 20px;
+    margin-left: 75px;
+    border-color: rgb(146, 144, 11);
 }
 
 input[type="submit"]:hover, input[type="button"]:hover {
     cursor: pointer;
 }
 
+#subm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    width: 300px;
+}
+
+#subm img {
+    height: 27px;
+    width: 33px;
+}
+
+#subm img:hover{
+    cursor: pointer;
+}
+
+#subm input{
+    margin-left: 35px;
+    width: 180px;
+}
+
 form, #page1, #page2 {
     height: 330px;
     width: 400px;
+}
+
+#page2 {
+    width:300px;
 }
 
 #reg {
@@ -71,6 +112,6 @@ form, #page1, #page2 {
 }
 
 #page2 {
-    left: -105px;
+    left: 10px;
     transform: rotateY(180deg);
 }

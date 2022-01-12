@@ -12,7 +12,7 @@
     <div id="modal-container">
         <div id="modal-content">
             <div id="modal-close" class="close"></div>
-            <p>${message}</p>
+            <p><fmt:message key="${message}" bundle="${ rb }"/></p>
         </div>
     </div>
 </main>

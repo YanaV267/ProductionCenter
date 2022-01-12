@@ -16,4 +16,6 @@ public interface Validator {
     boolean checkNumber(String number);
 
     boolean checkUserData(Map<String, String> userData);
+
+    boolean checkUserPersonalData(Map<String, String> userData);
 }

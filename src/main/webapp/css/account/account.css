@@ -1,0 +1,122 @@
+form {
+    height: 320px;
+    width: 650px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin: -400px auto 100px;
+    color: rgb(11, 35, 78);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    height: 360px;
+    width: 730px;
+    margin: 80px 80px 80px 280px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+p#title {
+    margin: 40px auto 20px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 300px;
+}
+
+form img:first-child {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+form > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 600px;
+}
+
+form > div > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 130px;
+    width: 300px;
+}
+
+form > div > div:nth-child(2) > div {
+    display: flex;
+    flex-direction: column;
+}
+
+form > div > div:nth-child(2) > div:first-child {
+    margin-left: 60px;
+}
+
+form > div > div:nth-child(2) > div:nth-child(2) {
+    text-align: left;
+    margin-left: 15px;
+}
+
+form > div > div:nth-child(2) > div:first-child > img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 15px;
+}
+
+form > div > div:nth-child(2) > div div {
+    margin-bottom: 15px;
+}
+
+input[type="button"], input[type="submit"], #upload_file {
+    color: rgb(11, 35, 78);
+    width: 150px;
+    height: 34px;
+    border-radius: 6px;
+    padding: 5px;
+    border: solid 0.7px rgb(95, 108, 167);
+}
+
+#upload_file {
+    margin-top: 0;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 138px;
+    height: 23px;
+    line-height: 23px;
+    font-size: 14px;
+    background-color: rgb(239, 239, 239);
+}
+
+#wrapper label {
+    display: flex;
+    align-items: baseline;
+    width: 350px;
+}
+
+input[type="button"] {
+    border-color: rgb(146, 144, 11);
+    background-color: rgb(190, 188, 14);
+    color: white;
+}
+
+input[type="button"]:hover, input[type="submit"]:hover, #upload_file:hover {
+    cursor: pointer;
+}
+
+input[type="file"] {
+    visibility: hidden;
+    display: none;
+}

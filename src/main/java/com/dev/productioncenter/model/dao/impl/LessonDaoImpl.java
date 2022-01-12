@@ -24,6 +24,14 @@ public class LessonDaoImpl implements LessonDao {
             "SELECT id_course, week_day, start_time, duration FROM lessons WHERE start_time = ?";
     private static final String SQL_SELECT_LESSON_BY_DURATION =
             "SELECT id_course, week_day, start_time, duration FROM lessons WHERE duration >= ? AND duration <= ?";
+    private static final LessonDaoImpl INSTANCE = new LessonDaoImpl();
+
+    private LessonDaoImpl() {
+    }
+
+    public static LessonDaoImpl getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public boolean add(Lesson lesson) throws DaoException {
