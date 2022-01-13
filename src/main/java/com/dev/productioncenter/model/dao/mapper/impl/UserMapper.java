@@ -1,6 +1,5 @@
 package com.dev.productioncenter.model.dao.mapper.impl;
 
-import com.dev.productioncenter.model.dao.ColumnName;
 import com.dev.productioncenter.model.dao.mapper.Mapper;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
@@ -10,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.dev.productioncenter.model.dao.ColumnName.*;
 
 public class UserMapper implements Mapper<User> {
     private static final UserMapper INSTANCE = new UserMapper();
@@ -26,13 +27,14 @@ public class UserMapper implements Mapper<User> {
         List<User> users = new ArrayList<>();
         while (resultSet.next()) {
             User user = new User.UserBuilder()
-                    .setLogin(resultSet.getString(ColumnName.USER_LOGIN))
-                    .setPassword(resultSet.getString(ColumnName.USER_PASSWORD))
-                    .setSurname(resultSet.getString(ColumnName.USER_SURNAME))
-                    .setName(resultSet.getString(ColumnName.USER_NAME))
-                    .setEmail(resultSet.getString(ColumnName.USER_EMAIL))
-                    .setPhoneNumber(BigInteger.valueOf(resultSet.getLong(ColumnName.USER_PHONE_NUMBER)))
-                    .setUserRole(UserRole.valueOf(resultSet.getString(ColumnName.USER_ROLE).toUpperCase()))
+                    .setId(resultSet.getLong(USER_ID))
+                    .setLogin(resultSet.getString(USER_LOGIN))
+                    .setPassword(resultSet.getString(USER_PASSWORD))
+                    .setSurname(resultSet.getString(USER_SURNAME))
+                    .setName(resultSet.getString(USER_NAME))
+                    .setEmail(resultSet.getString(USER_EMAIL))
+                    .setPhoneNumber(BigInteger.valueOf(resultSet.getLong(USER_PHONE_NUMBER)))
+                    .setUserRole(UserRole.valueOf(resultSet.getString(USER_ROLE).toUpperCase()))
                     .build();
             users.add(user);
         }

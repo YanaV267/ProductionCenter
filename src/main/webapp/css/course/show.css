@@ -1,8 +1,8 @@
-input[type="submit"]:disabled {
+input[type="button"]:disabled {
     background-color: rgb(185, 184, 80);
 }
 
-input[type="submit"]:enabled {
+input[type="button"]:enabled {
     background-color: rgb(190, 188, 14);
 }
 
@@ -14,43 +14,48 @@ input[type="submit"]:enabled {
     margin-right: 35px;
 }
 
-#all>div:nth-child(-n+4) {
+#all > div:nth-child(-n+4) {
     font-size: 15px;
     cursor: default;
 }
 
-#all>div:not(:nth-child(-n+4)) {
+#all > div:not(:nth-child(-n+4)) {
     font-size: 14px;
     cursor: pointer;
 }
 
-#all>div {
+#all > div {
     text-align: center;
     border-top: 1px solid rgb(11, 35, 78);
     border-bottom: 1px solid rgb(11, 35, 78);
     padding: 0.8em;
 }
 
-#all>div:nth-child(4n+1) {
+#all > div:nth-child(4n+1) {
     border-left: 1px solid rgb(11, 35, 78);
     border-radius: 15px 0 0 15px;
 }
 
-#all>div:nth-child(4n) {
+#all > div:nth-child(4n) {
     border-right: 1px solid rgb(11, 35, 78);
     border-radius: 0 15px 15px 0;
 }
 
 .color {
-    border-top-width: 2px!important;
-    border-bottom-width: 2px!important;
+    border-top-width: 2px !important;
+    border-bottom-width: 2px !important;
     background-color: rgba(254, 255, 235, 0.8);
 }
 
 div.color:nth-child(4n+1) {
-    border-left-width: 2px!important;
+    border-left-width: 2px !important;
 }
 
 div.color:nth-child(4n) {
-    border-right-width: 2px!important;
+    border-right-width: 2px !important;
+}
+
+form > div > div:last-child {
+    margin-left: 160px;
+    margin-top: 40px;
 }

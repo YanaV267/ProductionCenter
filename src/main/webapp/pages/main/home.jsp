@@ -30,5 +30,8 @@
         </div>
     </div>
 </header>
+<c:if test="${not empty message}">
+    <jsp:include page="../modal.jsp"/>
+</c:if>
 </body>
 </html>

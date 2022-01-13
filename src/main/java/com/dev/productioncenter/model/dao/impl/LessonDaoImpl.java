@@ -34,15 +34,17 @@ public class LessonDaoImpl implements LessonDao {
     }
 
     @Override
-    public boolean add(Lesson lesson) throws DaoException {
+    public long add(Lesson lesson) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_LESSON)) {
-            preparedStatement.setString(1, lesson.getCourse().toString());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_LESSON, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setLong(1, lesson.getCourse().getId());
             preparedStatement.setString(2, lesson.getWeekDay());
             preparedStatement.setString(3, lesson.getStartTime().toString());
             preparedStatement.setInt(4, lesson.getDuration());
             preparedStatement.execute();
-            return true;
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding lesson: " + exception);
             throw new DaoException("Error has occurred while adding lesson: ", exception);

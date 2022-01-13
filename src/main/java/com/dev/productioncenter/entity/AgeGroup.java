@@ -4,8 +4,13 @@ public class AgeGroup extends AbstractEntity {
     private int minAge;
     private int maxAge;
 
-    AgeGroup() {
+    public AgeGroup() {
 
+    }
+
+    public AgeGroup(int minAge, int maxAge) {
+        this.minAge = minAge;
+        this.maxAge = maxAge;
     }
 
     public int getMinAge() {

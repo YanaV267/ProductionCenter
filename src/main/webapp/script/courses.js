@@ -1,5 +1,3 @@
-$('input[type=submit]:last-child').prop('disabled', true);
-
 $('#all>div:not(:nth-child(-n+4))').on('click', function () {
     let row = Math.trunc($(this).index() / 4);
     let hasClass;
@@ -15,9 +13,9 @@ $('#all>div:not(:nth-child(-n+4))').on('click', function () {
     if (!hasClass) {
         for (let i = 1; i < 5; i++)
             $(`#all>div:nth-child(${4 * row + i})`).toggleClass('color');
-        $('input[type=submit]:last-child').prop('disabled', false);
+        $('input[type=button]:last-child').prop('disabled', false);
     } else {
-        $('input[type=submit]:last-child').prop('disabled', true);
+        $('input[type=button]:last-child').prop('disabled', true);
     }
 });
 

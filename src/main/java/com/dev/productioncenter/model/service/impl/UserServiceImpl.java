@@ -8,8 +8,8 @@ import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.impl.UserDaoImpl;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.util.PasswordEncoder;
-import com.dev.productioncenter.validator.Validator;
-import com.dev.productioncenter.validator.impl.ValidatorImpl;
+import com.dev.productioncenter.validator.UserValidator;
+import com.dev.productioncenter.validator.impl.UserValidatorImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
-        Validator validator = ValidatorImpl.getInstance();
+        UserValidator validator = UserValidatorImpl.getInstance();
         try {
             if (validator.checkLogin(login) && validator.checkPassword(password)) {
                 Optional<User> user = userDao.findUserByLogin(login);
@@ -68,10 +69,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findUsers() throws ServiceException {
+        try {
+            return userDao.findUsersByRole(UserRole.USER);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding all users: " + exception);
+            throw new ServiceException("Error has occurred while finding all users: " + exception);
+        }
+    }
+
+    @Override
+    public List<User> findTeachers() throws ServiceException {
+        try {
+            return userDao.findUsersByRole(UserRole.TEACHER);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding teachers: " + exception);
+            throw new ServiceException("Error has occurred while finding teachers: " + exception);
+        }
+    }
+
+    @Override
     public boolean isLoginAvailable(String login) throws ServiceException {
         try {
             Optional<User> foundUser = userDao.findUserByLogin(login);
-            return foundUser.isPresent();
+            return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking login availability: " + exception);
             throw new ServiceException("Error has occurred while checking login availability: " + exception);
@@ -82,7 +103,7 @@ public class UserServiceImpl implements UserService {
     public boolean isEmailAvailable(String email) throws ServiceException {
         try {
             Optional<User> foundUser = userDao.findUserByEmail(email);
-            return foundUser.isPresent();
+            return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking email availability: " + exception);
             throw new ServiceException("Error has occurred while checking email availability: " + exception);
@@ -92,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean registerUser(Map<String, String> userData) throws ServiceException {
         try {
-            if (ValidatorImpl.getInstance().checkUserData(userData)) {
+            if (UserValidatorImpl.getInstance().checkUserData(userData)) {
                 if (!userData.get(PASSWORD).equals(userData.get(REPEATED_PASSWORD))) {
                     userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
                     return false;
@@ -132,8 +153,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
+        UserValidator validator = UserValidatorImpl.getInstance();
         try {
-            Validator validator = ValidatorImpl.getInstance();
             if (validator.checkLogin(userData.get(LOGIN)) && validator.checkUserPersonalData(userData)) {
                 Optional<User> foundUser = userDao.findUserByLogin(userData.get(LOGIN));
                 if (foundUser.isPresent() && !foundUser.get().getPassword().equals(userData.get(PASSWORD))) {
@@ -142,7 +163,7 @@ public class UserServiceImpl implements UserService {
                 }
                 Optional<String> password;
                 if (!userData.get(NEW_PASSWORD).isEmpty() || !userData.get(REPEATED_PASSWORD).isEmpty()
-                        && ValidatorImpl.getInstance().checkPassword(NEW_PASSWORD)) {
+                        && UserValidatorImpl.getInstance().checkPassword(NEW_PASSWORD)) {
                     if (!userData.get(NEW_PASSWORD).equals(userData.get(REPEATED_PASSWORD))) {
                         userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
                         return false;

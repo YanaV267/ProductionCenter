@@ -36,7 +36,4 @@
     <jsp:include page="modal.jsp"/>
 </c:if>
 </body>
-<footer>
-
-</footer>
 </html>

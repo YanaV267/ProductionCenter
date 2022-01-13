@@ -67,14 +67,16 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     }
 
     @Override
-    public boolean add(Enrollment enrollment) throws DaoException {
+    public long add(Enrollment enrollment) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ENROLLMENT)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ENROLLMENT, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, enrollment.getUser().getId());
             preparedStatement.setLong(2, enrollment.getCourse().getId());
             preparedStatement.setInt(3, enrollment.getLessonAmount());
             preparedStatement.execute();
-            return true;
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding enrollment: " + exception);
             throw new DaoException("Error has occurred while adding enrollment: ", exception);

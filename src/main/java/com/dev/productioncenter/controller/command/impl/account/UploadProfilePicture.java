@@ -1,4 +1,4 @@
-package com.dev.productioncenter.controller.command.impl;
+package com.dev.productioncenter.controller.command.impl.account;
 
 import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
@@ -36,7 +36,7 @@ public class UploadProfilePicture implements Command {
             InputStream pictureStream = part.getInputStream();
             if (userService.updatePicture(login, pictureStream)) {
                 request.setAttribute(MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
-                Optional<User> user = userService.findUser(login);//TODO:повтор с др командой
+                Optional<User> user = userService.findUser(login);//TODO:повтор
                 if (user.isPresent()) {
                     request.setAttribute(USER_DATA, user.get());
                     String number = userService.formatPhoneNumber(user.get().getPhoneNumber());

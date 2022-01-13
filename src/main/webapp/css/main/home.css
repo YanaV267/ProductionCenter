@@ -110,7 +110,7 @@ div.stage {
     display: flex;
     flex-direction: row;
     margin-left: 220px;
-    margin-right: 170px;
+    width: 600px;
 }
 
 #menu div {

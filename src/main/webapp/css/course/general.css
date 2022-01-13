@@ -79,7 +79,7 @@ select {
     height: 15px;
 }
 
-input[type="submit"] {
+input[type="button"], input[type="submit"] {
     width: 150px;
     height: 34px;
     margin-top: 15px;
@@ -90,10 +90,10 @@ input[type="submit"] {
     color: white;
 }
 
-input[type="submit"]:first-of-type {
-    margin-top: 80px;
+input[type="submit"] {
+    margin-top: 55px;
 }
 
-input[type="submit"]:hover {
+input[type="button"]:hover, input[type="submit"]:hover {
     cursor: pointer;
 }

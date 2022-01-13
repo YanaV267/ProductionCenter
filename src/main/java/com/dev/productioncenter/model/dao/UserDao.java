@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface UserDao extends BaseDao<User> {
     Optional<User> findUserByLogin(String login) throws DaoException;
 
-    List<User> findUsersBySurname(String surname) throws DaoException;
+    Optional<User> findTeacherByName(String surname, String name) throws DaoException;
 
     Optional<User> findUserByEmail(String email) throws DaoException;
 

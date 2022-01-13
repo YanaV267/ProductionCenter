@@ -87,7 +87,4 @@
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
-<footer>
-
-</footer>
 </html>

@@ -4,8 +4,13 @@ public class Activity extends AbstractEntity {
     private String category;
     private String type;
 
-    Activity() {
+    public Activity() {
 
+    }
+
+    public Activity(String category, String type) {
+        this.category = category;
+        this.type = type;
     }
 
     public String getCategory() {
@@ -61,6 +66,11 @@ public class Activity extends AbstractEntity {
 
         public ActivityBuilder() {
             activity = new Activity();
+        }
+
+        public ActivityBuilder setId(long id) {
+            activity.setId(id);
+            return this;
         }
 
         public ActivityBuilder setCategory(String category) {

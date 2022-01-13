@@ -5,6 +5,7 @@ import com.dev.productioncenter.exception.ServiceException;
 
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,6 +17,10 @@ public interface UserService {
     Optional<User> findUser(String login, String password) throws ServiceException;
 
     Optional<User> findUser(String login) throws ServiceException;
+
+    List<User> findUsers() throws ServiceException;
+
+    List<User> findTeachers() throws ServiceException;
 
     boolean isLoginAvailable(String login) throws ServiceException;
 

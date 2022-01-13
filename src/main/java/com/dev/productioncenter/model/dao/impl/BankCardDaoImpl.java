@@ -27,7 +27,7 @@ public class BankCardDaoImpl implements BankCardDao {
     }
 
     @Override
-    public boolean add(BankCard bankCard) {
+    public long add(BankCard bankCard) {
         throw new UnsupportedOperationException("Adding of a bank card is unsupported");
     }
 

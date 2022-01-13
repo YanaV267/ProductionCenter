@@ -62,9 +62,6 @@
 <script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
 <c:if test="${not empty message}">
     <jsp:include page="modal.jsp"/>
-</c:if>>
+</c:if>
 </body>
-<footer>
-
-</footer>
 </html>

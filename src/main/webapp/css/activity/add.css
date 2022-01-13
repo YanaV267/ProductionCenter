@@ -1,0 +1,81 @@
+form {
+    height: 250px;
+    width: 410px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin-top: -335px;
+    margin-left: 280px;
+    color: rgb(11, 35, 78);
+    display: flex;
+    flex-wrap: wrap;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    height: 290px;
+    width: 510px;
+    margin: 80px 80px 80px 245px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+p#title {
+    margin: 40px auto 30px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 310px;
+}
+
+input {
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    padding: 5px 5px 5px 7px;
+    height: 30px;
+    width: 195px;
+}
+
+input:focus {
+    outline: 0.4px solid rgba(115, 140, 224, 0.795);
+}
+
+select {
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    width: 195px;
+    height: 32px;
+    outline: none;
+    padding: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+input[type="button"], input[type="submit"] {
+    width: 130px;
+    height: 34px;
+    padding: 5px 5px 5px 7px;
+    border-radius: 6px;
+
+}
+
+input[type="submit"] {
+    border: solid 0.7px rgb(146, 144, 11);
+    background-color: rgb(190, 188, 14);
+    color: white;
+    margin-left: 10px;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    cursor: pointer;
+}
+
+#buttons {
+    margin: 30px auto auto;
+}

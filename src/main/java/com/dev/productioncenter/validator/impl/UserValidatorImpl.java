@@ -1,13 +1,13 @@
 package com.dev.productioncenter.validator.impl;
 
-import com.dev.productioncenter.validator.Validator;
+import com.dev.productioncenter.validator.UserValidator;
 
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
-public class ValidatorImpl implements Validator {
-    private static final ValidatorImpl INSTANCE = new ValidatorImpl();
+public class UserValidatorImpl implements UserValidator {
+    private static final UserValidatorImpl INSTANCE = new UserValidatorImpl();
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String LOGIN_REGEX = "[a-zA-Z][A-Za-z\\d]{4,29}";
     private static final String PASSWORD_REGEX = "[a-zA-Z][A-Za-z\\d]{7,29}";
@@ -16,10 +16,10 @@ public class ValidatorImpl implements Validator {
     private static final String EMAIL_REGEX = "(([A-Za-z\\d._]+){5,25}@([a-z]+){3,7}\\.([a-z]+){2,3})";
     private static final String NUMBER_REGEX = "\\+375\\(\\d{2}\\)\\d{3}-\\d{2}-\\d{2}";
 
-    private ValidatorImpl() {
+    private UserValidatorImpl() {
     }
 
-    public static ValidatorImpl getInstance() {
+    public static UserValidatorImpl getInstance() {
         return INSTANCE;
     }
 

@@ -1,4 +1,4 @@
-package com.dev.productioncenter.controller.command.impl;
+package com.dev.productioncenter.controller.command.impl.account;
 
 import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
@@ -72,8 +72,7 @@ public class UpdateAccountDataCommand implements Command {
                 request.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
             }
-        } catch (
-                ServiceException exception) {
+        } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
             return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }

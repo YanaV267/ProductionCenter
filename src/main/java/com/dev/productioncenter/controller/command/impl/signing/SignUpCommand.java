@@ -47,7 +47,7 @@ public class SignUpCommand implements Command {
             }
             if (userService.registerUser(userData)) {
                 request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
-                return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
+                return new Router(PagePath.HOME, Router.RouterType.FORWARD);
             } else {
                 request.setAttribute(USER_DATA, userData);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);

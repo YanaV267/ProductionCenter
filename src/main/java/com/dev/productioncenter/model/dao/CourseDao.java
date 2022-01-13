@@ -20,4 +20,6 @@ public interface CourseDao extends BaseDao<Course> {
     List<Course> findCourseByStudentAmount(int studentAmount) throws DaoException;
 
     List<Course> findCourseByStatus(CourseStatus courseStatus) throws DaoException;
+
+    List<Course> findAvailableCourses() throws DaoException;
 }

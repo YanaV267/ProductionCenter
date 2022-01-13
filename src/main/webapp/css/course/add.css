@@ -5,15 +5,15 @@ form {
     background: rgba(214, 233, 255, 0.8);
     display: flex;
     flex-direction: column;
-    margin: -485px auto 0;
+    margin: -470px auto 0 !important;
     position: relative;
     z-index: 2;
 }
 
 #rect {
-    height: 480px;
+    max-height: 470px;
     width: 850px;
-    margin: 30px 30px 30px 225px;
+    margin: 30px 30px 30px 220px;
     position: relative;
     z-index: 1;
     border-radius: 5px;
@@ -25,17 +25,17 @@ form {
     flex-direction: row;
 }
 
-#courseProps>div {
+#courseProps > div {
     margin-left: 40px;
     margin-right: 10px;
 }
 
-#courseProps>div:last-child {
+#courseProps > div:last-child {
     margin-right: 40px;
     width: 420px;
 }
 
-#courseProps>div:last-child p {
+#courseProps > div:last-child p {
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -54,8 +54,8 @@ form {
     margin-right: 30px;
 }
 
-#time input, #courseProps>div:last-child input {
-    width: 65px;
+#time input, #courseProps > div:last-child input {
+    width: 78px;
     margin-left: 22px;
     margin-top: 3px;
 }
@@ -64,18 +64,18 @@ form {
     width: 50px;
 }
 
-#courseProps>div:last-child {
+#courseProps > div:last-child {
     margin-top: 10px;
 }
 
-#courseProps>div:last-child input {
+#courseProps > div:last-child input {
     margin-bottom: 5px;
 }
 
 input:not(#weekdays input):not([type="submit"]), textarea {
     border-radius: 6px;
     border: solid 0.7px rgb(95, 108, 167);
-    height: 17px;
+    height: 27px;
     outline: none;
     padding: 5px 5px 5px 7px;
 }
@@ -87,12 +87,12 @@ input:not(#weekdays input):not([type="submit"]), textarea {
 }
 
 #age input {
-    max-width: 45px;
+    max-width: 58px;
 }
 
 input[type="submit"] {
-    margin: 30px auto 0;
-    min-height: 30px;
+    margin: 35px auto 30px;
+    min-height: 25px;
 }
 
 input:focus {
@@ -100,7 +100,7 @@ input:focus {
 }
 
 textarea {
-    height: 70px;
+    height: 80px;
     width: 480px;
     margin-left: 40px;
     padding: 10px

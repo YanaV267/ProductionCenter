@@ -26,19 +26,20 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
     private static final String SQL_SELECT_ALL_USERS =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users";
     private static final String SQL_SELECT_USERS_BY_LOGIN =
-            "SELECT login, password, surname, name, email, phone_number, role, profile_picture FROM users WHERE login = ?";
-    private static final String SQL_SELECT_USERS_BY_SURNAME =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE surname = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, profile_picture FROM users WHERE login = ?";
+    private static final String SQL_SELECT_TEACHERS_BY_NAME =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users " +
+                    "WHERE surname = ? AND name = ? AND role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE email = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE email = ?";
     private static final String SQL_SELECT_USERS_BY_PHONE_NUMBER =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE phone_number = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE phone_number = ?";
     private static final String SQL_SELECT_USERS_BY_STATUS =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
-            "SELECT login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
     private static final UserDaoImpl INSTANCE = new UserDaoImpl();
 
     private UserDaoImpl() {
@@ -49,9 +50,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean add(User user) throws DaoException {
+    public long add(User user) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getSurname());
@@ -60,7 +61,9 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setLong(6, user.getPhoneNumber().longValue());
             preparedStatement.setString(7, user.getUserRole().getRole());
             preparedStatement.execute();
-            return true;
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding user: " + exception);
             throw new DaoException("Error has occurred while adding user: ", exception);
@@ -159,19 +162,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findUsersBySurname(String surname) throws DaoException {
-        List<User> users;
+    public Optional<User> findTeacherByName(String surname, String name) throws DaoException {
+        List<User> teachers;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_SURNAME)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_BY_NAME)) {
             preparedStatement.setString(1, surname);
+            preparedStatement.setString(2, name);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                teachers = UserMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by surname: " + exception);
             throw new DaoException("Error has occurred while finding users by surname: ", exception);
         }
-        return users;
+        return teachers.isEmpty() ? Optional.empty() : Optional.of(teachers.get(0));
     }
 
     @Override

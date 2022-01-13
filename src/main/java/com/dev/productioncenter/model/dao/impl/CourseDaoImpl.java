@@ -62,7 +62,13 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
-                    "WHERE courses.status = ?";
+                    "WHERE courses.status = ? ORDER BY category";
+    private static final String SQL_SELECT_AVAILABLE_COURSES =
+            "SELECT id_course, description, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
+                    "WHERE courses.status = 'upcoming' OR courses.status = 'running'";
     private static final CourseDaoImpl INSTANCE = new CourseDaoImpl();
 
     private CourseDaoImpl() {
@@ -73,9 +79,9 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public boolean add(Course course) throws DaoException {
+    public long add(Course course) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_COURSE)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_COURSE, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, course.getDescription());
             preparedStatement.setLong(2, course.getTeacher().getId());
             preparedStatement.setLong(3, course.getActivity().getId());
@@ -83,7 +89,9 @@ public class CourseDaoImpl implements CourseDao {
             preparedStatement.setBigDecimal(5, course.getLessonPrice());
             preparedStatement.setLong(6, course.getStudentAmount());
             preparedStatement.execute();
-            return true;
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while adding course: " + exception);
             throw new DaoException("Error has occurred while adding course: ", exception);
@@ -239,6 +247,20 @@ public class CourseDaoImpl implements CourseDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by status: " + exception);
             throw new DaoException("Error has occurred while finding courses by status: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> findAvailableCourses() throws DaoException {
+        List<Course> courses;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_AVAILABLE_COURSES)) {
+            courses = CourseMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding available courses: " + exception);
+            throw new DaoException("Error has occurred while finding available courses: ", exception);
         }
         return courses;
     }

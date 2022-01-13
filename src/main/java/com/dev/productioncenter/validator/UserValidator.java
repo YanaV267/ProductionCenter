@@ -2,7 +2,7 @@ package com.dev.productioncenter.validator;
 
 import java.util.Map;
 
-public interface Validator {
+public interface UserValidator {
     boolean checkLogin(String login);
 
     boolean checkPassword(String password);

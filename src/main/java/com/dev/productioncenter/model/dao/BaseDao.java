@@ -14,7 +14,7 @@ import java.util.List;
 public interface BaseDao<T extends AbstractEntity> {
     Logger LOGGER = LogManager.getLogger();
 
-    boolean add(T t) throws DaoException;
+    long add(T t) throws DaoException;
 
     boolean update(T t) throws DaoException;
 
