@@ -53,8 +53,8 @@ public class AddCourseCommand implements Command {
                 } else {
                     courses = courseService.findAvailableCourses();
                 }
-                request.setAttribute(RequestAttribute.COURSES, courses);
                 List<String> categories = activityService.findCategories();
+                request.setAttribute(RequestAttribute.COURSES, courses);
                 request.setAttribute(RequestAttribute.CATEGORIES, categories);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
             } else {

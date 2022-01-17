@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account/account.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${ rb }"/></title>
+    <title><fmt:message key="header.title" bundle="${rb}"/></title>
 </head>
 
 <body>
@@ -43,12 +43,12 @@
                 <input name="uploaded_picture" type="file" id="upload_file_input"
                        accept="image/jpg">
                 <label for="upload_file_input">
-                    <div id="upload_file"><fmt:message key="account.photo" bundle="${ rb }"/></div>
+                    <div id="upload_file"><fmt:message key="account.photo" bundle="${rb}"/></div>
                 </label>
             </div>
-            <input type="button" value="<fmt:message key="account.update" bundle="${ rb }"/>"
+            <input type="button" value="<fmt:message key="account.update" bundle="${rb}"/>"
                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_update_account_data'">
-            <input type="submit" value="<fmt:message key="account.upload_photo" bundle="${ rb }"/>" disabled>
+            <input type="submit" value="<fmt:message key="account.upload_photo" bundle="${rb}"/>" disabled>
         </div>
     </form>
 </main>

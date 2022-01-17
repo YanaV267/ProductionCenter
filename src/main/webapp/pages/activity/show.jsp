@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/activity/show.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${ rb }"/></title>
+    <title><fmt:message key="header.title" bundle="${rb}"/></title>
 </head>
 
 <body>
@@ -15,9 +15,9 @@
 <main>
     <div id="rect"></div>
     <form>
-        <p id="title"><fmt:message key="activities.title" bundle="${ rb }"/></p>
+        <p id="title"><fmt:message key="activities.title" bundle="${rb}"/></p>
         <c:if test="${sessionScope.role == 'admin'}">
-            <input type="button" value="<fmt:message key="activities.add" bundle="${ rb }"/>"
+            <input type="button" value="<fmt:message key="activities.add" bundle="${rb}"/>"
                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_activity'">
         </c:if>
         <c:forEach var="category" items="${categories}">
@@ -25,8 +25,8 @@
                 <p class="subtitle">${category}</p>
                 <div id="header">
                     <p></p>
-                    <p><fmt:message key="activities.teacher" bundle="${ rb }"/></p>
-                    <p><fmt:message key="activities.type" bundle="${ rb }"/></p>
+                    <p><fmt:message key="activities.teacher" bundle="${rb}"/></p>
+                    <p><fmt:message key="activities.type" bundle="${rb}"/></p>
                 </div>
                 <c:forEach var="activity" items="${activities}">
                     <c:if test="${activity.category eq category}">
@@ -43,7 +43,7 @@
                                 </c:choose>
                             </c:forEach>
                             <c:if test="${teacher_appointed eq 'false'}">
-                                <p><fmt:message key="activities.no_teacher" bundle="${ rb }"/></p>
+                                <p><fmt:message key="activities.no_teacher" bundle="${rb}"/></p>
                             </c:if>
                             <p>${activity.type}</p>
                         </div>
@@ -52,7 +52,7 @@
             </div>
         </c:forEach>
         <c:if test="${categories.size() == 0}">
-            <div><fmt:message key="activities.message" bundle="${ rb }"/></div>
+            <div><fmt:message key="activities.message" bundle="${rb}"/></div>
         </c:if>
     </form>
 </main>

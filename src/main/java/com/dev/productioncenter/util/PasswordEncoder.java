@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public class PasswordEncoder {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final PasswordEncoder INSTANCE = new PasswordEncoder();
     private static final String ENCODING_TYPE = "SHA-1";
     private static final int SIGN_TYPE = 1;
     private static final int NUMERAL_SYSTEM = 16;
@@ -19,11 +18,7 @@ public class PasswordEncoder {
     private PasswordEncoder() {
     }
 
-    public static PasswordEncoder getInstance() {
-        return INSTANCE;
-    }
-
-    public Optional<String> encode(String password) {
+    public static Optional<String> encode(String password) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ENCODING_TYPE);
             messageDigest.update(password.getBytes(StandardCharsets.UTF_8));

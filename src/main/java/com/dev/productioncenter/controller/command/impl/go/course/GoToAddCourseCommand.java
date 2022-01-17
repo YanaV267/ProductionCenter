@@ -34,12 +34,12 @@ public class GoToAddCourseCommand implements Command {
                 request.setAttribute(ACTIVITIES, activities);
             }
             List<String> categories = activityService.findCategories();
-            request.setAttribute(CATEGORIES, categories);
             List<User> teachers = userService.findTeachers();
+            request.setAttribute(CATEGORIES, categories);
             request.setAttribute(TEACHERS, teachers);
             return new Router(PagePath.ADD_COURSE, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
-            LOGGER.error("Error has occurred while adding course: " + exception);
+            LOGGER.error("Error has occurred while redirecting to adding course: " + exception);
             return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
     }

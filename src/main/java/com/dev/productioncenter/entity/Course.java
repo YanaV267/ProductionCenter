@@ -126,12 +126,12 @@ public class Course extends AbstractEntity {
     public String toString() {
         StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("{");
         sb.append("description='").append(description);
-        sb.append("', activity").append(activity);
-        sb.append("', ageGroup").append(ageGroup);
-        sb.append("', teacher").append(teacher);
-        sb.append("', lessonPrice").append(lessonPrice);
-        sb.append("', studentAmount").append(studentAmount);
-        sb.append("', courseStatus").append(courseStatus);
+        sb.append("', activity=").append(activity);
+        sb.append("', ageGroup=").append(ageGroup);
+        sb.append("', teacher=").append(teacher);
+        sb.append("', lessonPrice=").append(lessonPrice);
+        sb.append("', studentAmount=").append(studentAmount);
+        sb.append("', courseStatus=").append(courseStatus);
         return sb.toString();
     }
 

@@ -44,10 +44,10 @@ public class AddActivityCommand implements Command {
             List<String> categories = activityService.findCategories();
             request.setAttribute(RequestAttribute.CATEGORIES, categories);
             if (activityService.addActivity(activityData)) {
-                request.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
                 List<Activity> activities = activityService.findActivities();
-                request.setAttribute(ACTIVITIES, activities);
                 List<Course> courses = courseService.findAvailableCourses();
+                request.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
+                request.setAttribute(ACTIVITIES, activities);
                 request.setAttribute(COURSES, courses);
                 return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.FORWARD);
             } else {

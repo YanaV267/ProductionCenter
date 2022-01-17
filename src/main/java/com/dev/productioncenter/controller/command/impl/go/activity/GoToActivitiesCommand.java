@@ -27,10 +27,10 @@ public class GoToActivitiesCommand implements Command {
     public Router execute(HttpServletRequest request) {
         try {
             List<String> categories = activityService.findCategories();
-            request.setAttribute(CATEGORIES, categories);
             List<Activity> activities = activityService.findActivities();
-            request.setAttribute(ACTIVITIES, activities);
             List<Course> courses = courseService.findAvailableCourses();
+            request.setAttribute(CATEGORIES, categories);
+            request.setAttribute(ACTIVITIES, activities);
             request.setAttribute(COURSES, courses);
             return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {

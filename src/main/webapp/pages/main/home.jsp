@@ -8,7 +8,7 @@
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main/home.css" type="text/css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main/${sessionScope.role}.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${ rb }"/></title>
+    <title><fmt:message key="header.title" bundle="${rb}"/></title>
 </head>
 
 <body>
@@ -20,7 +20,7 @@
         <div class="stage" id="stage4"></div>
         <div class="stage" id="stage5"></div>
     </div>
-    <div id="headerTitle"><fmt:message key="header.title" bundle="${ rb }"/></div>
+    <div id="headerTitle"><fmt:message key="header.title" bundle="${rb}"/></div>
     <jsp:include page="${sessionScope.role}.jsp"/>
     <div id="language">
         <p>${sessionScope.language}</p>

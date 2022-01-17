@@ -30,9 +30,9 @@ public class SignInCommand implements Command {
             Optional<User> user = userService.findUser(login, password);
             if (user.isPresent()) {
                 request.setAttribute(SIGN_IN_ERROR, false);
-                session.setAttribute(SessionAttribute.USER, user.get());
                 String number = PhoneNumberFormatter.format(user.get().getPhoneNumber());
                 session.setAttribute(NUMBER, number);
+                session.setAttribute(SessionAttribute.USER, user.get());
                 session.setAttribute(SessionAttribute.ROLE, user.get().getUserRole().getRole());
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {

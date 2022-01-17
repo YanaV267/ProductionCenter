@@ -18,13 +18,13 @@ public class CourseValidatorImpl implements CourseValidator {
     private static final String TIME_REGEX = "(1[0-9]|20):[0-5][05]";
     private static final String CATEGORY_REMOVING_SYMBOLS_REGEX = "[\\[\\]]";
     private static final String CATEGORY_REPLACEMENT_REGEX = "";
-    private static final CourseValidatorImpl INSTANCE = new CourseValidatorImpl();
+    private static final CourseValidatorImpl instance = new CourseValidatorImpl();
 
     private CourseValidatorImpl() {
     }
 
     public static CourseValidatorImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override
