@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/timetable.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${ rb }"/></title>
+    <title><fmt:message key="header.title" bundle="${rb}"/></title>
 </head>
 
 <body>
@@ -15,9 +15,9 @@
 <main>
     <div id="rect"></div>
     <form>
-        <p id="title"><fmt:message key="timetable.title" bundle="${ rb }"/></p>
+        <p id="title"><fmt:message key="timetable.title" bundle="${rb}"/></p>
         <div>
-            <div><fmt:message key="timetable.monday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.monday" bundle="${rb}"/></div>
             <div>
                 <div>
                     <div>
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div>
-            <div><fmt:message key="timetable.tuesday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.tuesday" bundle="${rb}"/></div>
             <div>
                 <div>
                     <div>
@@ -59,25 +59,25 @@
             </div>
         </div>
         <div>
-            <div><fmt:message key="timetable.wednesday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.wednesday" bundle="${rb}"/></div>
             <div>
                 В этот день занятий нет
             </div>
         </div>
         <div>
-            <div><fmt:message key="timetable.thursday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.thursday" bundle="${rb}"/></div>
             <div>
                 В этот день занятий нет
             </div>
         </div>
         <div>
-            <div><fmt:message key="timetable.friday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.friday" bundle="${rb}"/></div>
             <div>
                 В этот день занятий нет
             </div>
         </div>
         <div>
-            <div><fmt:message key="timetable.saturday" bundle="${ rb }"/></div>
+            <div><fmt:message key="timetable.saturday" bundle="${rb}"/></div>
             <div>
                 В этот день занятий нет
             </div>

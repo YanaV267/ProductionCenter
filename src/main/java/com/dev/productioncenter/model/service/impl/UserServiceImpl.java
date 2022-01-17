@@ -1,7 +1,9 @@
 package com.dev.productioncenter.model.service.impl;
 
+import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
+import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.UserDao;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private static final String NUMBER_REMOVING_SYMBOLS_REGEX = "[+()-]";
     private static final String NUMBER_REPLACEMENT_REGEX = "";
     private static final String PICTURE_HEADER = "data:image/jpg;base64,";
+    private static final String EMPTY_VALUE_PARAMETER = "";
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
@@ -98,6 +102,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findEmployers() throws ServiceException {
+        try {
+            return userDao.findUsersByRole(UserRole.ADMIN);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding employers: " + exception);
+            throw new ServiceException("Error has occurred while finding employers: " + exception);
+        }
+    }
+
+    @Override
     public boolean isLoginAvailable(String login) throws ServiceException {
         try {
             Optional<User> foundUser = userDao.findUserByLogin(login);
@@ -149,6 +163,21 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Error has occurred while registering user: " + exception);
         }
         return false;
+    }
+
+    @Override
+    public boolean changeStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
+        try {
+            for (Map.Entry<String, UserStatus> userStatus : usersStatuses.entrySet()) {
+                if (!userDao.changeStatus(userStatus.getKey(), userStatus.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while changing users' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: " + exception);
+        }
     }
 
     @Override
@@ -221,5 +250,20 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Error has occurred while loading user account picture: " + exception);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Map<String, String> loadTeachersPictures(List<Course> courses) throws ServiceException {
+        Map<String, String> teachersPictures = new HashMap<>();
+        for (Course course : courses) {
+            String login = course.getTeacher().getLogin();
+            Optional<String> picture = loadPicture(login);
+            if (picture.isPresent()) {
+                teachersPictures.put(login, picture.get());
+            } else {
+                teachersPictures.put(login, EMPTY_VALUE_PARAMETER);
+            }
+        }
+        return teachersPictures;
     }
 }

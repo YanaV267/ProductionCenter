@@ -11,6 +11,7 @@ public final class RequestParameter {
     public static final String NAME = "name";
     public static final String EMAIL = "email";
     public static final String PHONE_NUMBER = "number";
+    public static final String STATUS = "status";
     public static final String UPLOADED_PICTURE = "uploaded_picture";
     public static final String CATEGORY = "category";
     public static final String NEW_CATEGORY = "new_category";
@@ -24,6 +25,9 @@ public final class RequestParameter {
     public static final String LESSON_PRICE = "lesson_price";
     public static final String STUDENT_AMOUNT = "student_amount";
     public static final String DESCRIPTION = "description";
+    public static final String CHOSEN_TYPE = "chosen_type";
+    public static final String CHOSEN_TEACHER = "chosen_teacher";
+    public static final String CHOSEN_AGE_GROUP = "chosen_age_group";
 
     private RequestParameter() {
     }

@@ -24,8 +24,7 @@ $('#all>div:not(:nth-child(-n+4))').on('click', function () {
         $('input:nth-of-type(2)').prop('disabled', true);
         $('input[type=button]:last-of-type').prop('disabled', true);
     }
-})
-;
+});
 
 let heightValue = $('form').height() + 40;
 $('#rect').css('height', heightValue - 15);

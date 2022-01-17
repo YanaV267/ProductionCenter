@@ -17,6 +17,8 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
+
 public class UserDaoImpl implements UserDao {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SQL_INSERT_USER =
@@ -24,22 +26,23 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE_USER =
             "UPDATE users SET password = ?, surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
+    private static final String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
     private static final String SQL_SELECT_ALL_USERS =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users";
     private static final String SQL_SELECT_USERS_BY_LOGIN =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role, profile_picture FROM users WHERE login = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status, profile_picture FROM users WHERE login = ?";
     private static final String SQL_SELECT_TEACHERS_BY_NAME =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users " +
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
                     "WHERE surname = ? AND name = ? AND role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE email = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE email = ?";
     private static final String SQL_SELECT_USERS_BY_PHONE_NUMBER =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE phone_number = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE phone_number = ?";
     private static final String SQL_SELECT_USERS_BY_STATUS =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE role = ?";
     private static final UserDaoImpl instance = new UserDaoImpl();
 
     private UserDaoImpl() {
@@ -115,13 +118,14 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public Optional<InputStream> loadPicture(String login) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(resultSet.getBlob(ColumnName.USER_PROFILE_PICTURE).getBinaryStream());
+                if (resultSet.next() && resultSet.getBlob(USER_PROFILE_PICTURE) != null) {
+                    return Optional.of(resultSet.getBlob(USER_PROFILE_PICTURE).getBinaryStream());
                 }
             }
         } catch (SQLException exception) {
@@ -240,5 +244,19 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Error has occurred while finding users by role: ", exception);
         }
         return users;
+    }
+
+    @Override
+    public boolean changeStatus(String login, UserStatus currentStatus) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_STATUS)) {
+            preparedStatement.setString(1, currentStatus.getStatus());
+            preparedStatement.setString(2, login);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user's status: " + exception);
+            throw new DaoException("Error has occurred while updating user's status: ", exception);
+        }
     }
 }

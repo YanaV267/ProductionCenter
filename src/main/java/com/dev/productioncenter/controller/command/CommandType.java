@@ -1,9 +1,10 @@
 package com.dev.productioncenter.controller.command;
 
 import com.dev.productioncenter.controller.command.impl.ChangeLocaleCommand;
+import com.dev.productioncenter.controller.command.impl.ChangeUserStatusCommand;
 import com.dev.productioncenter.controller.command.impl.DefaultCommand;
 import com.dev.productioncenter.controller.command.impl.account.UpdateAccountDataCommand;
-import com.dev.productioncenter.controller.command.impl.account.UploadProfilePicture;
+import com.dev.productioncenter.controller.command.impl.account.UploadProfilePictureCommand;
 import com.dev.productioncenter.controller.command.impl.AddActivityCommand;
 import com.dev.productioncenter.controller.command.impl.course.AddCourseCommand;
 import com.dev.productioncenter.controller.command.impl.course.UpdateCourseCommand;
@@ -13,6 +14,7 @@ import com.dev.productioncenter.controller.command.impl.go.account.GoToUpdateAcc
 import com.dev.productioncenter.controller.command.impl.go.activity.GoToActivitiesCommand;
 import com.dev.productioncenter.controller.command.impl.go.activity.GoToAddActivityCommand;
 import com.dev.productioncenter.controller.command.impl.go.course.GoToAddCourseCommand;
+import com.dev.productioncenter.controller.command.impl.go.course.GoToCourseInfoCommand;
 import com.dev.productioncenter.controller.command.impl.go.course.GoToCoursesCommand;
 import com.dev.productioncenter.controller.command.impl.go.course.GoToUpdateCourseCommand;
 import com.dev.productioncenter.controller.command.impl.signing.SignInCommand;
@@ -26,6 +28,7 @@ public enum CommandType {
     GO_TO_SIGN_IN(new GoToSignInCommand()),
     GO_TO_SIGN_UP(new GoToSignUpCommand()),
     GO_TO_COURSES(new GoToCoursesCommand()),
+    GO_TO_COURSE_INFO(new GoToCourseInfoCommand()),
     GO_TO_ADD_COURSE(new GoToAddCourseCommand()),
     GO_TO_UPDATE_COURSE(new GoToUpdateCourseCommand()),
     GO_TO_ACCOUNT(new GoToAccountCommand()),
@@ -33,12 +36,15 @@ public enum CommandType {
     GO_TO_ACTIVITIES(new GoToActivitiesCommand()),
     GO_TO_ADD_ACTIVITY(new GoToAddActivityCommand()),
     GO_TO_TIMETABLE(new GoToTimetableCommand()),
+    GO_TO_CONTACTS(new GoToContactsCommand()),
+    GO_TO_USERS(new GoToUsersCommand()),
     CHANGE_LOCALE(new ChangeLocaleCommand()),
     SIGN_IN(new SignInCommand()),
     SIGN_OUT(new SignOutCommand()),
     SIGN_UP(new SignUpCommand()),
     UPDATE_ACCOUNT_DATA(new UpdateAccountDataCommand()),
-    UPLOAD_PROFILE_PICTURE(new UploadProfilePicture()),
+    UPLOAD_PROFILE_PICTURE(new UploadProfilePictureCommand()),
+    CHANGE_USER_STATUS(new ChangeUserStatusCommand()),
     ADD_COURSE(new AddCourseCommand()),
     ADD_ACTIVITY(new AddActivityCommand()),
     UPDATE_COURSE(new UpdateCourseCommand()),

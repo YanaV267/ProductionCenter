@@ -16,6 +16,7 @@ input[type="button"]:enabled, input[type="submit"]:enabled {
 
 #all > div:nth-child(-n+4) {
     font-size: 15px;
+    font-weight: bold;
     cursor: default;
 }
 

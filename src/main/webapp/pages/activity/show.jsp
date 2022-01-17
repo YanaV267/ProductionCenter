@@ -31,16 +31,23 @@
                 <c:forEach var="activity" items="${activities}">
                     <c:if test="${activity.category eq category}">
                         <div>
-                                <%--                            TODO:конкретное фото--%>
-                            <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
                             <c:set var="teacher_appointed" value="false"/>
                             <c:forEach var="course" items="${courses}">
-                                <c:choose>
-                                    <c:when test="${course.activity.category eq category && course.activity.type eq activity.type}">
-                                        <p>${course.teacher.surname} ${course.teacher.name}</p>
-                                        <c:set var="teacher_appointed" value="true"/>
-                                    </c:when>
-                                </c:choose>
+                                <c:set var="photo_uploaded" value="false"/>
+                                <c:forEach var="profile_picture" items="${profile_pictures}">
+                                    <c:if test="${profile_picture.key eq course.teacher.login && not empty profile_picture.value}">
+                                        <img src="${profile_picture.value}" alt="account">
+                                        <c:set var="photo_uploaded" value="true"/>
+                                    </c:if>
+                                </c:forEach>
+                                <c:if test="${photo_uploaded eq 'false'}">
+                                    <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
+                                </c:if>
+
+                                <c:if test="${course.activity.category eq category && course.activity.type eq activity.type}">
+                                    <p>${course.teacher.surname} ${course.teacher.name}</p>
+                                    <c:set var="teacher_appointed" value="true"/>
+                                </c:if>
                             </c:forEach>
                             <c:if test="${teacher_appointed eq 'false'}">
                                 <p><fmt:message key="activities.no_teacher" bundle="${rb}"/></p>

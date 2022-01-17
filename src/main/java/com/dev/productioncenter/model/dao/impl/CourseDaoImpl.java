@@ -59,7 +59,7 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE student_amount = ?";
     private static final String SQL_SELECT_COURSES_BY_STATUS =
-            "SELECT id_course, description, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +

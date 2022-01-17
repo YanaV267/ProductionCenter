@@ -1,5 +1,6 @@
 package com.dev.productioncenter.model.dao.mapper.impl;
 
+import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.model.dao.mapper.Mapper;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
@@ -35,6 +36,7 @@ public class UserMapper implements Mapper<User> {
                     .setEmail(resultSet.getString(USER_EMAIL))
                     .setPhoneNumber(BigInteger.valueOf(resultSet.getLong(USER_PHONE_NUMBER)))
                     .setUserRole(UserRole.valueOf(resultSet.getString(USER_ROLE).toUpperCase()))
+                    .setUserStatus(UserStatus.valueOf(resultSet.getString(USER_STATUS).toUpperCase()))
                     .build();
             users.add(user);
         }
