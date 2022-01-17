@@ -5,6 +5,7 @@ import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
+import com.dev.productioncenter.util.PhoneNumberFormatter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +30,9 @@ public class SignInCommand implements Command {
             Optional<User> user = userService.findUser(login, password);
             if (user.isPresent()) {
                 request.setAttribute(SIGN_IN_ERROR, false);
-                session.setAttribute(SessionAttribute.LOGIN, user.get().getLogin());
+                session.setAttribute(SessionAttribute.USER, user.get());
+                String number = PhoneNumberFormatter.format(user.get().getPhoneNumber());
+                session.setAttribute(NUMBER, number);
                 session.setAttribute(SessionAttribute.ROLE, user.get().getUserRole().getRole());
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {

@@ -21,13 +21,13 @@ public class ActivityDaoImpl implements ActivityDao {
             "SELECT id_activity, category, type FROM activities WHERE category = ?";
     private static final String SQL_SELECT_ALL_CATEGORIES =
             "SELECT category FROM activities GROUP BY category";
-    private static final ActivityDaoImpl INSTANCE = new ActivityDaoImpl();
+    private static final ActivityDaoImpl instance = new ActivityDaoImpl();
 
     private ActivityDaoImpl() {
     }
 
     public static ActivityDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

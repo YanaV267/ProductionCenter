@@ -40,13 +40,13 @@ public class UserDaoImpl implements UserDao {
             "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT id_user, login, password, surname, name, email, phone_number, role FROM users WHERE role = ?";
-    private static final UserDaoImpl INSTANCE = new UserDaoImpl();
+    private static final UserDaoImpl instance = new UserDaoImpl();
 
     private UserDaoImpl() {
     }
 
     public static UserDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

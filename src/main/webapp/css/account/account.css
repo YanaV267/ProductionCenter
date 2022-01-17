@@ -37,6 +37,7 @@ form img:first-child {
     width: 150px;
     height: 150px;
     margin-bottom: 10px;
+    border-radius: 3px;
 }
 
 form > div {
@@ -61,8 +62,8 @@ form > div > div:nth-child(2) > div {
     flex-direction: column;
 }
 
-form > div > div:nth-child(2) > div:first-child {
-    margin-left: 60px;
+#icons {
+    margin-left: 60px !important;
 }
 
 form > div > div:nth-child(2) > div:nth-child(2) {
@@ -70,7 +71,7 @@ form > div > div:nth-child(2) > div:nth-child(2) {
     margin-left: 15px;
 }
 
-form > div > div:nth-child(2) > div:first-child > img {
+#icons > img {
     width: 20px;
     height: 20px;
     margin-bottom: 15px;

@@ -22,10 +22,10 @@
                 <option>${category}</option>
             </c:forEach>
         </select>
-        <input type="text" name="new_category" autocomplete="off" value="${activity_data.category}"
+        <input type="text" name="new_category" autocomplete="off" value="${activity.category}"
                placeholder="<fmt:message key="activities.new_category.placeholder" bundle="${ rb }"/>"
                pattern="[а-яА-Я]{3,20}" title="<fmt:message key="activities.new_category.title" bundle="${ rb }"/>">
-        <input type="text" name="type" autocomplete="off" value="${activity_data.type}"
+        <input type="text" name="type" autocomplete="off" value="${activity.type}"
                placeholder="<fmt:message key="activities.type" bundle="${ rb }"/>"
                pattern="[а-яА-Я -]{3,30}" title="<fmt:message key="activities.type.title" bundle="${ rb }"/>">
         <div id="buttons">

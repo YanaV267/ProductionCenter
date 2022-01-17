@@ -15,7 +15,7 @@
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/uploadController" enctype="multipart/form-data">
-        <p id="title">${sessionScope.login}</p>
+        <p id="title">${user.login}</p>
         <div>
             <div>
                 <c:choose>
@@ -28,14 +28,14 @@
                 </c:choose>
             </div>
             <div>
-                <div>
+                <div id="icons">
                     <img src="${pageContext.request.contextPath}/pics/account_name.png" alt="name">
                     <img src="${pageContext.request.contextPath}/pics/mail.png" alt="mail">
                     <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                 </div>
                 <div>
-                    <div>${user_data.surname} ${user_data.name}</div>
-                    <div>${user_data.email}</div>
+                    <div>${user.surname} ${user.name}</div>
+                    <div>${user.email}</div>
                     <div>${number}</div>
                 </div>
             </div>

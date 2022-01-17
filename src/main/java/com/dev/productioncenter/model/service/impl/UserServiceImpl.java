@@ -30,10 +30,6 @@ public class UserServiceImpl implements UserService {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String NUMBER_REMOVING_SYMBOLS_REGEX = "[+()-]";
     private static final String NUMBER_REPLACEMENT_REGEX = "";
-    private static final String NUMBER_PLUS_SYMBOL = "+";
-    private static final String NUMBER_OPENING_PARENTHESIS_SYMBOL = "(";
-    private static final String NUMBER_CLOSING_PARENTHESIS_SYMBOL = ")";
-    private static final String NUMBER_DASH_SYMBOL = "-";
     private static final String PICTURE_HEADER = "data:image/jpg;base64,";
 
     @Override
@@ -42,7 +38,7 @@ public class UserServiceImpl implements UserService {
         try {
             if (validator.checkLogin(login) && validator.checkPassword(password)) {
                 Optional<User> user = userDao.findUserByLogin(login);
-                Optional<String> encodedPassword = PasswordEncoder.getInstance().encode(password);
+                Optional<String> encodedPassword = PasswordEncoder.encode(password);
                 if (user.isPresent() && encodedPassword.isPresent() && user.get().getPassword().equals(encodedPassword.get())) {
                     return user;
                 }
@@ -60,6 +56,19 @@ public class UserServiceImpl implements UserService {
             Optional<User> user = userDao.findUserByLogin(login);
             if (user.isPresent()) {
                 return user;
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding user by login: " + exception);
+            throw new ServiceException("Error has occurred while finding user by login: " + exception);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> findUser(String surname, String name, UserRole userRole) throws ServiceException {
+        try {
+            if (userRole == UserRole.TEACHER) {
+                return userDao.findTeacherByName(surname, name);
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
@@ -118,7 +127,7 @@ public class UserServiceImpl implements UserService {
                     userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
                     return false;
                 }
-                Optional<String> password = PasswordEncoder.getInstance().encode(userData.get(PASSWORD));
+                Optional<String> password = PasswordEncoder.encode(userData.get(PASSWORD));
                 if (password.isPresent()) {
                     BigInteger phoneNumber = new BigInteger(
                             userData.get(PHONE_NUMBER).replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
@@ -143,15 +152,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String formatPhoneNumber(BigInteger phoneNumber) {
-        String number = String.valueOf(phoneNumber);
-        number = NUMBER_PLUS_SYMBOL + number.substring(0, 3) + NUMBER_OPENING_PARENTHESIS_SYMBOL + number.substring(3, 5)
-                + NUMBER_CLOSING_PARENTHESIS_SYMBOL + number.substring(5, 8) + NUMBER_DASH_SYMBOL + number.substring(8, 10)
-                + NUMBER_DASH_SYMBOL + number.substring(10);
-        return number;
-    }
-
-    @Override
     public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
         UserValidator validator = UserValidatorImpl.getInstance();
         try {
@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
                         userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
                         return false;
                     }
-                    password = PasswordEncoder.getInstance().encode(userData.get(NEW_PASSWORD));
+                    password = PasswordEncoder.encode(userData.get(NEW_PASSWORD));
                 } else {
                     password = Optional.of(userData.get(PASSWORD));
                 }

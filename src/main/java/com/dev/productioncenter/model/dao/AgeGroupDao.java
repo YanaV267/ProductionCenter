@@ -2,5 +2,5 @@ package com.dev.productioncenter.model.dao;
 
 import com.dev.productioncenter.entity.AgeGroup;
 
-public interface AgeGroupDao extends BaseDao<AgeGroup> {//TODO:нет методов
+public interface AgeGroupDao extends BaseDao<AgeGroup> {
 }

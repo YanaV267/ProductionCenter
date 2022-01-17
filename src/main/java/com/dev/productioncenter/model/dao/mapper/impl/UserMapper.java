@@ -13,13 +13,13 @@ import java.util.List;
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
 public class UserMapper implements Mapper<User> {
-    private static final UserMapper INSTANCE = new UserMapper();
+    private static final UserMapper instance = new UserMapper();
 
     private UserMapper() {
     }
 
     public static UserMapper getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

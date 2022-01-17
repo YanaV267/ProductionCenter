@@ -9,6 +9,7 @@ import com.dev.productioncenter.model.dao.mapper.impl.CourseMapper;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class CourseDaoImpl implements CourseDao {
     private static final String SQL_INSERT_COURSE =
@@ -69,13 +70,19 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = 'upcoming' OR courses.status = 'running'";
-    private static final CourseDaoImpl INSTANCE = new CourseDaoImpl();
+    private static final String SQL_SELECT_CHOSEN_COURSE =
+            "SELECT id_course, description, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
+                    "WHERE type = ? AND surname = ? AND name = ? AND role = 'teacher' AND min_age = ? AND max_age = ?";
+    private static final CourseDaoImpl instance = new CourseDaoImpl();
 
     private CourseDaoImpl() {
     }
 
     public static CourseDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -263,5 +270,24 @@ public class CourseDaoImpl implements CourseDao {
             throw new DaoException("Error has occurred while finding available courses: ", exception);
         }
         return courses;
+    }
+
+    @Override
+    public Optional<Course> findChosenCourse(Activity activity, User teacher, AgeGroup ageGroup) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_CHOSEN_COURSE)) {
+            preparedStatement.setString(1, activity.getType());
+            preparedStatement.setString(2, teacher.getSurname());
+            preparedStatement.setString(3, teacher.getName());
+            preparedStatement.setInt(4, ageGroup.getMinAge());
+            preparedStatement.setInt(5, ageGroup.getMaxAge());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Course> courses = CourseMapper.getInstance().retrieve(resultSet);
+                return courses.isEmpty() ? Optional.empty() : Optional.of(courses.get(0));
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding available courses: " + exception);
+            throw new DaoException("Error has occurred while finding available courses: ", exception);
+        }
     }
 }

@@ -24,7 +24,7 @@
             <div id="authent">
                 <input type="text" name="login"
                        placeholder="<fmt:message key="sign_in.login.placeholder" bundle="${ rb }"/>"
-                       pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="${sessionScope.login}"
+                       pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="${user.login}"
                        title="<fmt:message key="sign_in.login.title" bundle="${ rb }"/>"><br/>
                 <input type="password" name="password" pattern="[a-zA-Z][A-Za-z0-9]{7,29}"
                        placeholder="<fmt:message key="account.update.old_password.placeholder" bundle="${ rb }"/>"
@@ -40,14 +40,14 @@
             <div id="personal">
                 <input type="text" name="surname"
                        placeholder="<fmt:message key="sign_up.surname.placeholder" bundle="${ rb }"/>"
-                       pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="${user_data.surname}"
+                       pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="${user.surname}"
                        title="<fmt:message key="sign_up.surname.title" bundle="${ rb }"/>"><br/>
                 <input type="text" name="name"
                        placeholder="<fmt:message key="sign_up.name.placeholder" bundle="${ rb }"/>"
-                       pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="${user_data.name}"
+                       pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="${user.name}"
                        title="<fmt:message key="sign_up.name.title" bundle="${ rb }"/>"><br/>
                 <input type="email" name="email" placeholder="Email" autocomplete="off"
-                       pattern="(([A-Za-z\d._]+){5,25}@([A-Za-z]+){3,7}\.([a-z]+){2,3})" value="${user_data.email}"
+                       pattern="(([A-Za-z\d._]+){5,25}@([A-Za-z]+){3,7}\.([a-z]+){2,3})" value="${user.email}"
                        title="<fmt:message key="sign_up.email.title" bundle="${ rb }"/>: *****@***.**"><br/>
                 <input type="tel" name="number"
                        placeholder="+375(xx)xxx-xx-xx" autocomplete="off"

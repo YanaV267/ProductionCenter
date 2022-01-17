@@ -15,22 +15,22 @@ public class LessonDaoImpl implements LessonDao {
     private static final String SQL_UPDATE_LESSON =
             "UPDATE lessons SET week_day = ?, start_time = ?, duration = ? WHERE id_lesson = ?";
     private static final String SQL_DELETE_LESSON = "DELETE FROM lessons WHERE id_lesson = ?";
-    private static final String SQL_SELECT_ALL_LESSONS = "SELECT id_course, week_day, start_time, duration FROM lessons";
+    private static final String SQL_SELECT_ALL_LESSONS = "SELECT id_lesson, week_day, start_time, duration FROM lessons";
     private static final String SQL_SELECT_LESSON_BY_COURSE =
-            "SELECT id_course, week_day, start_time, duration FROM lessons WHERE id_course = ?";
+            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE id_course = ?";
     private static final String SQL_SELECT_LESSON_BY_WEEK_DAY =
-            "SELECT id_course, week_day, start_time, duration FROM lessons WHERE week_day = ?";
+            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE week_day = ?";
     private static final String SQL_SELECT_LESSON_BY_START_TIME =
-            "SELECT id_course, week_day, start_time, duration FROM lessons WHERE start_time = ?";
+            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE start_time = ?";
     private static final String SQL_SELECT_LESSON_BY_DURATION =
-            "SELECT id_course, week_day, start_time, duration FROM lessons WHERE duration >= ? AND duration <= ?";
-    private static final LessonDaoImpl INSTANCE = new LessonDaoImpl();
+            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE duration >= ? AND duration <= ?";
+    private static final LessonDaoImpl instance = new LessonDaoImpl();
 
     private LessonDaoImpl() {
     }
 
     public static LessonDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

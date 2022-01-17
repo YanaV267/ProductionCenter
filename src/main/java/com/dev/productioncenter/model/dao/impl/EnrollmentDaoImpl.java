@@ -57,13 +57,13 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE enrollments.status = ?";
-    private static final EnrollmentDaoImpl INSTANCE = new EnrollmentDaoImpl();
+    private static final EnrollmentDaoImpl instance = new EnrollmentDaoImpl();
 
     private EnrollmentDaoImpl() {
     }
 
     public static EnrollmentDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

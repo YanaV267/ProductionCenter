@@ -19,15 +19,15 @@
             <p class="title"><fmt:message key="sign_up.title" bundle="${ rb }"/></p>
             <input type="text" name="login" required
                    placeholder="<fmt:message key="sign_in.login.placeholder" bundle="${ rb }"/>"
-                   pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="${user_data.login}"
+                   pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="${user.login}"
                    title="<fmt:message key="sign_in.login.title" bundle="${ rb }"/>"><br/>
             <input type="password" name="password" required
                    placeholder="<fmt:message key="sign_in.password.placeholder" bundle="${ rb }"/>"
-                   pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="${user_data.password}"
+                   pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="${user.password}"
                    title="<fmt:message key="sign_in.password.title" bundle="${ rb }"/>"><br/>
             <input type="password" name="repeated_password" required
                    placeholder="<fmt:message key="sign_up.repeat_password.placeholder" bundle="${ rb }"/>"
-                   pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="${user_data.repeated_password}"
+                   pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="${user.repeated_password}"
                    title="<fmt:message key="sign_in.password.title" bundle="${ rb }"/>"><br/>
             <div id="next">
                 <input type="button" value="<fmt:message key="sign_up.next" bundle="${ rb }"/>">
@@ -37,18 +37,18 @@
             <p class="title"><fmt:message key="sign_up.title" bundle="${ rb }"/></p>
             <input type="text" name="surname" required
                    placeholder="<fmt:message key="sign_up.surname.placeholder" bundle="${ rb }"/>"
-                   pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="${user_data.surname}"
+                   pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="${user.surname}"
                    title="<fmt:message key="sign_up.surname.title" bundle="${ rb }"/>"><br/>
             <input type="text" name="name" required
                    placeholder="<fmt:message key="sign_up.name.placeholder" bundle="${ rb }"/>"
-                   pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="${user_data.name}"
+                   pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="${user.name}"
                    title="<fmt:message key="sign_up.name.title" bundle="${ rb }"/>"><br/>
             <input type="email" name="email" placeholder="Email" autocomplete="off" required
-                   pattern="(([A-Za-z\d._]+){5,25}@([A-Za-z]+){3,7}\.([a-z]+){2,3})" value="${user_data.email}"
+                   pattern="(([A-Za-z\d._]+){5,25}@([A-Za-z]+){3,7}\.([a-z]+){2,3})" value="${user.email}"
                    title="<fmt:message key="sign_up.email.title" bundle="${ rb }"/>: *****@***.**"><br/>
             <input type="tel" name="number" required
                    placeholder="+375(xx)xxx-xx-xx" autocomplete="off"
-                   value="${user_data.number}" pattern="\+375\(\d{2}\)\d{3}-\d{2}-\d{2}"
+                   value="${user.number}" pattern="\+375\(\d{2}\)\d{3}-\d{2}-\d{2}"
                    title="<fmt:message key="sign_up.number.placeholder" bundle="${ rb }"/>: +375(xx)xxx-xx-xx"><br/>
             <div id="subm">
                     <img src="${pageContext.request.contextPath}/pics/back_arrow.png" alt="arrow">

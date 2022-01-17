@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnrollmentMapper implements Mapper<Enrollment> {
-    private static final EnrollmentMapper INSTANCE = new EnrollmentMapper();
+    private static final EnrollmentMapper instance = new EnrollmentMapper();
 
     private EnrollmentMapper() {
     }
 
     public static EnrollmentMapper getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

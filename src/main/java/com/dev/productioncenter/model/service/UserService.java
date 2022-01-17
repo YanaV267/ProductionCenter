@@ -1,6 +1,7 @@
 package com.dev.productioncenter.model.service;
 
 import com.dev.productioncenter.entity.User;
+import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.exception.ServiceException;
 
 import java.io.InputStream;
@@ -16,6 +17,8 @@ public interface UserService {
 
     Optional<User> findUser(String login, String password) throws ServiceException;
 
+    Optional<User> findUser(String surname, String name, UserRole userRole) throws ServiceException;
+
     Optional<User> findUser(String login) throws ServiceException;
 
     List<User> findUsers() throws ServiceException;
@@ -27,8 +30,6 @@ public interface UserService {
     boolean isEmailAvailable(String email) throws ServiceException;
 
     boolean registerUser(Map<String, String> userData) throws ServiceException;
-
-    String formatPhoneNumber(BigInteger phoneNumber);
 
     boolean updateUserAccountData(Map<String, String> userData) throws ServiceException;
 }

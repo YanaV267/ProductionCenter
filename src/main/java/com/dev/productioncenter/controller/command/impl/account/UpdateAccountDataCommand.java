@@ -32,7 +32,8 @@ public class UpdateAccountDataCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String login = (String) session.getAttribute(SessionAttribute.LOGIN);
+        User currentUser = (User) session.getAttribute(SessionAttribute.USER);
+        String login = currentUser.getLogin();
         Map<String, String> userData = new HashMap<>();
         userData.put(LOGIN, request.getParameter(LOGIN));
         userData.put(PASSWORD, request.getParameter(PASSWORD));
@@ -43,13 +44,13 @@ public class UpdateAccountDataCommand implements Command {
         userData.put(EMAIL, request.getParameter(EMAIL));
         userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
         if (!login.equals(userData.get(LOGIN)) && userData.get(PASSWORD).isEmpty()) {
-            request.setAttribute(USER_DATA, userData);
+            request.setAttribute(USER, userData);
             request.setAttribute(MESSAGE, PASSWORD_REQUIREMENT_ERROR_MESSAGE_KEY);
             return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
         }
         try {
             if (!login.equals(userData.get(LOGIN)) && !userService.isLoginAvailable(userData.get(LOGIN))) {
-                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
             }
@@ -58,12 +59,12 @@ public class UpdateAccountDataCommand implements Command {
                 userData.put(PASSWORD, user.get().getPassword());
                 if (!user.get().getEmail().equals(userData.get(EMAIL))
                         && !userService.isEmailAvailable(userData.get(EMAIL))) {
-                    request.setAttribute(USER_DATA, userData);
+                    request.setAttribute(USER, userData);
                     request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
                     return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
                 }
             }
-            request.setAttribute(USER_DATA, userData);
+            request.setAttribute(USER, userData);
             if (userService.updateUserAccountData(userData)) {
                 request.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
                 request.setAttribute(NUMBER, userData.get(PHONE_NUMBER));

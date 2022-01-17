@@ -19,32 +19,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.PICTURE;
 import static com.dev.productioncenter.controller.command.RequestParameter.UPLOADED_PICTURE;
 
-public class UploadProfilePicture implements Command {
+public class UploadProfilePictureCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String UPLOAD_PROFILE_PICTURE_CONFIRM_KEY = "profile_pictures";
+    private static final String UPLOAD_PROFILE_PICTURE_CONFIRM_KEY = "confirm.upload_profile_picture";
     private final UserService userService = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String login = (String) session.getAttribute(SessionAttribute.LOGIN);
+        User user = (User) session.getAttribute(SessionAttribute.USER);
+        String login = user.getLogin();
         try {
             Part part = request.getPart(UPLOADED_PICTURE);
             InputStream pictureStream = part.getInputStream();
             if (userService.updatePicture(login, pictureStream)) {
                 request.setAttribute(MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
-                Optional<User> user = userService.findUser(login);//TODO:повтор
-                if (user.isPresent()) {
-                    request.setAttribute(USER_DATA, user.get());
-                    String number = userService.formatPhoneNumber(user.get().getPhoneNumber());
-                    request.setAttribute(NUMBER, number);
+                Optional<String> picture = userService.loadPicture(login);
+                if (picture.isPresent()) {
+                    request.setAttribute(PICTURE, picture.get());
                     return new Router(PagePath.ACCOUNT, Router.RouterType.FORWARD);
                 }
             }
-        } catch (ServiceException | IOException | ServletException exception) {//TODO:exceptions
+        } catch (ServiceException | IOException | ServletException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
         }
         return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);

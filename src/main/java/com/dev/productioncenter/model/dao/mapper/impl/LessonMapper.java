@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LessonMapper implements Mapper<Lesson> {
-    private static final LessonMapper INSTANCE = new LessonMapper();
+    private static final LessonMapper instance = new LessonMapper();
 
     private LessonMapper() {
     }
 
     public static LessonMapper getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class LessonMapper implements Mapper<Lesson> {
         List<Lesson> lessons = new ArrayList<>();
         while (resultSet.next()) {
             Lesson lesson = new Lesson();
-            lesson.getCourse().setId(resultSet.getLong(ColumnName.LESSON_ID));
+            lesson.setId(resultSet.getLong(ColumnName.LESSON_ID));
             lesson.setWeekDay(resultSet.getString(ColumnName.LESSON_WEEK_DAY));
             lesson.setStartTime(resultSet.getTime(ColumnName.LESSON_START_TIME).toLocalTime());
             lesson.setDuration(resultSet.getInt(ColumnName.LESSON_DURATION));

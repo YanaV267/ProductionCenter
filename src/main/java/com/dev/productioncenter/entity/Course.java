@@ -16,6 +16,12 @@ public class Course extends AbstractEntity {
         ageGroup = new AgeGroup();
     }
 
+    public Course(long id) {
+        super(id);
+        activity = new Activity();
+        ageGroup = new AgeGroup();
+    }
+
     public String getDescription() {
         return description;
     }

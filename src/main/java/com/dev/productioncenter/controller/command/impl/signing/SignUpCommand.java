@@ -36,12 +36,12 @@ public class SignUpCommand implements Command {
         userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
         try {
             if (!userService.isLoginAvailable(userData.get(LOGIN))) {
-                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (!userService.isEmailAvailable(userData.get(EMAIL))) {
-                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
@@ -49,7 +49,7 @@ public class SignUpCommand implements Command {
                 request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.FORWARD);
             } else {
-                request.setAttribute(USER_DATA, userData);
+                request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }

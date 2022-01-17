@@ -47,19 +47,26 @@
                     <label><input type="checkbox" value="<fmt:message key="timetable.saturday" bundle="${ rb }"/>">
                         <fmt:message key="courses.saturday" bundle="${ rb }"/></label>
                 </div>
-                <input type="submit" value="<fmt:message key="courses.search" bundle="${ rb }"/>">
-                <c:choose>
-                    <c:when test="${sessionScope.role == 'admin'}">
-                        <input type="button" value="<fmt:message key="courses.add" bundle="${ rb }"/>"
-                               onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_course'">
-                        <input type="button" value="<fmt:message key="courses.update" bundle="${ rb }"/>" disabled
-                               onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_update_course'">
-                    </c:when>
-                    <c:otherwise>
-                        <input type="button" value="<fmt:message key="courses.enroll" bundle="${ rb }"/>" disabled
-                               onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course'">
-                    </c:otherwise>
-                </c:choose>
+                <div id="buttons">
+                    <input type="submit" value="<fmt:message key="courses.search" bundle="${ rb }"/>">
+                    <input type="submit" value="<fmt:message key="courses.info" bundle="${ rb }"/>" disabled>
+                    <input type="hidden" name="command" value="go_to_course_info">
+                    <input type="hidden" name="chosen_type">
+                    <input type="hidden" name="chosen_teacher">
+                    <input type="hidden" name="chosen_age_group">
+                    <c:choose>
+                        <c:when test="${sessionScope.role == 'admin'}">
+                            <input type="button" value="<fmt:message key="courses.add" bundle="${ rb }"/>"
+                                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_course'">
+                            <input type="button" value="<fmt:message key="courses.update" bundle="${ rb }"/>" disabled
+                                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_update_course'">
+                        </c:when>
+                        <c:otherwise>
+                            <input type="button" value="<fmt:message key="courses.enroll" bundle="${ rb }"/>" disabled
+                                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course'">
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
             <c:if test="${courses.size() > 0}">
                 <div id="all">
@@ -70,14 +77,13 @@
                     <c:forEach var="course" items="${courses}">
                         <div><c:out value="${course.activity.type}"/></div>
                         <div><c:out value="${course.teacher.surname}"/> ${course.teacher.name}</div>
-                        <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/>
-                            <fmt:message key="courses.age.title" bundle="${ rb }"/></div>
+                        <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/> <fmt:message key="courses.age.title" bundle="${ rb }"/></div>
                         <div><c:out value="${course.lessonPrice}"/>р</div>
                     </c:forEach>
                 </div>
             </c:if>
             <c:if test="${courses.size() == 0}">
-                <div><fmt:message key="courses.message" bundle="${ rb }"/></div>
+                <div id="none"><fmt:message key="courses.message" bundle="${ rb }"/></div>
             </c:if>
         </div>
     </form>

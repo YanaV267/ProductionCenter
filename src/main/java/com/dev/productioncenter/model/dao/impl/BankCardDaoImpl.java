@@ -17,13 +17,13 @@ public class BankCardDaoImpl implements BankCardDao {
             "SELECT card_number, expiration_date, owner_name, cvv_number FROM bank_cards WHERE card_number = ? AND expiration_date = ? AND owner_name = ? AND cvv_number = ?";
     private static final String SQL_SELECT_BANK_CARD_BALANCE =
             "SELECT balance FROM bank_cards WHERE card_number = ? AND expiration_date = ? AND owner_name = ? AND cvv_number = ?";
-    private static final BankCardDaoImpl INSTANCE = new BankCardDaoImpl();
+    private static final BankCardDaoImpl instance = new BankCardDaoImpl();
 
     private BankCardDaoImpl() {
     }
 
     public static BankCardDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

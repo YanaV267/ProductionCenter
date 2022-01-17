@@ -11,13 +11,13 @@ import java.util.List;
 public class AgeGroupDaoImpl implements AgeGroupDao {
     private static final String SQL_INSERT_AGE_GROUP =
             "INSERT INTO age_group(min_age, max_age) VALUES (?, ?)";
-    private static final AgeGroupDaoImpl INSTANCE = new AgeGroupDaoImpl();
+    private static final AgeGroupDaoImpl instance = new AgeGroupDaoImpl();
 
     private AgeGroupDaoImpl() {
     }
 
     public static AgeGroupDaoImpl getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

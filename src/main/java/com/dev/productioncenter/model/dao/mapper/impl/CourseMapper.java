@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseMapper implements Mapper<Course> {
-    private static final CourseMapper INSTANCE = new CourseMapper();
+    private static final CourseMapper instance = new CourseMapper();
 
     private CourseMapper() {
     }
 
     public static CourseMapper getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override
