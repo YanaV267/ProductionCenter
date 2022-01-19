@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseDao extends BaseDao<Course> {
+    Optional<Course> findCourseById(long id) throws DaoException;
+
     List<Course> findCourseByTeacher(User teacher) throws DaoException;
 
     List<Course> findCourseByActivityCategory(Activity activity) throws DaoException;
@@ -23,6 +25,4 @@ public interface CourseDao extends BaseDao<Course> {
     List<Course> findCourseByStatus(CourseStatus courseStatus) throws DaoException;
 
     List<Course> findAvailableCourses() throws DaoException;
-
-    Optional<Course> findChosenCourse(Activity activity, User teacher, AgeGroup ageGroup) throws DaoException;
 }

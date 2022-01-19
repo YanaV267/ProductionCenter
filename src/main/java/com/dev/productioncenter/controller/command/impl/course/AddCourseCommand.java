@@ -22,10 +22,10 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ActivityService activityService = new ActivityServiceImpl();
-    private static final CourseService courseService = new CourseServiceImpl();
     private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.add_course";
     private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.add_course";
+    private final ActivityService activityService = new ActivityServiceImpl();
+    private final CourseService courseService = new CourseServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {

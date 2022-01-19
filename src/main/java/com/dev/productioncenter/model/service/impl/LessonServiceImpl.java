@@ -18,10 +18,10 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class LessonServiceImpl implements LessonService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final LessonDao lessonDao = LessonDaoImpl.getInstance();
     private static final String WEEKDAYS_DELIMITER_REGEX = ",";
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\]]";
     private static final String REPLACEMENT_REGEX = "";
+    private final LessonDao lessonDao = LessonDaoImpl.getInstance();
 
     @Override
     public boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException {

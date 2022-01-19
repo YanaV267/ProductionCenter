@@ -12,7 +12,8 @@
 
 #modal-content {
     width: 350px;
-    height: 150px;
+    min-height: 150px;
+    height: auto;
     margin: 200px auto;
     padding-left: 30px;
     color: rgb(8, 10, 114);
@@ -23,6 +24,7 @@
 #modal-content p {
     font-size: 16px;
     margin-top: 65px;
+    margin-right: 30px;
 }
 
 .close {

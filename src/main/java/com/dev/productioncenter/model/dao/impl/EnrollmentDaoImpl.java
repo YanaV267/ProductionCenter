@@ -12,6 +12,7 @@ import com.dev.productioncenter.model.dao.mapper.impl.EnrollmentMapper;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class EnrollmentDaoImpl implements EnrollmentDao {
     private static final String SQL_INSERT_ENROLLMENT =
@@ -39,6 +40,12 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE category = ? AND type = ?";
+    private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE_USER =
+            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+                    "JOIN users ON enrollments.id_user = users.id_user " +
+                    "JOIN courses ON enrollments.id_course = courses.id_course " +
+                    "JOIN activities ON activities.id_activity = courses.id_activity " +
+                    "WHERE enrollments.id_user = ? AND enrollments.id_course = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT =
             "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
@@ -185,6 +192,21 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
             throw new DaoException("Error has occurred while finding enrollments by course: ", exception);
         }
         return enrollments;
+    }
+
+    @Override
+    public Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE_USER)) {
+            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(2, course.getId());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                return Optional.ofNullable(EnrollmentMapper.getInstance().retrieve(resultSet).get(0));
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding enrollments by course: " + exception);
+            throw new DaoException("Error has occurred while finding enrollments by course: ", exception);
+        }
     }
 
     @Override

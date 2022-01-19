@@ -8,6 +8,7 @@ import com.dev.productioncenter.exception.DaoException;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface EnrollmentDao extends BaseDao<Enrollment> {
     boolean checkEnrollmentReservationStatus() throws DaoException;
@@ -17,6 +18,8 @@ public interface EnrollmentDao extends BaseDao<Enrollment> {
     List<Enrollment> findEnrollmentsByUser(User user) throws DaoException;
 
     List<Enrollment> findEnrollmentsByCourse(Course course) throws DaoException;
+
+    Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException;
 
     List<Enrollment> findEnrollmentsByLessonAmount(int minAmount, int maxAmount) throws DaoException;
 

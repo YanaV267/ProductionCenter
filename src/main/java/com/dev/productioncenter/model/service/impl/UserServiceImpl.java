@@ -29,12 +29,12 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final UserDao userDao = UserDaoImpl.getInstance();
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String NUMBER_REMOVING_SYMBOLS_REGEX = "[+()-]";
     private static final String NUMBER_REPLACEMENT_REGEX = "";
     private static final String PICTURE_HEADER = "data:image/jpg;base64,";
     private static final String EMPTY_VALUE_PARAMETER = "";
+    private final UserDao userDao = UserDaoImpl.getInstance();
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
@@ -253,15 +253,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, String> loadTeachersPictures(List<Course> courses) throws ServiceException {
-        Map<String, String> teachersPictures = new HashMap<>();
+    public Map<Course, String> loadTeachersPictures(List<Course> courses) throws ServiceException {
+        Map<Course, String> teachersPictures = new HashMap<>();
         for (Course course : courses) {
             String login = course.getTeacher().getLogin();
             Optional<String> picture = loadPicture(login);
             if (picture.isPresent()) {
-                teachersPictures.put(login, picture.get());
+                teachersPictures.put(course, picture.get());
             } else {
-                teachersPictures.put(login, EMPTY_VALUE_PARAMETER);
+                teachersPictures.put(course, EMPTY_VALUE_PARAMETER);
             }
         }
         return teachersPictures;

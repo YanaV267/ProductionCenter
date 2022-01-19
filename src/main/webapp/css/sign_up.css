@@ -2,7 +2,7 @@ form {
     border-radius: 10px;
     background: rgba(214, 233, 255, 0.8);
     position: absolute;
-    left: 270px;
+    left: 280px;
     top: 170px;
     padding-bottom: 40px;
     color: rgb(11, 35, 78);
@@ -12,7 +12,7 @@ form {
 #rect {
     width: 400px;
     height: 350px;
-    margin: 70px 70px 70px 240px;
+    margin: 70px 70px 70px 250px;
     position: relative;
     z-index: 1;
     border-radius: 10px;

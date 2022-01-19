@@ -28,6 +28,7 @@ public class CourseMapper implements Mapper<Course> {
                     .setId(resultSet.getLong(COURSE_ID))
                     .setDescription(resultSet.getString(COURSE_DESCRIPTION))
                     .setTeacher(new User.UserBuilder()
+                            .setLogin(resultSet.getString(USER_LOGIN))
                             .setSurname(resultSet.getString(USER_SURNAME))
                             .setName(resultSet.getString(USER_NAME))
                             .build())
@@ -43,9 +44,6 @@ public class CourseMapper implements Mapper<Course> {
                     .setStudentAmount(resultSet.getInt(COURSE_STUDENT_AMOUNT))
                     .setCourseStatus(CourseStatus.valueOf(resultSet.getString(COURSE_STATUS).toUpperCase()))
                     .build();
-            if (resultSet.getString(USER_LOGIN) != null) {
-                course.getTeacher().setLogin(resultSet.getString(USER_LOGIN));
-            }
             courses.add(course);
         }
         return courses;

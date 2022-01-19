@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
-<fmt:setBundle basename="pagecontent" var="rb"/>
+<fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/contacts.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${rb}"/></title>
+    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
@@ -15,24 +15,20 @@
 <main>
     <div id="rect"></div>
     <form>
-        <p id="title"><fmt:message key="contacts.title" bundle="${rb}"/></p>
+        <p id="title"><fmt:message key="contacts.title"/></p>
         <div>
-            <p class="subtitle"><fmt:message key="contacts.employers" bundle="${rb}"/></p>
+            <p class="subtitle"><fmt:message key="contacts.employers"/></p>
             <c:forEach var="employer" items="${employers}">
                 <div id="data">
-                    <div>${employer.surname} ${employer.name}</div>
+                    <div>${employer.key.surname} ${employer.key.name}</div>
                     <div>
                         <div class="icons">
                             <img src="${pageContext.request.contextPath}/pics/mail.png" alt="mail">
                             <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                         </div>
                         <div>
-                            <div>${employer.email}</div>
-                            <c:forEach var="employer_number" items="${employers_numbers}">
-                                <c:if test="${employer_number.key eq employer.id}">
-                                    <div>${employer_number.value}</div>
-                                </c:if>
-                            </c:forEach>
+                            <div>${employer.key.email}</div>
+                            <div>${employer.value}</div>
                         </div>
                     </div>
                 </div>
@@ -40,13 +36,13 @@
         </div>
         <c:if test="${teachers.size() != 0}">
             <div>
-                <p class="subtitle"><fmt:message key="header.teachers" bundle="${rb}"/></p>
+                <p class="subtitle"><fmt:message key="header.teachers"/></p>
                 <c:forEach var="teacher" items="${teachers}">
                     <div id="data">
-                        <div>${teacher.surname} ${teacher.name} -
+                        <div>${teacher.key.surname} ${teacher.key.name}
                             <c:forEach var="course" items="${courses}">
-                                <c:if test="${course.teacher.surname eq teacher.surname && course.teacher.name eq teacher.name}">
-                                    ${course.activity.type}
+                                <c:if test="${course.teacher.surname eq teacher.key.surname && course.teacher.name eq teacher.key.name}">
+                                    - ${course.activity.type}
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -56,12 +52,8 @@
                                 <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                             </div>
                             <div>
-                                <div>${teacher.email}</div>
-                                <c:forEach var="teacher_number" items="${teachers_numbers}">
-                                    <c:if test="${teacher_number.key eq teacher.id}">
-                                        <div>${teacher_number.value}</div>
-                                    </c:if>
-                                </c:forEach>
+                                <div>${teacher.key.email}</div>
+                                <div>${teacher.value}</div>
                             </div>
                         </div>
                     </div>

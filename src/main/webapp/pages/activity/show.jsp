@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
-<fmt:setBundle basename="pagecontent" var="rb"/>
+<fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/activity/show.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${rb}"/></title>
+    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
@@ -15,9 +15,9 @@
 <main>
     <div id="rect"></div>
     <form>
-        <p id="title"><fmt:message key="activities.title" bundle="${rb}"/></p>
+        <p id="title"><fmt:message key="activities.title"/></p>
         <c:if test="${sessionScope.role == 'admin'}">
-            <input type="button" value="<fmt:message key="activities.add" bundle="${rb}"/>"
+            <input type="button" value="<fmt:message key="activities.add"/>"
                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_activity'">
         </c:if>
         <c:forEach var="category" items="${categories}">
@@ -25,32 +25,29 @@
                 <p class="subtitle">${category}</p>
                 <div id="header">
                     <p></p>
-                    <p><fmt:message key="activities.teacher" bundle="${rb}"/></p>
-                    <p><fmt:message key="activities.type" bundle="${rb}"/></p>
+                    <p><fmt:message key="activities.teacher"/></p>
+                    <p><fmt:message key="activities.type"/></p>
                 </div>
                 <c:forEach var="activity" items="${activities}">
                     <c:if test="${activity.category eq category}">
                         <div>
                             <c:set var="teacher_appointed" value="false"/>
                             <c:forEach var="course" items="${courses}">
-                                <c:set var="photo_uploaded" value="false"/>
-                                <c:forEach var="profile_picture" items="${profile_pictures}">
-                                    <c:if test="${profile_picture.key eq course.teacher.login && not empty profile_picture.value}">
-                                        <img src="${profile_picture.value}" alt="account">
-                                        <c:set var="photo_uploaded" value="true"/>
-                                    </c:if>
-                                </c:forEach>
-                                <c:if test="${photo_uploaded eq 'false'}">
-                                    <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
-                                </c:if>
-
-                                <c:if test="${course.activity.category eq category && course.activity.type eq activity.type}">
-                                    <p>${course.teacher.surname} ${course.teacher.name}</p>
+                                <c:choose>
+                                    <c:when test="${not empty course.value}">
+                                        <img src="${course.value}" alt="account">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:if test="${course.key.activity.category eq category && course.key.activity.type eq activity.type}">
+                                    <p>${course.key.teacher.surname} ${course.key.teacher.name}</p>
                                     <c:set var="teacher_appointed" value="true"/>
                                 </c:if>
                             </c:forEach>
                             <c:if test="${teacher_appointed eq 'false'}">
-                                <p><fmt:message key="activities.no_teacher" bundle="${rb}"/></p>
+                                <p><fmt:message key="activities.no_teacher"/></p>
                             </c:if>
                             <p>${activity.type}</p>
                         </div>
@@ -59,7 +56,7 @@
             </div>
         </c:forEach>
         <c:if test="${categories.size() == 0}">
-            <div><fmt:message key="activities.message" bundle="${rb}"/></div>
+            <div><fmt:message key="activities.message"/></div>
         </c:if>
     </form>
 </main>

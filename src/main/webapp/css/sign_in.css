@@ -26,12 +26,12 @@ form > * {
 }
 
 p#title {
-    margin-left: 107px;
-    margin-bottom: 25px;
+    margin: auto auto 25px;
     cursor: default;
     letter-spacing: 2px;
     font-weight: bold;
     font-size: 20px;
+    width: fit-content;
 }
 
 input {

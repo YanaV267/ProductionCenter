@@ -1,14 +1,13 @@
 form {
     height: 370px;
-    width: 400px;
+    width: 420px;
     border-radius: 5px;
     background: rgba(214, 233, 255, 0.8);
     position: absolute;
-    left: 320px;
+    left: 280px;
     top: 120px;
     margin-top: 40px;
     color: rgb(11, 35, 78);
-    padding-right: 20px;
     padding-bottom: 40px;
     display: flex;
     flex-direction: column;
@@ -18,7 +17,7 @@ form {
 #rect {
     height: 405px;
     width: 420px;
-    margin: 50px 50px 50px 285px;
+    margin: 50px 50px 50px 250px;
     position: relative;
     z-index: 1;
     border-radius: 5px;
@@ -85,13 +84,11 @@ form>div {
 }
 
 p#title {
-    margin-left: 30px;
-    margin-top: 40px;
-    margin-bottom: 0;
+    margin: 40px auto 0;
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 2px;
-    width: 390px;
+    width: fit-content;
     text-align: center;
 }
 

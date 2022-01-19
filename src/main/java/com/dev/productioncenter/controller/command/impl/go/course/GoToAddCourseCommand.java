@@ -21,8 +21,8 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToAddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ActivityService activityService = new ActivityServiceImpl();
-    private static final UserService userService = new UserServiceImpl();
+    private final ActivityService activityService = new ActivityServiceImpl();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {

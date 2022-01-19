@@ -22,3 +22,19 @@ $('#subm img').on('click', function (event) {
     $('#reg').css('transform', 'rotateY(0deg)');
     $('#rect').css('height', '350px');
 });
+
+$('input[type=tel]').bind('input', function () {
+    if ($(this).val().length === 4)
+        $(this).val($(this).val() + '(');
+    if ($(this).val().length === 7)
+        $(this).val($(this).val() + ')');
+    if ($(this).val().length === 11)
+        $(this).val($(this).val() + '-');
+    if ($(this).val().length === 14)
+        $(this).val($(this).val() + '-');
+});
+
+$("input[type=tel]").bind("keydown click focus", function () {
+    if ($(this).val().length === 0)
+        $(this).val('+');
+});

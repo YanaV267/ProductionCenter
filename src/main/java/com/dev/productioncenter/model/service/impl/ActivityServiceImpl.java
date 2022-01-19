@@ -17,7 +17,7 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class ActivityServiceImpl implements ActivityService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final ActivityDao activityDao = ActivityDaoImpl.getInstance();
+    private final ActivityDao activityDao = ActivityDaoImpl.getInstance();
 
     @Override
     public boolean addActivity(Map<String, String> activityData) throws ServiceException {

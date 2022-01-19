@@ -28,13 +28,11 @@ public class GoToAccountCommand implements Command {
         String login = user.getLogin();
         try {
             Optional<String> picture = userService.loadPicture(login);
-            if (picture.isPresent()) {
-                request.setAttribute(PICTURE, picture.get());
-                return new Router(PagePath.ACCOUNT, Router.RouterType.FORWARD);
-            }
+            picture.ifPresent(s -> request.setAttribute(PICTURE, s));
+            return new Router(PagePath.ACCOUNT, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to account page: " + exception);
+            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
-        return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }
 }

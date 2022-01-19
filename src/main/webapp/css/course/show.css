@@ -14,13 +14,13 @@ input[type="button"]:enabled, input[type="submit"]:enabled {
     margin-right: 35px;
 }
 
-#all > div:nth-child(-n+4) {
+#all > div:nth-child(-n+5) {
     font-size: 15px;
     font-weight: bold;
     cursor: default;
 }
 
-#all > div:not(:nth-child(-n+4)) {
+#all > div:not(:nth-child(-n+5)) {
     font-size: 14px;
     cursor: pointer;
 }
@@ -32,12 +32,12 @@ input[type="button"]:enabled, input[type="submit"]:enabled {
     padding: 0.8em;
 }
 
-#all > div:nth-child(4n+1) {
+#all > div:nth-child(5n+1) {
     border-left: 1px solid rgb(11, 35, 78);
     border-radius: 15px 0 0 15px;
 }
 
-#all > div:nth-child(4n) {
+#all > div:nth-child(5n) {
     border-right: 1px solid rgb(11, 35, 78);
     border-radius: 0 15px 15px 0;
 }
@@ -48,11 +48,11 @@ input[type="button"]:enabled, input[type="submit"]:enabled {
     background-color: rgba(254, 255, 235, 0.8);
 }
 
-div.color:nth-child(4n+1) {
+div.color:nth-child(5n+1) {
     border-left-width: 2px !important;
 }
 
-div.color:nth-child(4n) {
+div.color:nth-child(5n) {
     border-right-width: 2px !important;
 }
 
@@ -74,4 +74,8 @@ form > div > div:last-child {
 
 #buttons input:first-of-type {
     margin-right: 15px;
+}
+
+#buttons input:nth-of-type(5) {
+    margin-left: 15px;
 }

@@ -38,5 +38,5 @@ public interface UserService {
 
     Optional<String> loadPicture(String login) throws ServiceException;
 
-    Map<String, String> loadTeachersPictures(List<Course> courses) throws ServiceException;
+    Map<Course, String> loadTeachersPictures(List<Course> courses) throws ServiceException;
 }

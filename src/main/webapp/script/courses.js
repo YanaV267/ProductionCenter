@@ -1,22 +1,26 @@
-$('#all>div:not(:nth-child(-n+4))').on('click', function () {
-    let row = Math.trunc($(this).index() / 4);
+$('#all>div:not(:nth-child(-n+5))').on('click', function () {
+    let row = Math.trunc($(this).index() / 5);
     let hasClass;
     $('#all>div').each(function () {
-        if (Math.trunc($(this).index() / 4) !== row)
+        if (Math.trunc($(this).index() / 5) !== row)
             $(this).removeClass('color');
     });
-    for (let i = 1; i < 5; i++) {
-        if ($(`#all > div:nth-child(${4 * row + i})`).hasClass('color'))
+    for (let i = 1; i < 6; i++) {
+        if ($(`#all > div:nth-child(${5 * row + i})`).hasClass('color'))
             hasClass = true;
-        $(`#all > div:nth-child(${4 * row + i})`).removeClass('color');
+        $(`#all > div:nth-child(${5 * row + i})`).removeClass('color');
     }
     if (!hasClass) {
-        for (let i = 1; i < 5; i++) {
-            $(`#all > div:nth-child(${4 * row + i})`).toggleClass('color');
-            if (i !== 4) {
-                let property = $(`#all > div:nth-child(${4 * row + i})`).text();
-                $(`input:nth-of-type(${i + 3})`).val(property);
+        let counter = 1;
+        $('input[name=course_id]').each(function () {
+            if (counter === row) {
+                let id = $(this).val();
+                $('input[name=chosen_course_id]').val(id);
             }
+            counter++;
+        });
+        for (let i = 1; i < 6; i++) {
+            $(`#all > div:nth-child(${5 * row + i})`).toggleClass('color');
         }
         $('input:nth-of-type(2)').prop('disabled', false);
         $('input[type=button]:last-of-type').prop('disabled', false);

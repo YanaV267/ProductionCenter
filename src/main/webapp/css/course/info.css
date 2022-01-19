@@ -2,6 +2,7 @@ form {
     height: 370px;
     width: 780px;
     margin-top: -460px !important;
+    font-size: 15px;
 }
 
 #rect {
@@ -32,7 +33,7 @@ input[type="submit"] {
 #data {
     display: flex;
     flex-direction: column;
-    margin-right: 60px;
+    margin-right: 120px;
 }
 
 #data > div:first-child {
@@ -53,7 +54,7 @@ input[type="submit"] {
 }
 
 form > div > div:nth-child(3) {
-    width: 250px;
+    width: 220px;
     text-align: start;
 }
 
@@ -78,7 +79,7 @@ form > div > div:nth-child(4) :last-child {
 #timetable {
     display: flex;
     flex-direction: column;
-    width: 250px;
+    width: 220px;
     text-align: start;
 }
 

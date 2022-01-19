@@ -17,22 +17,20 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.USERS;
-import static com.dev.productioncenter.controller.command.RequestAttribute.USERS_NUMBERS;
 
 public class GoToUsersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final UserService userService = new UserServiceImpl();
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
         try {
-            List<User> users = userService.findUsers();
-            Map<String, String> users_numbers = new HashMap<>();
-            for (User user : users) {
-                users_numbers.put(user.getLogin(), PhoneNumberFormatter.format(user.getPhoneNumber()));
+            List<User> allUsers = userService.findUsers();
+            Map<User, String> users = new HashMap<>();
+            for (User user : allUsers) {
+                users.put(user, PhoneNumberFormatter.format(user.getPhoneNumber()));
             }
             request.setAttribute(USERS, users);
-            request.setAttribute(USERS_NUMBERS, users_numbers);
             return new Router(PagePath.USERS, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to users page: " + exception);

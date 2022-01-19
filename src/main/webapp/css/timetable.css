@@ -4,7 +4,7 @@ form {
     width: 450px;
     border-radius: 5px;
     background: rgba(214, 233, 255, 0.8);
-    margin: 50px auto;
+    margin: 50px auto 50px 280px;
     color: rgb(11, 35, 78);
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@ form {
 
 #rect {
     width: 530px;
-    margin: 40px 40px 40px 380px;
+    margin: 40px 40px 40px 250px;
     position: relative;
     z-index: 1;
     border-radius: 5px;

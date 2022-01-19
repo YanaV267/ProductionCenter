@@ -3,8 +3,14 @@ package com.dev.productioncenter.model.service.impl;
 import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.dao.*;
-import com.dev.productioncenter.model.dao.impl.*;
+import com.dev.productioncenter.model.dao.ActivityDao;
+import com.dev.productioncenter.model.dao.AgeGroupDao;
+import com.dev.productioncenter.model.dao.CourseDao;
+import com.dev.productioncenter.model.dao.UserDao;
+import com.dev.productioncenter.model.dao.impl.ActivityDaoImpl;
+import com.dev.productioncenter.model.dao.impl.AgeGroupDaoImpl;
+import com.dev.productioncenter.model.dao.impl.CourseDaoImpl;
+import com.dev.productioncenter.model.dao.impl.UserDaoImpl;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.LessonService;
 import com.dev.productioncenter.validator.impl.CourseValidatorImpl;
@@ -20,15 +26,14 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class CourseServiceImpl implements CourseService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final LessonService lessonService = new LessonServiceImpl();
     private static final CourseDao courseDao = CourseDaoImpl.getInstance();
     private static final AgeGroupDao ageGroupDao = AgeGroupDaoImpl.getInstance();
     private static final ActivityDao activityDao = ActivityDaoImpl.getInstance();
     private static final UserDao userDao = UserDaoImpl.getInstance();
     private static final String SPACE_DELIMITER_REGEX = " ";
-    private static final String AGE_GROUP_DELIMITER_REGEX = "-";
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\]]";
     private static final String REPLACEMENT_REGEX = "";
+    private final LessonService lessonService = new LessonServiceImpl();
 
     @Override
     public boolean addCourse(Map<String, String> courseData) throws ServiceException {
@@ -87,17 +92,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Optional<Course> findCourse(Map<String, String> chosenCourseData) throws ServiceException {
+    public Optional<Course> findCourse(long id) throws ServiceException {
         try {
-            Activity activity = new Activity();
-            activity.setType(chosenCourseData.get(CHOSEN_TYPE));
-            User teacher = new User();
-            teacher.setSurname(chosenCourseData.get(CHOSEN_TEACHER).split(SPACE_DELIMITER_REGEX)[0]);
-            teacher.setName(chosenCourseData.get(CHOSEN_TEACHER).split(SPACE_DELIMITER_REGEX)[1]);
-            String chosenAgeGroup = chosenCourseData.get(CHOSEN_AGE_GROUP).split(SPACE_DELIMITER_REGEX)[0];
-            AgeGroup ageGroup = new AgeGroup(Integer.parseInt(chosenAgeGroup.split(AGE_GROUP_DELIMITER_REGEX)[0]),
-                    Integer.parseInt(chosenAgeGroup.split(AGE_GROUP_DELIMITER_REGEX)[1]));
-            return courseDao.findChosenCourse(activity, teacher, ageGroup);
+            return courseDao.findCourseById(id);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new ServiceException("Error has occurred while finding available courses: " + exception);

@@ -35,13 +35,13 @@ public class BankCardDaoImpl implements BankCardDao {
     public boolean update(BankCard bankCard) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BANK_CARD_BALANCE)) {
-            preparedStatement.setLong(1, bankCard.getCardNumber());
-            preparedStatement.setBigDecimal(2, bankCard.getBalance());
+            preparedStatement.setBigDecimal(1, bankCard.getBalance());
+            preparedStatement.setLong(2, bankCard.getCardNumber());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while checking bank card: " + exception);
-            throw new DaoException("Error has occurred while checking bank card: ", exception);
+            LOGGER.error("Error has occurred while updating bank card balance: " + exception);
+            throw new DaoException("Error has occurred while updating bank card balance: ", exception);
         }
     }
 
@@ -85,6 +85,7 @@ public class BankCardDaoImpl implements BankCardDao {
             preparedStatement.setString(3, bankCard.getOwnerName());
             preparedStatement.setInt(4, bankCard.getCvvNumber());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
                 balance = resultSet.getBigDecimal(ColumnName.BANK_CARD_BALANCE);
             }
         } catch (SQLException exception) {

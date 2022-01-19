@@ -17,8 +17,8 @@ import java.util.List;
 
 public class GoToCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final CourseService courseService = new CourseServiceImpl();
-    private static final ActivityService activityService = new ActivityServiceImpl();
+    private final CourseService courseService = new CourseServiceImpl();
+    private final ActivityService activityService = new ActivityServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -29,7 +29,6 @@ public class SignInCommand implements Command {
         try {
             Optional<User> user = userService.findUser(login, password);
             if (user.isPresent()) {
-                request.setAttribute(SIGN_IN_ERROR, false);
                 String number = PhoneNumberFormatter.format(user.get().getPhoneNumber());
                 session.setAttribute(NUMBER, number);
                 session.setAttribute(SessionAttribute.USER, user.get());
@@ -38,7 +37,6 @@ public class SignInCommand implements Command {
             } else {
                 request.setAttribute(USER_LOGIN, login);
                 request.setAttribute(USER_PASSWORD, password);
-                request.setAttribute(SIGN_IN_ERROR, true);
                 request.setAttribute(MESSAGE, SIGN_IN_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_IN, Router.RouterType.FORWARD);
             }
