@@ -25,9 +25,14 @@ public final class RequestParameter {
     public static final String LESSON_PRICE = "lesson_price";
     public static final String STUDENT_AMOUNT = "student_amount";
     public static final String DESCRIPTION = "description";
-    public static final String CHOSEN_TYPE = "chosen_type";
-    public static final String CHOSEN_TEACHER = "chosen_teacher";
-    public static final String CHOSEN_AGE_GROUP = "chosen_age_group";
+    public static final String CHOSEN_COURSE_ID = "chosen_course_id";
+    public static final String LESSON_AMOUNT = "lesson_amount";
+    public static final String ENROLLMENT_ID = "enrollment_id";
+    public static final String CARD_NUMBER = "card_number";
+    public static final String OWNER_NAME = "owner_name";
+    public static final String EXPIRATION_DATE = "expiration_date";
+    public static final String CVV_NUMBER = "cvv_number";
+    public static final String BALANCE = "balance";
 
     private RequestParameter() {
     }

@@ -18,11 +18,7 @@ public interface UserService {
 
     Optional<User> findUser(String login) throws ServiceException;
 
-    List<User> findUsers() throws ServiceException;
-
-    List<User> findTeachers() throws ServiceException;
-
-    List<User> findEmployers() throws ServiceException;
+    Map<User, String> findUsers(UserRole role) throws ServiceException;
 
     boolean isLoginAvailable(String login) throws ServiceException;
 
@@ -30,7 +26,7 @@ public interface UserService {
 
     boolean registerUser(Map<String, String> userData) throws ServiceException;
 
-    boolean changeStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException;
+    boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException;
 
     boolean updateUserAccountData(Map<String, String> userData) throws ServiceException;
 

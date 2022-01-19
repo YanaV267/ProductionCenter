@@ -1,0 +1,38 @@
+form {
+    height: 340px;
+    width: 320px;
+    padding: 20px;
+    margin-top: 30px;
+    align-items: center;
+}
+
+#rect {
+    width: 360px;
+    height: 380px;
+}
+
+p#title {
+    margin-top: 20px;
+}
+
+#authent {
+    width: 250px;
+    height: 200px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+input:not([type='submit']) {
+    width: 220px;
+    margin-bottom: 15px;
+}
+
+input[name='expiration_date'], input[name='cvv_number'] {
+    width: 100px !important;
+    margin-right: 20px;
+}
+
+input[type='submit'] {
+    margin: 15px 40px 10px 40px;
+}

@@ -16,7 +16,7 @@ public class LessonDaoImpl implements LessonDao {
             "UPDATE lessons SET week_day = ?, start_time = ?, duration = ? WHERE id_lesson = ?";
     private static final String SQL_DELETE_LESSON = "DELETE FROM lessons WHERE id_lesson = ?";
     private static final String SQL_SELECT_ALL_LESSONS = "SELECT id_lesson, week_day, start_time, duration FROM lessons";
-    private static final String SQL_SELECT_LESSON_BY_COURSE =
+    private static final String SQL_SELECT_LESSONS_BY_COURSE =
             "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE id_course = ?";
     private static final String SQL_SELECT_LESSON_BY_WEEK_DAY =
             "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE week_day = ?";
@@ -98,7 +98,7 @@ public class LessonDaoImpl implements LessonDao {
     public List<Lesson> findLessonsByCourse(long courseId) throws DaoException {
         List<Lesson> lessons;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_COURSE)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSONS_BY_COURSE)) {
             preparedStatement.setLong(1, courseId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 lessons = LessonMapper.getInstance().retrieve(resultSet);

@@ -49,8 +49,8 @@ public class LessonServiceImpl implements LessonService {
         try {
             return lessonDao.findLessonsByCourse(courseId);
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while finding course's lessons: " + exception);
+            LOGGER.error("Error has occurred while finding user's lessons: " + exception);
+            throw new ServiceException("Error has occurred while finding user's lessons: " + exception);
         }
     }
 }

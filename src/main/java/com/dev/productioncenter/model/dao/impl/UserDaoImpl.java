@@ -1,13 +1,12 @@
 package com.dev.productioncenter.model.dao.impl;
 
 import com.dev.productioncenter.entity.User;
-import com.dev.productioncenter.exception.DaoException;
-import com.dev.productioncenter.model.connection.ConnectionPool;
-import com.dev.productioncenter.model.dao.ColumnName;
-import com.dev.productioncenter.model.dao.UserDao;
-import com.dev.productioncenter.model.dao.mapper.impl.UserMapper;
 import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.entity.UserStatus;
+import com.dev.productioncenter.exception.DaoException;
+import com.dev.productioncenter.model.connection.ConnectionPool;
+import com.dev.productioncenter.model.dao.UserDao;
+import com.dev.productioncenter.model.dao.mapper.impl.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -247,7 +246,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean changeStatus(String login, UserStatus currentStatus) throws DaoException {
+    public boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_STATUS)) {
             preparedStatement.setString(1, currentStatus.getStatus());

@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
-<fmt:setBundle basename="pagecontent" var="rb"/>
+<fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/timetable.css" type="text/css"/>
-    <title><fmt:message key="header.title" bundle="${rb}"/></title>
+    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
@@ -15,73 +15,29 @@
 <main>
     <div id="rect"></div>
     <form>
-        <p id="title"><fmt:message key="timetable.title" bundle="${rb}"/></p>
-        <div>
-            <div><fmt:message key="timetable.monday" bundle="${rb}"/></div>
+        <p id="title"><fmt:message key="timetable.title"/></p>
+        <c:forEach var="weekday" items="${weekdays}">
             <div>
+                <div><fmt:message key="timetable.${weekday}"/></div>
                 <div>
-                    <div>
-                        18:00
-                    </div>
-                    <div>
-                        Эстрадный вокал
-                    </div>
+                    <c:set var="lessons_today" value="false"/>
+                    <c:forEach var="enrollment" items="${enrollments}">
+                        <c:forEach var="lesson" items="${enrollment.course.lessons}">
+                            <c:if test="${lesson.weekDay eq weekday}">
+                                <div>
+                                    <div>${lesson.startTime}</div>
+                                    <div>${enrollment.course.activity.type}</div>
+                                    <c:set var="lessons_today" value="true"/>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </c:forEach>
+                    <c:if test="${lessons_today eq 'false'}">
+                        <fmt:message key="timetable.no_lessons"/>
+                    </c:if>
                 </div>
             </div>
-        </div>
-        <div>
-            <div><fmt:message key="timetable.tuesday" bundle="${rb}"/></div>
-            <div>
-                <div>
-                    <div>
-                        16:00
-                    </div>
-                    <div>
-                        Эстрадный вокал
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        18:00
-                    </div>
-                    <div>
-                        Хореография
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        18:00
-                    </div>
-                    <div>
-                        Эстрадный вокал
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <div><fmt:message key="timetable.wednesday" bundle="${rb}"/></div>
-            <div>
-                В этот день занятий нет
-            </div>
-        </div>
-        <div>
-            <div><fmt:message key="timetable.thursday" bundle="${rb}"/></div>
-            <div>
-                В этот день занятий нет
-            </div>
-        </div>
-        <div>
-            <div><fmt:message key="timetable.friday" bundle="${rb}"/></div>
-            <div>
-                В этот день занятий нет
-            </div>
-        </div>
-        <div>
-            <div><fmt:message key="timetable.saturday" bundle="${rb}"/></div>
-            <div>
-                В этот день занятий нет
-            </div>
-        </div>
+        </c:forEach>
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>

@@ -23,7 +23,7 @@ public interface UserDao extends BaseDao<User> {
 
     List<User> findUsersByRole(UserRole role) throws DaoException;
 
-    boolean changeStatus(String login, UserStatus currentStatus) throws DaoException;
+    boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException;
 
     boolean updatePicture(String login, InputStream pictureStream) throws DaoException;
 

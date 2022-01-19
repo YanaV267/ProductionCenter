@@ -37,11 +37,11 @@ public class UploadProfilePictureCommand implements Command {
             Part part = request.getPart(UPLOADED_PICTURE);
             InputStream pictureStream = part.getInputStream();
             if (userService.updatePicture(login, pictureStream)) {
-                request.setAttribute(MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
+                session.setAttribute(MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
                 Optional<String> picture = userService.loadPicture(login);
                 if (picture.isPresent()) {
-                    request.setAttribute(PICTURE, picture.get());
-                    return new Router(PagePath.ACCOUNT, Router.RouterType.FORWARD);
+                    session.setAttribute(PICTURE, picture.get());
+                    return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
                 }
             }
         } catch (ServiceException | IOException | ServletException exception) {

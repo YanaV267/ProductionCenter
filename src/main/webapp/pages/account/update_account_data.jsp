@@ -61,8 +61,6 @@
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/update_account.js"></script>
 <script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
-<c:if test="${not empty message}">
-    <jsp:include page="../modal.jsp"/>
-</c:if>
+
 </body>
 </html>

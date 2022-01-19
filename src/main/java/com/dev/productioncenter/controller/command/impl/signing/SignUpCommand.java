@@ -7,6 +7,7 @@ import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +27,7 @@ public class SignUpCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         Map<String, String> userData = new HashMap<>();
         userData.put(LOGIN, request.getParameter(LOGIN));
         userData.put(PASSWORD, request.getParameter(PASSWORD));
@@ -46,8 +48,8 @@ public class SignUpCommand implements Command {
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (userService.registerUser(userData)) {
-                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
-                return new Router(PagePath.HOME, Router.RouterType.FORWARD);
+                session.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
+                return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);

@@ -5,17 +5,16 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.User;
+import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
-import com.dev.productioncenter.util.PhoneNumberFormatter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +29,8 @@ public class GoToContactsCommand implements Command {
     public Router execute(HttpServletRequest request) {
         try {
             List<Course> courses = courseService.findCourses();
-            List<User> allEmployers = userService.findEmployers();
-            List<User> allTeachers = userService.findTeachers();
-            Map<User, String> employers = new HashMap<>();
-            for (User employer : allEmployers) {
-                employers.put(employer, PhoneNumberFormatter.format(employer.getPhoneNumber()));
-            }
-            Map<User, String> teachers = new HashMap<>();
-            for (User teacher : allTeachers) {
-                teachers.put(teacher, PhoneNumberFormatter.format(teacher.getPhoneNumber()));
-            }
+            Map<User, String> employers = userService.findUsers(UserRole.ADMIN);
+            Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
             request.setAttribute(COURSES, courses);
             request.setAttribute(EMPLOYERS, employers);
             request.setAttribute(TEACHERS, teachers);

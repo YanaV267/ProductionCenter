@@ -10,6 +10,7 @@ import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.impl.UserDaoImpl;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.util.PasswordEncoder;
+import com.dev.productioncenter.util.PhoneNumberFormatter;
 import com.dev.productioncenter.validator.UserValidator;
 import com.dev.productioncenter.validator.impl.UserValidatorImpl;
 import org.apache.commons.codec.binary.Base64;
@@ -82,32 +83,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUsers() throws ServiceException {
+    public Map<User, String> findUsers(UserRole role) throws ServiceException {
         try {
-            return userDao.findUsersByRole(UserRole.USER);
+            List<User> allUsers = userDao.findUsersByRole(role);
+            Map<User, String> users = new HashMap<>();
+            for (User user : allUsers) {
+                users.put(user, PhoneNumberFormatter.format(user.getPhoneNumber()));
+            }
+            return users;
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding all users: " + exception);
-            throw new ServiceException("Error has occurred while finding all users: " + exception);
-        }
-    }
-
-    @Override
-    public List<User> findTeachers() throws ServiceException {
-        try {
-            return userDao.findUsersByRole(UserRole.TEACHER);
-        } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding teachers: " + exception);
-            throw new ServiceException("Error has occurred while finding teachers: " + exception);
-        }
-    }
-
-    @Override
-    public List<User> findEmployers() throws ServiceException {
-        try {
-            return userDao.findUsersByRole(UserRole.ADMIN);
-        } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding employers: " + exception);
-            throw new ServiceException("Error has occurred while finding employers: " + exception);
+            LOGGER.error("Error has occurred while finding users: " + exception);
+            throw new ServiceException("Error has occurred while finding users: " + exception);
         }
     }
 
@@ -166,10 +152,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changeStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
+    public boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
         try {
             for (Map.Entry<String, UserStatus> userStatus : usersStatuses.entrySet()) {
-                if (!userDao.changeStatus(userStatus.getKey(), userStatus.getValue())) {
+                if (!userDao.updateUserStatus(userStatus.getKey(), userStatus.getValue())) {
                     return false;
                 }
             }

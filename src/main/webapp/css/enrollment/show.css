@@ -1,0 +1,55 @@
+#all {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+#all > div:not(:nth-child(-n+7)) {
+    height: auto;
+    line-height: normal;
+}
+
+#all > div:nth-child(-n+7) {
+    font-weight: normal;
+}
+
+#all > div:nth-child(7n+1) {
+    border-left: none;
+    border-radius: 0;
+}
+
+#all > div:nth-child(7n) {
+    border-right: none;
+    border-radius: 0;
+}
+
+input:checked + .slider {
+    background-color: #167e19;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #167e19;
+}
+
+#all > div:nth-child(-n+8) {
+    font-size: 15px;
+    font-weight: bold;
+    cursor: default;
+}
+
+#all > div:not(:nth-child(-n+8)) {
+    font-size: 14px;
+    cursor: pointer;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    align-self: center;
+}
+
+#all > div:nth-child(8n+1) {
+    border-left: 1px solid rgb(11, 35, 78);
+    border-radius: 15px 0 0 15px;
+}
+
+#all > div:nth-child(8n) {
+    border-right: 1px solid rgb(11, 35, 78);
+    border-radius: 0 15px 15px 0;
+}

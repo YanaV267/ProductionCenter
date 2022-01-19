@@ -12,6 +12,7 @@ import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.impl.ActivityServiceImpl;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,6 +33,7 @@ public class AddActivityCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         String category = request.getParameter(NEW_CATEGORY);
         if (category == null) {
             category = request.getParameter(CATEGORY);
@@ -46,10 +48,10 @@ public class AddActivityCommand implements Command {
             if (activityService.addActivity(activityData)) {
                 List<Activity> activities = activityService.findActivities();
                 List<Course> courses = courseService.findCourses();
-                request.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
-                request.setAttribute(ACTIVITIES, activities);
-                request.setAttribute(COURSES, courses);
-                return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.FORWARD);
+                session.setAttribute(ACTIVITIES, activities);
+                session.setAttribute(COURSES, courses);
+                session.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
+                return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(ACTIVITY, activityData);
                 request.setAttribute(MESSAGE, ADD_ACTIVITY_ERROR_MESSAGE_KEY);

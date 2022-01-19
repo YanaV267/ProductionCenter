@@ -6,6 +6,7 @@ import com.dev.productioncenter.controller.command.RequestParameter;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.entity.User;
+import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.ActivityService;
 import com.dev.productioncenter.model.service.UserService;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
@@ -34,7 +36,7 @@ public class GoToAddCourseCommand implements Command {
                 request.setAttribute(ACTIVITIES, activities);
             }
             List<String> categories = activityService.findCategories();
-            List<User> teachers = userService.findTeachers();
+            Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
             request.setAttribute(CATEGORIES, categories);
             request.setAttribute(TEACHERS, teachers);
             return new Router(PagePath.ADD_COURSE, Router.RouterType.FORWARD);

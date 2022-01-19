@@ -24,42 +24,49 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     private static final String SQL_UPDATE_ENROLLMENT_STATUS = "UPDATE enrollments SET status = ? WHERE id_enrollment = ?";
     private static final String SQL_DELETE_ENROLLMENT = "DELETE FROM enrollments WHERE id_enrollment = ?";
     private static final String SQL_SELECT_ALL_ENROLLMENTS =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity";
     private static final String SQL_SELECT_ENROLLMENTS_BY_USER =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE surname = ? AND name = ?";
+                    "WHERE login = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE category = ? AND type = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE_USER =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE enrollments.id_user = ? AND enrollments.id_course = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE lesson_amount >= ? && lesson_amount <= ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_RESERVATION_DATETIME =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE reservation_datetime = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_STATUS =
-            "SELECT id_enrollment, surname, name, category, type, lesson_amount, reservation_datetime, enrollments.status FROM enrollments " +
+            "SELECT id_enrollment, surname, name, enrollments.id_course, category, type, lesson_amount, " +
+                    "reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
@@ -165,8 +172,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
-            preparedStatement.setString(1, user.getSurname());
-            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(1, user.getLogin());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }

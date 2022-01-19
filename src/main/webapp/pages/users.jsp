@@ -19,8 +19,8 @@
         <c:if test="${users.size() > 0}">
             <div id="all">
                 <div><fmt:message key="users.login"/></div>
-                <input type="hidden" name="login" value="${login}">
-                <input type="hidden" name="status">
+                <input type="hidden">
+                <input type="hidden">
                 <div><fmt:message key="users.name"/></div>
                 <div><fmt:message key="users.email"/></div>
                 <div><fmt:message key="users.phone_number"/></div>

@@ -40,30 +40,24 @@
                 <select name="teacher">
                     <option disabled selected><fmt:message key="courses.teacher"/> --</option>
                     <c:forEach var="teacher" items="${teachers}">
-                        <option>${teacher.surname} ${teacher.name}</option>
+                        <option>${teacher.key.surname} ${teacher.key.name}</option>
                     </c:forEach>
                 </select>
             </div>
             <div>
                 <p><fmt:message key="courses.weekdays"/>:</p>
                 <div id="weekdays">
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.monday"/>">
+                    <label><input type="checkbox" name="weekdays" value="monday">
                         <fmt:message key="courses.monday"/></label>
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.tuesday"/>">
+                    <label><input type="checkbox" name="weekdays" value="tuesday">
                         <fmt:message key="courses.tuesday"/></label>
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.wednesday"/>">
+                    <label><input type="checkbox" name="weekdays" value="wednesday">
                         <fmt:message key="courses.wednesday"/></label>
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.thursday"/>">
+                    <label><input type="checkbox" name="weekdays" value="thursday">
                         <fmt:message key="courses.thursday"/></label>
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.friday"/>">
+                    <label><input type="checkbox" name="weekdays" value="friday">
                         <fmt:message key="courses.friday"/></label>
-                    <label><input type="checkbox" name="weekdays"
-                                  value="<fmt:message key="timetable.saturday"/>">
+                    <label><input type="checkbox" name="weekdays" value="saturday">
                         <fmt:message key="courses.saturday"/></label>
                 </div>
                 <div id="time">
@@ -95,8 +89,6 @@
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/courses.js"></script>
-<c:if test="${not empty message}">
-    <jsp:include page="../modal.jsp"/>
-</c:if>
+
 </body>
 </html>

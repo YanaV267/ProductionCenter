@@ -1,0 +1,133 @@
+form {
+    height: 340px;
+    width: 500px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin: -430px 50px 50px 240px;
+    color: rgb(11, 35, 78);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-bottom: 40px;
+    font-size: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+#rect {
+    width: 580px;
+    height: 380px;
+    margin: 50px 80px 80px 210px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+p#title {
+    margin: 40px auto;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: 500px;
+    cursor: default;
+}
+
+form div {
+    cursor: default;
+}
+
+form > div {
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+form > div > div {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+form > div > div:nth-child(2n) {
+    margin-left: 40px;
+}
+
+form > div > div > div:first-child {
+    text-align: right;
+    margin-right: 10px;
+}
+
+form > div > div > div {
+    display: flex;
+    flex-direction: column;
+}
+
+#amount {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    margin-left: 70px;
+}
+
+#amount > div:first-child {
+    text-align: left;
+}
+
+#timetable {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+}
+
+#timetable > div {
+    text-align: left;
+}
+
+#timetable > div:not(:first-child) {
+    margin-left: 30px;
+    margin-top: 5px;
+}
+
+form > div > div:last-child {
+    margin: 10px auto auto;
+}
+
+input {
+    height: 28px;
+    width: 60px;
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    padding: 5px 5px 5px 7px;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+input:focus {
+    outline: 0.4px solid rgba(115, 140, 224, 0.795);
+}
+
+input[type="submit"], input[type="button"] {
+    width: 130px;
+    height: 34px;
+    border-radius: 6px;
+    padding: 5px;
+    border: solid 0.7px rgb(146, 144, 11);
+    background-color: rgb(190, 188, 14);
+    color: white;
+    margin-right: 20px;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    cursor: pointer;
+}
+
+input[type="button"] {
+    color: rgb(11, 35, 78);
+    border: solid 0.7px rgb(95, 108, 167);
+    background-color: rgb(239, 239, 239);
+}

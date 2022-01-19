@@ -1,12 +1,15 @@
 package com.dev.productioncenter.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Course extends AbstractEntity {
     private String description;
     private Activity activity;
     private AgeGroup ageGroup;
     private User teacher;
+    private List<Lesson> lessons;
     private BigDecimal lessonPrice;
     private int studentAmount;
     private CourseStatus courseStatus;
@@ -14,12 +17,14 @@ public class Course extends AbstractEntity {
     public Course() {
         activity = new Activity();
         ageGroup = new AgeGroup();
+        lessons = new ArrayList<>();
     }
 
     public Course(long id) {
         super(id);
         activity = new Activity();
         ageGroup = new AgeGroup();
+        lessons = new ArrayList<>();
     }
 
     public String getDescription() {
@@ -52,6 +57,14 @@ public class Course extends AbstractEntity {
 
     public void setTeacher(User teacher) {
         this.teacher = teacher;
+    }
+
+    public List<Lesson> getLessons() {
+        return List.copyOf(lessons);
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = List.copyOf(lessons);
     }
 
     public BigDecimal getLessonPrice() {
@@ -100,6 +113,9 @@ public class Course extends AbstractEntity {
         if (teacher != null ? !teacher.equals(course.teacher) : course.teacher != null) {
             return false;
         }
+        if (lessons != null ? !lessons.equals(course.lessons) : course.lessons != null) {
+            return false;
+        }
         if (lessonPrice != null ? !lessonPrice.equals(course.lessonPrice) : course.lessonPrice != null) {
             return false;
         }
@@ -116,6 +132,7 @@ public class Course extends AbstractEntity {
         result = result * 31 + (activity != null ? activity.hashCode() : 0);
         result = result * 31 + (ageGroup != null ? ageGroup.hashCode() : 0);
         result = result * 31 + (teacher != null ? teacher.hashCode() : 0);
+        result = result * 31 + (lessons != null ? lessons.hashCode() : 0);
         result = result * 31 + (lessonPrice != null ? lessonPrice.hashCode() : 0);
         result = result * 31 + Integer.hashCode(studentAmount);
         result = result * 31 + (courseStatus != null ? courseStatus.hashCode() : 0);
@@ -129,6 +146,7 @@ public class Course extends AbstractEntity {
         sb.append("', activity=").append(activity);
         sb.append("', ageGroup=").append(ageGroup);
         sb.append("', teacher=").append(teacher);
+        sb.append("', lessons=").append(lessons);
         sb.append("', lessonPrice=").append(lessonPrice);
         sb.append("', studentAmount=").append(studentAmount);
         sb.append("', courseStatus=").append(courseStatus);

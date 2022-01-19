@@ -64,12 +64,14 @@ public class UpdateAccountDataCommand implements Command {
                     return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
                 }
             }
-            request.setAttribute(USER, userData);
             if (userService.updateUserAccountData(userData)) {
-                request.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
-                request.setAttribute(NUMBER, userData.get(PHONE_NUMBER));
-                return new Router(PagePath.ACCOUNT, Router.RouterType.FORWARD);
+                user = userService.findUser(login);
+                session.setAttribute(USER, user);
+                session.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(NUMBER, userData.get(PHONE_NUMBER));
+                return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
             } else {
+                request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
             }

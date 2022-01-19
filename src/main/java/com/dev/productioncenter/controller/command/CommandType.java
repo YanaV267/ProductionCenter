@@ -1,25 +1,15 @@
 package com.dev.productioncenter.controller.command;
 
-import com.dev.productioncenter.controller.command.impl.ChangeLocaleCommand;
-import com.dev.productioncenter.controller.command.impl.ChangeUserStatusCommand;
-import com.dev.productioncenter.controller.command.impl.DefaultCommand;
-import com.dev.productioncenter.controller.command.impl.account.UpdateAccountDataCommand;
-import com.dev.productioncenter.controller.command.impl.account.UploadProfilePictureCommand;
-import com.dev.productioncenter.controller.command.impl.AddActivityCommand;
-import com.dev.productioncenter.controller.command.impl.course.AddCourseCommand;
-import com.dev.productioncenter.controller.command.impl.course.UpdateCourseCommand;
+import com.dev.productioncenter.controller.command.impl.*;
+import com.dev.productioncenter.controller.command.impl.account.*;
+import com.dev.productioncenter.controller.command.impl.course.*;
+import com.dev.productioncenter.controller.command.impl.enrollment.*;
 import com.dev.productioncenter.controller.command.impl.go.*;
-import com.dev.productioncenter.controller.command.impl.go.account.GoToAccountCommand;
-import com.dev.productioncenter.controller.command.impl.go.account.GoToUpdateAccountDataCommand;
-import com.dev.productioncenter.controller.command.impl.go.activity.GoToActivitiesCommand;
-import com.dev.productioncenter.controller.command.impl.go.activity.GoToAddActivityCommand;
-import com.dev.productioncenter.controller.command.impl.go.course.GoToAddCourseCommand;
-import com.dev.productioncenter.controller.command.impl.go.course.GoToCourseInfoCommand;
-import com.dev.productioncenter.controller.command.impl.go.course.GoToCoursesCommand;
-import com.dev.productioncenter.controller.command.impl.go.course.GoToUpdateCourseCommand;
-import com.dev.productioncenter.controller.command.impl.signing.SignInCommand;
-import com.dev.productioncenter.controller.command.impl.signing.SignOutCommand;
-import com.dev.productioncenter.controller.command.impl.signing.SignUpCommand;
+import com.dev.productioncenter.controller.command.impl.go.account.*;
+import com.dev.productioncenter.controller.command.impl.go.activity.*;
+import com.dev.productioncenter.controller.command.impl.go.course.*;
+import com.dev.productioncenter.controller.command.impl.go.enrollment.*;
+import com.dev.productioncenter.controller.command.impl.signing.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,9 +22,12 @@ public enum CommandType {
     GO_TO_ADD_COURSE(new GoToAddCourseCommand()),
     GO_TO_UPDATE_COURSE(new GoToUpdateCourseCommand()),
     GO_TO_ACCOUNT(new GoToAccountCommand()),
+    GO_TO_REPLENISH_BALANCE(new GoToReplenishBalanceCommand()),
     GO_TO_UPDATE_ACCOUNT_DATA(new GoToUpdateAccountDataCommand()),
     GO_TO_ACTIVITIES(new GoToActivitiesCommand()),
     GO_TO_ADD_ACTIVITY(new GoToAddActivityCommand()),
+    GO_TO_ENROLL_ON_COURSE(new GoToEnrollOnCourseCommand()),
+    GO_TO_ENROLLMENTS(new GoToEnrollmentsCommand()),
     GO_TO_TIMETABLE(new GoToTimetableCommand()),
     GO_TO_CONTACTS(new GoToContactsCommand()),
     GO_TO_USERS(new GoToUsersCommand()),
@@ -43,11 +36,14 @@ public enum CommandType {
     SIGN_OUT(new SignOutCommand()),
     SIGN_UP(new SignUpCommand()),
     UPDATE_ACCOUNT_DATA(new UpdateAccountDataCommand()),
+    REPLENISH_BALANCE(new ReplenishBalanceCommand()),
     UPLOAD_PROFILE_PICTURE(new UploadProfilePictureCommand()),
     CHANGE_USER_STATUS(new ChangeUserStatusCommand()),
+    CHANGE_ENROLLMENT_STATUS(new ChangeEnrollmentStatusCommand()),
     ADD_COURSE(new AddCourseCommand()),
     ADD_ACTIVITY(new AddActivityCommand()),
     UPDATE_COURSE(new UpdateCourseCommand()),
+    ENROLL_ON_COURSE(new EnrollOnCourseCommand()),
     DEFAULT(new DefaultCommand());
 
     private final Command command;

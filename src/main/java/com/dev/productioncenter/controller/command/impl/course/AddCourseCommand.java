@@ -45,7 +45,6 @@ public class AddCourseCommand implements Command {
         courseData.put(DESCRIPTION, request.getParameter(DESCRIPTION));
         try {
             if (courseService.addCourse(courseData)) {
-                request.setAttribute(RequestAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
                 List<Course> courses;
                 if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
                         || UserRole.valueOf(role.toUpperCase()) == UserRole.TEACHER) {
@@ -54,9 +53,10 @@ public class AddCourseCommand implements Command {
                     courses = courseService.findAvailableCourses();
                 }
                 List<String> categories = activityService.findCategories();
-                request.setAttribute(RequestAttribute.COURSES, courses);
-                request.setAttribute(RequestAttribute.CATEGORIES, categories);
-                return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
+                session.setAttribute(RequestAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(RequestAttribute.COURSES, courses);
+                session.setAttribute(RequestAttribute.CATEGORIES, categories);
+                return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(RequestAttribute.COURSE, courseData);
                 request.setAttribute(RequestAttribute.MESSAGE, ADD_COURSE_ERROR_MESSAGE_KEY);

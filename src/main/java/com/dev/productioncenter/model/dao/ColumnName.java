@@ -36,7 +36,7 @@ public final class ColumnName {
     public static final String LESSON_DURATION = "duration";
 
     public static final String ENROLLMENT_ID = "id_enrollment";
-    public static final String ENROLLMENT_COURSE_ID = "id_course";
+    public static final String ENROLLMENT_COURSE_ID = "enrollments.id_course";
     public static final String ENROLLMENT_USER_ID = "id_user";
     public static final String ENROLLMENT_LESSON_AMOUNT = "lesson_amount";
     public static final String ENROLLMENT_RESERVATION_DATETIME = "reservation_datetime";
