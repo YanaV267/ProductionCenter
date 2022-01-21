@@ -31,8 +31,8 @@ public class GoToAddCourseCommand implements Command {
         String category = request.getParameter(RequestParameter.CATEGORY);
         try {
             if (category != null) {
-                request.setAttribute(SELECTED_CATEGORY, category);
                 List<Activity> activities = activityService.findActivities(category);
+                request.setAttribute(SELECTED_CATEGORY, category);
                 request.setAttribute(ACTIVITIES, activities);
             }
             List<String> categories = activityService.findCategories();

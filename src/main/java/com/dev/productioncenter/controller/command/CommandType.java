@@ -31,6 +31,7 @@ public enum CommandType {
     GO_TO_TIMETABLE(new GoToTimetableCommand()),
     GO_TO_CONTACTS(new GoToContactsCommand()),
     GO_TO_USERS(new GoToUsersCommand()),
+    GO_TO_TEACHERS(new GoToTeachersCommand()),
     CHANGE_LOCALE(new ChangeLocaleCommand()),
     SIGN_IN(new SignInCommand()),
     SIGN_OUT(new SignOutCommand()),
@@ -39,11 +40,13 @@ public enum CommandType {
     REPLENISH_BALANCE(new ReplenishBalanceCommand()),
     UPLOAD_PROFILE_PICTURE(new UploadProfilePictureCommand()),
     CHANGE_USER_STATUS(new ChangeUserStatusCommand()),
+    CHANGE_USER_ROLE(new ChangeUserRoleCommand()),
     CHANGE_ENROLLMENT_STATUS(new ChangeEnrollmentStatusCommand()),
-    ADD_COURSE(new AddCourseCommand()),
-    ADD_ACTIVITY(new AddActivityCommand()),
-    UPDATE_COURSE(new UpdateCourseCommand()),
     ENROLL_ON_COURSE(new EnrollOnCourseCommand()),
+    ADD_ACTIVITY(new AddActivityCommand()),
+    ADD_COURSE(new AddCourseCommand()),
+    UPDATE_COURSE(new UpdateCourseCommand()),
+    SEARCH_COURSES(new SearchCoursesCommand()),
     DEFAULT(new DefaultCommand());
 
     private final Command command;

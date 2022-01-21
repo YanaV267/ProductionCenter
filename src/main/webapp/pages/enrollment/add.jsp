@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf8">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/enrollment/enrollment.css" type="text/css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/enrollment/add.css" type="text/css"/>
     <title><fmt:message key="header.title"/></title>
 </head>
 
@@ -24,10 +24,10 @@
                     <div><fmt:message key="courses.age_group"/>:</div>
                 </div>
                 <div>
-                    <div>${course.activity.type}</div>
-                    <div>${course.teacher.surname} ${course.teacher.name}</div>
-                    <div>${course.ageGroup.minAge}-${course.ageGroup.maxAge} <fmt:message
-                            key="courses.age.title"/></div>
+                    <div><c:out value="${course.activity.type}"/></div>
+                    <div><c:out value="${course.teacher.surname}"/> <c:out value="${course.teacher.name}"/></div>
+                    <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/>
+                        <fmt:message key="courses.age.title"/></div>
                 </div>
             </div>
             <div>
@@ -36,14 +36,16 @@
                     <div><fmt:message key="enrollment.total_price"/>:</div>
                 </div>
                 <div>
-                    <div id="price">${course.lessonPrice}р</div>
+                    <div id="price"><c:out value="${course.lessonPrice}"/>р</div>
                     <div id="total"></div>
                 </div>
             </div>
             <div id="timetable">
                 <div><fmt:message key="courses.timetable"/>:</div>
                 <c:forEach var="lesson" items="${lessons}">
-                    <div>${lesson.weekDay}: ${lesson.startTime} (${lesson.duration}мин)</div>
+                    <div><c:out value="${lesson.weekDay}"/>: <c:out value="${lesson.startTime}"/>
+                        (<c:out value="${lesson.duration}"/>мин)
+                    </div>
                 </c:forEach>
             </div>
             <div id="amount">
@@ -54,7 +56,7 @@
                 <input type="submit" value="<fmt:message key="courses.enroll"/>">
                 <input type="button" value="<fmt:message key="courses.back"/>"
                        onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">
-                <input type="hidden" name="chosen_course_id" value="${course.id}">
+                <input type="hidden" name="chosen_course_id" value="<c:out value="${course.id}"/>">
             </div>
         </div>
     </form>

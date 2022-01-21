@@ -26,6 +26,7 @@ public class UserDaoImpl implements UserDao {
             "UPDATE users SET password = ?, surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
     private static final String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ? WHERE login = ?";
+    private static final String SQL_UPDATE_USER_ROLE = "UPDATE users SET role = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
     private static final String SQL_SELECT_ALL_USERS =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users";
@@ -256,6 +257,20 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating user's status: " + exception);
             throw new DaoException("Error has occurred while updating user's status: ", exception);
+        }
+    }
+
+    @Override
+    public boolean updateUserRole(String login, UserRole currentRole) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_ROLE)) {
+            preparedStatement.setString(1, currentRole.getRole());
+            preparedStatement.setString(2, login);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user's role: " + exception);
+            throw new DaoException("Error has occurred while updating user's role: ", exception);
         }
     }
 }

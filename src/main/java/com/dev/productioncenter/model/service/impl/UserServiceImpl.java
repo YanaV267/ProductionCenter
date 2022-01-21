@@ -167,6 +167,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException {
+        try {
+            for (Map.Entry<String, UserRole> userStatus : usersRoles.entrySet()) {
+                if (!userDao.updateUserRole(userStatus.getKey(), userStatus.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while changing users' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: " + exception);
+        }
+    }
+
+    @Override
     public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
         UserValidator validator = UserValidatorImpl.getInstance();
         try {

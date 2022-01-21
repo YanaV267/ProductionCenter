@@ -30,7 +30,8 @@ p#title {
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 2px;
-    width: 310px;
+    width: 215px;
+    text-align: center;
 }
 
 input {

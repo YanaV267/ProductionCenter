@@ -13,7 +13,7 @@
 #modal-content {
     width: 350px;
     min-height: 150px;
-    height: auto;
+    height: fit-content;
     margin: 200px auto;
     padding-left: 30px;
     color: rgb(8, 10, 114);

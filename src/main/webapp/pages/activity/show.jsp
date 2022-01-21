@@ -22,7 +22,7 @@
         </c:if>
         <c:forEach var="category" items="${categories}">
             <div>
-                <p class="subtitle">${category}</p>
+                <p class="subtitle"><c:out value="${category}"/></p>
                 <div id="header">
                     <p></p>
                     <p><fmt:message key="activities.teacher"/></p>
@@ -35,21 +35,24 @@
                             <c:forEach var="course" items="${courses}">
                                 <c:choose>
                                     <c:when test="${not empty course.value}">
-                                        <img src="${course.value}" alt="account">
+                                        <img src="<c:out value="${course.value}"/>" alt="account">
                                     </c:when>
                                     <c:otherwise>
                                         <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
                                     </c:otherwise>
                                 </c:choose>
                                 <c:if test="${course.key.activity.category eq category && course.key.activity.type eq activity.type}">
-                                    <p>${course.key.teacher.surname} ${course.key.teacher.name}</p>
+                                    <p>
+                                        <c:out value="${course.key.teacher.surname}"/> <c:out
+                                            value="${course.key.teacher.name}"/>
+                                    </p>
                                     <c:set var="teacher_appointed" value="true"/>
                                 </c:if>
                             </c:forEach>
                             <c:if test="${teacher_appointed eq 'false'}">
                                 <p><fmt:message key="activities.no_teacher"/></p>
                             </c:if>
-                            <p>${activity.type}</p>
+                            <p><c:out value="${activity.type}"/></p>
                         </div>
                     </c:if>
                 </c:forEach>

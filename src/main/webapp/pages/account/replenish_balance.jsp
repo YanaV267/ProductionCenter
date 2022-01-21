@@ -20,20 +20,21 @@
         <div>
             <div id="authent">
                 <input type="text" name="card_number" placeholder="xxxx xxxx xxxx xxxx"
-                       pattern="\d{4} \d{4} \d{4} \d{4}" autocomplete="off" value="${card.cardNumber}"
+                       pattern="\d{4} \d{4} \d{4} \d{4}" autocomplete="off" value="<c:out value="${card.cardNumber}"/>"
                        title="<fmt:message key="account.balance.card_number"/>: xxxx xxxx xxxx xxxx"><br/>
                 <input type="text" name="owner_name" autocomplete="off"
                        placeholder="<fmt:message key="account.balance.owner_name.placeholder"/>"
-                       pattern="[A-Z ]{3,30}" value="${card.ownerName}"
+                       pattern="[A-Z ]{3,30}" value="<c:out value="${card.ownerName}"/>"
                        title="<fmt:message key="account.balance.owner_name"/>"><br/>
-                <input type="text" name="expiration_date" placeholder="xx/xx"
-                       pattern="(0[1-9]|1[0-2])\/(2[2-6])" autocomplete="off" value="${card.expirationDate}"
+                <input type="text" name="expiration_date" placeholder="xx/xx" autocomplete="off"
+                       pattern="(0[1-9]|1[0-2])\/(2[2-6])" value="<c:out value="${card.expirationDate}"/>"
                        title="<fmt:message key="account.balance.expiration_date"/>: xx/xx"><br/>
                 <input type="tel" name="cvv_number" placeholder="CVV" autocomplete="off"
-                       value="${card.cvvNumber}" pattern="\d{3}"
+                       value="<c:out value="${card.cvvNumber}"/>" pattern="\d{3}"
                        title="<fmt:message key="account.balance.cvv_number"/>"><br/>
                 <input type="text" name="balance" pattern="^((\d{2,4}\.\d{2})|(\d{2,4}))$" autocomplete="off"
-                       placeholder="<fmt:message key="account.balance.summary"/>" value="${card.balance}"
+                       placeholder="<fmt:message key="account.balance.summary"/>"
+                       value="<c:out value="${card.balance}"/>"
                        title="<fmt:message key="account.balance.summary.placeholder"/>: xxxx.xx"><br/>
                 <input type="submit" value="<fmt:message key="account.balance.submit"/>">
             </div>

@@ -1,0 +1,15 @@
+input:checked + .slider {
+    background-color: #167e19;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #167e19;
+}
+
+p#userTitle {
+    margin: 0 auto 30px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: fit-content;
+}

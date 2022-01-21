@@ -19,7 +19,7 @@
         <p id="title"><fmt:message key="courses.add.title"/></p>
         <div id="courseProps">
             <div>
-<%--                TODO:переключение чтобы не было сброса данных--%>
+                <%--                TODO:переключение чтобы не было сброса данных--%>
                 <select name="category" onchange="location.href=
                         '${pageContext.request.contextPath}/controller?command=go_to_add_course&category='
                         + this.options[this.selectedIndex].value">
@@ -28,19 +28,19 @@
                     </option>
                     <c:forEach var="category" items="${categories}">
                         <option <c:if test="${category eq selected_category}">selected</c:if>>
-                                ${category}</option>
+                            <c:out value="${category}"/></option>
                     </c:forEach>
                 </select>
                 <select name="type">
                     <option disabled selected><fmt:message key="activities.type"/> --</option>
                     <c:forEach var="activity" items="${activities}">
-                        <option>${activity.type}</option>
+                        <option><c:out value="${activity.type}"/></option>
                     </c:forEach>
                 </select>
                 <select name="teacher">
                     <option disabled selected><fmt:message key="courses.teacher"/> --</option>
                     <c:forEach var="teacher" items="${teachers}">
-                        <option>${teacher.key.surname} ${teacher.key.name}</option>
+                        <option><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/></option>
                     </c:forEach>
                 </select>
             </div>

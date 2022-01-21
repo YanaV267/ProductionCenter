@@ -9,8 +9,8 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 public class CourseValidatorImpl implements CourseValidator {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String CATEGORY_REGEX = "[а-яА-Я]{3,20}";
-    private static final String TYPE_REGEX = "[а-яА-Я -]{3,30}";
-    private static final String TEACHER_REGEX = "[а-яА-Я ]{5,30}";
+    private static final String TYPE_REGEX = "[\\p{Alpha}а-яА-Я -&]{3,30}";
+    private static final String TEACHER_REGEX = "[\\p{Alpha}а-яА-Я ]{5,30}";
     private static final String AGE_REGEX = "\\b([3-9]|[1-5]\\d|60)\\b";
     private static final String STUDENT_AMOUNT_REGEX = "\\b([1-9]|[1-5]\\d|30)\\b";
     private static final String LESSON_PRICE_REGEX = "^((\\d\\d\\.)?\\d{1,2})$";

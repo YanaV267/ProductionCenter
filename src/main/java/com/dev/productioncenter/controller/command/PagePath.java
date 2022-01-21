@@ -2,8 +2,8 @@ package com.dev.productioncenter.controller.command;
 
 public final class PagePath {
     public static final String HOME = "/index.jsp";
-    public static final String ERROR_500 = "/pages/error500.jsp";
-    public static final String ERROR_404 = "/pages/error404.jsp";
+    public static final String ERROR_403 = "/pages/error/error403.jsp";
+    public static final String ERROR_404 = "/pages/error/error404.jsp";
     public static final String SIGN_IN = "/pages/sign_in.jsp";
     public static final String SIGN_UP = "/pages/sign_up.jsp";
     public static final String SHOW_COURSES = "/pages/course/show.jsp";
@@ -20,6 +20,7 @@ public final class PagePath {
     public static final String TIMETABLE = "/pages/timetable.jsp";
     public static final String CONTACTS = "/pages/contacts.jsp";
     public static final String USERS = "/pages/users.jsp";
+    public static final String TEACHERS = "/pages/teachers.jsp";
 
     private PagePath(){
     }

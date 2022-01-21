@@ -18,9 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
@@ -80,11 +78,46 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<Course> findCourses(Activity activity, String[] weekdays) throws ServiceException {
+        try {
+            if (activity.getCategory() != null) {
+                if (activity.getType() != null) {
+                    if (weekdays != null) {
+                        Set<Course> courses = new HashSet<>();
+                        for (String weekday : weekdays) {
+                            courses.addAll(courseDao.findCourseByWeekday(weekday));
+                        }
+                        return List.copyOf(courses);
+                    } else {
+                        return courseDao.findCourseByActivity(activity);
+                    }
+                } else {
+                    return courseDao.findCourseByActivityCategory(activity);
+                }
+            } else {
+                if (activity.getType() != null) {
+                    return courseDao.findCourseByActivityType(activity);
+                } else {
+                    if (weekdays != null) {
+                        Set<Course> courses = new HashSet<>();
+                        for (String weekday : weekdays) {
+                            courses.addAll(courseDao.findCourseByWeekday(weekday));
+                        }
+                        return List.copyOf(courses);
+                    }
+                }
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding courses: " + exception);
+            throw new ServiceException("Error has occurred while finding courses: " + exception);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<Course> findAvailableCourses() throws ServiceException {
         try {
-            List<Course> courses = courseDao.findCourseByStatus(CourseStatus.UPCOMING);
-            courses.addAll(courseDao.findCourseByStatus(CourseStatus.RUNNING));
-            return courses;
+            return courseDao.findAvailableCourses();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new ServiceException("Error has occurred while finding available courses: " + exception);

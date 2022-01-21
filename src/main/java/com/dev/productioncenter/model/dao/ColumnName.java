@@ -20,7 +20,7 @@ public final class ColumnName {
     public static final String ACTIVITY_CATEGORY = "category";
     public static final String ACTIVITY_TYPE = "type";
 
-    public static final String COURSE_ID = "id_course";
+    public static final String COURSE_ID = "courses.id_course";
     public static final String COURSE_DESCRIPTION = "description";
     public static final String COURSE_TEACHER_ID = "id_teacher";
     public static final String COURSE_ACTIVITY_ID = "id_activity";

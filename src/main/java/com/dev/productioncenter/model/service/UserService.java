@@ -28,6 +28,8 @@ public interface UserService {
 
     boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException;
 
+    boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException;
+
     boolean updateUserAccountData(Map<String, String> userData) throws ServiceException;
 
     boolean updatePicture(String login, InputStream pictureStream) throws ServiceException;

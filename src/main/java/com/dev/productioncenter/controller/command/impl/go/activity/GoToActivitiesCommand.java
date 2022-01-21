@@ -45,9 +45,9 @@ public class GoToActivitiesCommand implements Command {
                 allCourses = courseService.findAvailableCourses();
             }
             Map<Course, String> courses = userService.loadTeachersPictures(allCourses);
-            request.setAttribute(CATEGORIES, categories);
-            request.setAttribute(ACTIVITIES, activities);
-            request.setAttribute(COURSES, courses);
+            session.setAttribute(CATEGORIES, categories);
+            session.setAttribute(ACTIVITIES, activities);
+            session.setAttribute(COURSES, courses);
             return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to activities page: " + exception);

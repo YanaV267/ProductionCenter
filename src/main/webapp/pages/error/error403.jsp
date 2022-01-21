@@ -5,7 +5,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/error.css" type="text/css"/>
-    <title>Error 404</title>
+    <title>Error 403</title>
 </head>
 <body>
 <main>
@@ -14,10 +14,10 @@
             <img src="${pageContext.request.contextPath}/pics/error.png" alt="error">
             <div>
                 <div id="number">
-                    <div>404</div>
-                    <div>Not Found</div>
+                    <div>403</div>
+                    <div>Forbidden</div>
                 </div>
-                <div><fmt:message key="error.404.message"/></div>
+                <div><fmt:message key="error.403.message"/></div>
                 <input type="submit" value="<fmt:message key="error.back"/>"/>
             </div>
         </div>

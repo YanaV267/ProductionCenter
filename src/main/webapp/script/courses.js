@@ -22,10 +22,10 @@ $('#all>div:not(:nth-child(-n+5))').on('click', function () {
         for (let i = 1; i < 6; i++) {
             $(`#all > div:nth-child(${5 * row + i})`).toggleClass('color');
         }
-        $('input:nth-of-type(2)').prop('disabled', false);
+        $('input:nth-of-type(3)').prop('disabled', false);
         $('input[type=button]:last-of-type').prop('disabled', false);
     } else {
-        $('input:nth-of-type(2)').prop('disabled', true);
+        $('input:nth-of-type(3)').prop('disabled', true);
         $('input[type=button]:last-of-type').prop('disabled', true);
     }
 });

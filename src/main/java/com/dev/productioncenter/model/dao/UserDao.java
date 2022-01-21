@@ -25,6 +25,8 @@ public interface UserDao extends BaseDao<User> {
 
     boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException;
 
+    boolean updateUserRole(String login, UserRole currentRole) throws DaoException;
+
     boolean updatePicture(String login, InputStream pictureStream) throws DaoException;
 
     Optional<InputStream> loadPicture(String login) throws DaoException;

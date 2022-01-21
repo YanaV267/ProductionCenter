@@ -72,10 +72,14 @@ form > div > div:last-child {
     margin-top: 25px;
 }
 
-#buttons input:first-of-type {
-    margin-right: 15px;
+#buttons > div {
+    margin-right: 25px;
 }
 
-#buttons input:nth-of-type(5) {
+#buttons > *:nth-child(2n) {
     margin-left: 15px;
+}
+
+#buttons > input:last-of-type {
+    margin-bottom: 30px;
 }

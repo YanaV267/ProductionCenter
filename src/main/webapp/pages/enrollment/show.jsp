@@ -30,8 +30,9 @@
                 <c:forEach var="enrollment" items="${enrollments}">
                     <div><c:out value="${enrollment.key.user.surname}"/> <c:out
                             value="${enrollment.key.user.name}"/></div>
-                    <input type="hidden" name="enrollment_id" value="${enrollment.key.id}">
-                    <input type="hidden" name="status" value="${enrollment.key.enrollmentStatus.status}">
+                    <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
+                    <input type="hidden" name="status"
+                           value="<c:out value="${enrollment.key.enrollmentStatus.status}"/>">
                     <div><c:out value="${enrollment.key.course.activity.type}"/></div>
                     <div><c:out value="${enrollment.key.lessonAmount}"/></div>
                     <div><c:out value="${enrollment.value}"/></div>

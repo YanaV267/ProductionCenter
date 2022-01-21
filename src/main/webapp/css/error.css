@@ -1,0 +1,80 @@
+@font-face {
+    font-family: 'Century Gothic';
+    src: url(gothic.ttf);
+}
+
+* {
+    font-family: 'Century Gothic';
+}
+
+a:active, a:hover, a {
+    text-decoration: none;
+    color: white;
+}
+
+body {
+    background: rgb(21, 31, 47);
+    color: white;
+}
+
+img {
+    width: 580px;
+    height: 600px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#error {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#error > div {
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
+}
+
+#error > div:not(#number) {
+    align-items: center;
+}
+
+#error > div > *:not(#number) {
+    margin-right: 70px;
+}
+
+#number {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#number > div:first-child {
+    font-size: 200px;
+}
+
+#number > div:last-child {
+    transform: rotate(-90deg);
+    font-size: 23px;
+    margin-left: -60px;
+    height: fit-content;
+    width: 200px;
+    text-align: center;
+}
+
+
+input[type="submit"] {
+    width: 180px;
+    height: 37px;
+    padding: 5px;
+    background-color: rgb(190, 188, 14);
+    border: solid 0.7px rgb(146, 144, 11);
+    border-radius: 6px;
+    color: white;
+    margin-top: 60px;
+}
+
+input[type="submit"]:hover {
+    cursor: pointer;
+}

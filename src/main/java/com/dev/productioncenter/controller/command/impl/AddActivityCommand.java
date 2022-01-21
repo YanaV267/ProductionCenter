@@ -5,12 +5,9 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.RequestAttribute;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.Activity;
-import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.ActivityService;
-import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.impl.ActivityServiceImpl;
-import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
-import static com.dev.productioncenter.controller.command.RequestAttribute.COURSES;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class AddActivityCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final CourseService courseService = new CourseServiceImpl();
     private static final String ADD_ACTIVITY_ERROR_MESSAGE_KEY = "error.add_activity";
     private static final String ADD_ACTIVITY_CONFIRM_MESSAGE_KEY = "confirm.add_activity";
     private final ActivityService activityService = new ActivityServiceImpl();
@@ -47,9 +42,7 @@ public class AddActivityCommand implements Command {
             request.setAttribute(RequestAttribute.CATEGORIES, categories);
             if (activityService.addActivity(activityData)) {
                 List<Activity> activities = activityService.findActivities();
-                List<Course> courses = courseService.findCourses();
                 session.setAttribute(ACTIVITIES, activities);
-                session.setAttribute(COURSES, courses);
                 session.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.REDIRECT);
             } else {

@@ -1,5 +1,6 @@
 package com.dev.productioncenter.model.service;
 
+import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.exception.ServiceException;
 
@@ -11,6 +12,8 @@ public interface CourseService {
     boolean addCourse(Map<String, String> courseData) throws ServiceException;
 
     List<Course> findCourses() throws ServiceException;
+
+    List<Course> findCourses(Activity activity, String[] weekdays) throws ServiceException;
 
     List<Course> findAvailableCourses() throws ServiceException;
 

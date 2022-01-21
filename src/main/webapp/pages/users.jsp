@@ -27,8 +27,8 @@
                 <div><fmt:message key="users.status"/></div>
                 <c:forEach var="user" items="${users}">
                     <div><c:out value="${user.key.login}"/></div>
-                    <input type="hidden" name="login" value="${user.key.login}">
-                    <input type="hidden" name="status" value="${user.key.userStatus.status}">
+                    <input type="hidden" name="login" value="<c:out value="${user.key.login}"/>">
+                    <input type="hidden" name="status" value="<c:out value="${user.key.userStatus.status}"/>">
                     <div><c:out value="${user.key.surname}"/> <c:out value="${user.key.name}"/></div>
                     <div><c:out value="${user.key.email}"/></div>
                     <div><c:out value="${user.value}"/></div>

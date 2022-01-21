@@ -61,8 +61,8 @@ public class ActivityServiceImpl implements ActivityService {
         try {
             return activityDao.findCategories();
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding all activities: " + exception);
-            throw new ServiceException("Error has occurred while finding all activities: " + exception);
+            LOGGER.error("Error has occurred while finding all categories: " + exception);
+            throw new ServiceException("Error has occurred while finding all categories: " + exception);
         }
     }
 }

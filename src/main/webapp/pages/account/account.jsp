@@ -15,12 +15,12 @@
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/uploadController" enctype="multipart/form-data">
-        <p id="title">${user.login}</p>
+        <p id="title"><c:out value="${user.login}"/></p>
         <div>
             <div>
                 <c:choose>
                     <c:when test="${not empty picture}">
-                        <img src="${picture}" alt="account">
+                        <img src="<c:out value="${picture}"/>" alt="account">
                     </c:when>
                     <c:otherwise>
                         <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
@@ -34,9 +34,9 @@
                     <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                 </div>
                 <div>
-                    <div>${user.surname} ${user.name}</div>
-                    <div>${user.email}</div>
-                    <div>${number}</div>
+                    <div><c:out value="${user.surname}"/> <c:out value="${user.name}"/></div>
+                    <div><c:out value="${user.email}"/></div>
+                    <div><c:out value="${number}"/></div>
                 </div>
             </div>
             <div id="wrapper">

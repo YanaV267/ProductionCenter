@@ -12,6 +12,7 @@ public final class RequestParameter {
     public static final String EMAIL = "email";
     public static final String PHONE_NUMBER = "number";
     public static final String STATUS = "status";
+    public static final String ROLE = "role";
     public static final String UPLOADED_PICTURE = "uploaded_picture";
     public static final String CATEGORY = "category";
     public static final String NEW_CATEGORY = "new_category";

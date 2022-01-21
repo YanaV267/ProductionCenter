@@ -6,7 +6,6 @@ import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.CourseDao;
 import com.dev.productioncenter.model.dao.mapper.impl.CourseMapper;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
@@ -18,60 +17,79 @@ public class CourseDaoImpl implements CourseDao {
             "UPDATE courses SET description = ?, id_teacher = ?, id_activity = ?, id_age_group = ?, lesson_price = ?, student_amount = ?, status = ? WHERE id_course = ?";
     private static final String SQL_DELETE_COURSE = "DELETE FROM courses WHERE id_course = ?";
     private static final String SQL_SELECT_ALL_COURSES =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group";
     private static final String SQL_SELECT_COURSE_BY_ID =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE id_course = ?";
     private static final String SQL_SELECT_COURSES_BY_TEACHER =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE id_teacher = ?";
+    private static final String SQL_SELECT_COURSES_BY_AGE_GROUP =
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
+                    "WHERE min_age <= ? AND max_age >= ?";
+    private static final String SQL_SELECT_COURSES_BY_ACTIVITY =
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
+                    "WHERE category = ? AND type = ?";
     private static final String SQL_SELECT_COURSES_BY_ACTIVITY_CATEGORY =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE category = ?";
     private static final String SQL_SELECT_COURSES_BY_ACTIVITY_TYPE =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE type = ?";
-    private static final String SQL_SELECT_COURSES_BY_AGE_GROUP =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+    private static final String SQL_SELECT_COURSES_BY_ACTIVITY_WEEKDAY =
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
-                    "WHERE min_age <= ? AND max_age >= ?";
-    private static final String SQL_SELECT_COURSES_BY_LESSON_PRICE =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN lessons ON courses.id_course = lessons.id_course " +
+                    "WHERE category = ? AND type = ? AND lessons.week_day = ?";
+    private static final String SQL_SELECT_COURSES_BY_WEEKDAY =
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
-                    "WHERE lesson_price = ?";
-    private static final String SQL_SELECT_COURSES_BY_STUDENT_AMOUNT =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
-                    "JOIN users ON courses.id_teacher = users.id_user " +
-                    "JOIN activities ON courses.id_activity = activities.id_activity " +
-                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
-                    "WHERE student_amount = ?";
+                    "JOIN lessons ON courses.id_course = lessons.id_course " +
+                    "WHERE lessons.week_day = ?";
     private static final String SQL_SELECT_COURSES_BY_STATUS =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = ? ORDER BY category";
     private static final String SQL_SELECT_AVAILABLE_COURSES =
-            "SELECT id_course, description, login, surname, name, category, type, min_age, max_age, lesson_price, student_amount, courses.status FROM courses " +
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
@@ -183,6 +201,38 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    public List<Course> findCourseByAgeGroup(AgeGroup ageGroup) throws DaoException {
+        List<Course> courses;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_AGE_GROUP)) {
+            preparedStatement.setInt(1, ageGroup.getMinAge());
+            preparedStatement.setInt(2, ageGroup.getMaxAge());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            courses = CourseMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding courses by age group: " + exception);
+            throw new DaoException("Error has occurred while finding courses by age group: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> findCourseByActivity(Activity activity) throws DaoException {
+        List<Course> courses;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY)) {
+            preparedStatement.setString(1, activity.getCategory());
+            preparedStatement.setString(2, activity.getType());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            courses = CourseMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding courses by activity: " + exception);
+            throw new DaoException("Error has occurred while finding courses by activity: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
     public List<Course> findCourseByActivityCategory(Activity activity) throws DaoException {
         List<Course> courses;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -213,47 +263,33 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<Course> findCourseByAgeGroup(AgeGroup ageGroup) throws DaoException {
+    public List<Course> findCourseByActivityWeekday(Activity activity, String weekday) throws DaoException {
         List<Course> courses;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_AGE_GROUP)) {
-            preparedStatement.setInt(1, ageGroup.getMinAge());
-            preparedStatement.setInt(2, ageGroup.getMaxAge());
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_WEEKDAY)) {
+            preparedStatement.setString(1, activity.getCategory());
+            preparedStatement.setString(2, activity.getType());
+            preparedStatement.setString(3, weekday);
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding courses by age group: " + exception);
-            throw new DaoException("Error has occurred while finding courses by age group: ", exception);
+            LOGGER.error("Error has occurred while finding courses by activity & weekday: " + exception);
+            throw new DaoException("Error has occurred while finding courses by activity & weekday: ", exception);
         }
         return courses;
     }
 
     @Override
-    public List<Course> findCourseByLessonPrice(BigDecimal lessonPrice) throws DaoException {
+    public List<Course> findCourseByWeekday(String weekday) throws DaoException {
         List<Course> courses;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_LESSON_PRICE)) {
-            preparedStatement.setBigDecimal(1, lessonPrice);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_WEEKDAY)) {
+            preparedStatement.setString(1, weekday);
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding courses by lesson price: " + exception);
-            throw new DaoException("Error has occurred while finding courses by lesson price: ", exception);
-        }
-        return courses;
-    }
-
-    @Override
-    public List<Course> findCourseByStudentAmount(int studentAmount) throws DaoException {
-        List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_STUDENT_AMOUNT)) {
-            preparedStatement.setInt(1, studentAmount);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding courses by student amount: " + exception);
-            throw new DaoException("Error has occurred while finding courses by student amount: ", exception);
+            LOGGER.error("Error has occurred while finding courses by weekday: " + exception);
+            throw new DaoException("Error has occurred while finding courses by weekday: ", exception);
         }
         return courses;
     }

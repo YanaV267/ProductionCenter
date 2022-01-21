@@ -15,44 +15,47 @@
 <jsp:include page="../main/home.jsp"/>
 <main>
     <div id="rect"></div>
-    <form method="get" action="${pageContext.request.contextPath}/controller?command=search_courses">
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=search_courses">
         <p id="title"><fmt:message key="courses.title"/></p>
         <div id="layout">
             <div id="search">
-                <select name="category"
-                        onchange="location.href='${pageContext.request.contextPath}/controller?command=go_to_show_course'">
+                <select name="category" onchange="location.href=
+                        '${pageContext.request.contextPath}/controller?command=go_to_courses&category='
+                        + this.options[this.selectedIndex].value">
                     <option disabled selected><fmt:message key="activities.category"/> --</option>
                     <c:forEach var="category" items="${categories}">
-                        <option>${category}</option>
+                        <option <c:if test="${category eq selected_category}">selected</c:if>>
+                            <c:out value="${category}"/></option>
                     </c:forEach>
                 </select>
                 <select name="type">
                     <option disabled selected><fmt:message key="activities.type"/> --</option>
                     <c:forEach var="activity" items="${activities}">
-                        <option>${activity.type}</option>
+                        <option <c:if test="${activity.type eq selected_type}">selected</c:if>>
+                            <c:out value="${activity.type}"/></option>
                     </c:forEach>
                 </select>
                 <p><fmt:message key="courses.weekdays"/>:</p>
                 <div id="weekdays">
-                    <label><input type="checkbox" name="weekdays" value="monday">
-                        <fmt:message key="courses.monday"/></label>
-                    <label><input type="checkbox" name="weekdays" value="tuesday">
-                        <fmt:message key="courses.tuesday"/></label>
-                    <label><input type="checkbox" name="weekdays" value="wednesday">
-                        <fmt:message key="courses.wednesday"/></label>
-                    <label><input type="checkbox" name="weekdays" value="thursday">
-                        <fmt:message key="courses.thursday"/></label>
-                    <label><input type="checkbox" name="weekdays" value="friday">
-                        <fmt:message key="courses.friday"/></label>
-                    <label><input type="checkbox" name="weekdays" value="saturday">
-                        <fmt:message key="courses.saturday"/></label>
+                    <c:forEach var="weekday" items="${weekdays}">
+                        <label><input type="checkbox" name="weekdays" value="<c:out value="${weekday}"/>"
+                        <c:forEach var="selected_weekday" items="${selected_weekdays}">
+                                      <c:if test="${selected_weekday eq weekday}">checked</c:if>
+                        </c:forEach>>
+                            <fmt:message key="courses.${weekday}"/></label>
+                    </c:forEach>
                 </div>
                 <div id="buttons">
                     <input type="submit" value="<fmt:message key="courses.search"/>">
-                    <input type="submit" value="<fmt:message key="courses.info"/>" disabled>
-                    <input type="hidden" name="command" value="go_to_course_info">
+                    <input type="button" value="<fmt:message key="courses.clear"/>"
+                           onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">
+                    <input type="button" value="<fmt:message key="courses.info"/>" disabled
+                           onclick="location.href=
+                                   '${pageContext.request.contextPath}/controller?command=go_to_course_info&chosen_course_id='
+                                   + document.getElementsByName('chosen_course_id')[0].value">
                     <c:choose>
                         <c:when test="${sessionScope.role == 'admin'}">
+                            <div></div>
                             <input type="button" value="<fmt:message key="courses.add"/>"
                                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_course'">
                             <input type="button" value="<fmt:message key="courses.update"/>" disabled

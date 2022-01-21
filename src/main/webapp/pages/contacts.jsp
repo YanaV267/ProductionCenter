@@ -20,15 +20,15 @@
             <p class="subtitle"><fmt:message key="contacts.employers"/></p>
             <c:forEach var="employer" items="${employers}">
                 <div id="data">
-                    <div>${employer.key.surname} ${employer.key.name}</div>
+                    <div><c:out value="${employer.key.surname}"/> <c:out value="${employer.key.name}"/></div>
                     <div>
                         <div class="icons">
                             <img src="${pageContext.request.contextPath}/pics/mail.png" alt="mail">
                             <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                         </div>
                         <div>
-                            <div>${employer.key.email}</div>
-                            <div>${employer.value}</div>
+                            <div><c:out value="${employer.key.email}"/></div>
+                            <div><c:out value="${employer.value}"/></div>
                         </div>
                     </div>
                 </div>
@@ -39,10 +39,10 @@
                 <p class="subtitle"><fmt:message key="header.teachers"/></p>
                 <c:forEach var="teacher" items="${teachers}">
                     <div id="data">
-                        <div>${teacher.key.surname} ${teacher.key.name}
+                        <div><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/>
                             <c:forEach var="course" items="${courses}">
-                                <c:if test="${course.teacher.surname eq teacher.key.surname && course.teacher.name eq teacher.key.name}">
-                                    - ${course.activity.type}
+                                <c:if test="${course.teacher.surname eq teacher.key.surname
+                                && course.teacher.name eq teacher.key.name}"> - <c:out value="${course.activity.type}"/>
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -52,8 +52,8 @@
                                 <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                             </div>
                             <div>
-                                <div>${teacher.key.email}</div>
-                                <div>${teacher.value}</div>
+                                <div><c:out value="${teacher.key.email}"/></div>
+                                <div><c:out value="${teacher.value}"/></div>
                             </div>
                         </div>
                     </div>

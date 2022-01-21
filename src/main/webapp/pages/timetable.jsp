@@ -25,8 +25,8 @@
                         <c:forEach var="lesson" items="${enrollment.course.lessons}">
                             <c:if test="${lesson.weekDay eq weekday}">
                                 <div>
-                                    <div>${lesson.startTime}</div>
-                                    <div>${enrollment.course.activity.type}</div>
+                                    <div><c:out value="${lesson.startTime}"/></div>
+                                    <div><c:out value="${enrollment.course.activity.type}"/></div>
                                     <c:set var="lessons_today" value="true"/>
                                 </div>
                             </c:if>
