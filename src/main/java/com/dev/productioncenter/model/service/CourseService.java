@@ -18,4 +18,6 @@ public interface CourseService {
     List<Course> findAvailableCourses() throws ServiceException;
 
     Optional<Course> findCourse(long id) throws ServiceException;
+
+    boolean reservePlaceAtCourse(long id) throws ServiceException;
 }

@@ -1,15 +1,16 @@
 package com.dev.productioncenter.controller.command.impl.enrollment;
 
-import com.dev.productioncenter.controller.command.*;
+import com.dev.productioncenter.controller.command.Command;
+import com.dev.productioncenter.controller.command.PagePath;
+import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.SessionAttribute;
 import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.Lesson;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.service.ActivityService;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.EnrollmentService;
 import com.dev.productioncenter.model.service.LessonService;
-import com.dev.productioncenter.model.service.impl.ActivityServiceImpl;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.EnrollmentServiceImpl;
 import com.dev.productioncenter.model.service.impl.LessonServiceImpl;
@@ -22,16 +23,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
-import static com.dev.productioncenter.controller.command.RequestParameter.*;
+import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
+import static com.dev.productioncenter.controller.command.RequestParameter.LESSON_AMOUNT;
 
 public class EnrollOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment";
-    private static final String ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrollment";
+    private static final String ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrolling_on_course";
+    private static final String ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrolling_on_course";
     private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
     private final LessonService lessonService = new LessonServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
-    private final ActivityService activityService = new ActivityServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -41,12 +42,8 @@ public class EnrollOnCourseCommand implements Command {
         String lessonAmount = request.getParameter(LESSON_AMOUNT);
         try {
             if (enrollmentService.enrollOnCourse(user, chosenCourseId, lessonAmount)) {
-                List<Course> courses = courseService.findAvailableCourses();
-                List<String> categories = activityService.findCategories();
-                session.setAttribute(COURSES, courses);
-                session.setAttribute(CATEGORIES, categories);
-                session.setAttribute(CATEGORIES, categories);
-                session.setAttribute(MESSAGE, ENROLLMENT_CONFIRM_MESSAGE_KEY);
+                courseService.reservePlaceAtCourse(chosenCourseId);
+                session.setAttribute(SessionAttribute.MESSAGE, ENROLLMENT_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
                 Optional<Course> course = courseService.findCourse(chosenCourseId);
@@ -59,7 +56,7 @@ public class EnrollOnCourseCommand implements Command {
                 }
             }
         } catch (ServiceException exception) {
-            LOGGER.error("Error has occurred while redirecting to enrollment page: " + exception);
+            LOGGER.error("Error has occurred while enrolling on course: " + exception);
         }
         return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }

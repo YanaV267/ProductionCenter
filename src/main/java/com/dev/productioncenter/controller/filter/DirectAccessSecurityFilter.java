@@ -1,10 +1,12 @@
 package com.dev.productioncenter.controller.filter;
 
 import com.dev.productioncenter.controller.command.PagePath;
+import com.dev.productioncenter.controller.command.SessionAttribute;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +28,9 @@ public class DirectAccessSecurityFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        if (!httpServletRequest.getServletPath().contains(ERROR_PAGE_PATH)) {
+        HttpSession session = httpServletRequest.getSession();
+        if (!httpServletRequest.getServletPath().contains(ERROR_PAGE_PATH)
+                && session.getAttribute(SessionAttribute.MESSAGE) == null) {
             String pagePath = httpServletRequest.getServletPath();
             Optional<String> foundPage = accessiblePages
                     .stream()

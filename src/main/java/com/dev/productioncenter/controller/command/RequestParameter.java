@@ -29,6 +29,7 @@ public final class RequestParameter {
     public static final String CHOSEN_COURSE_ID = "chosen_course_id";
     public static final String LESSON_AMOUNT = "lesson_amount";
     public static final String ENROLLMENT_ID = "enrollment_id";
+    public static final String CHOSEN_ENROLLMENT_ID = "chosen_enrollment_id";
     public static final String CARD_NUMBER = "card_number";
     public static final String OWNER_NAME = "owner_name";
     public static final String EXPIRATION_DATE = "expiration_date";

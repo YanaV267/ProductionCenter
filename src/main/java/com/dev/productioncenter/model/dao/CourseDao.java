@@ -6,8 +6,8 @@ import com.dev.productioncenter.exception.DaoException;
 import java.util.List;
 import java.util.Optional;
 
-public interface CourseDao extends BaseDao<Course> {
-    Optional<Course> findCourseById(long id) throws DaoException;
+public interface CourseDao extends BaseDao<Long, Course> {
+    boolean updateCourseStudentAmount(long id, int studentAmount) throws DaoException;
 
     List<Course> findCourseByTeacher(User teacher) throws DaoException;
 

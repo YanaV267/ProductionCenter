@@ -44,19 +44,15 @@ public class ReplenishBalanceCommand implements Command {
         try {
             Optional<BankCard> bankCard = bankCardService.findCard(cardData);
             if (bankCard.isPresent() && bankCardService.replenishBalance(bankCard.get(), cardData.get(BALANCE))) {
-                Optional<String> picture = userService.loadPicture(login);
-                if (picture.isPresent()) {
-                    session.setAttribute(PICTURE, picture.get());
-                    session.setAttribute(MESSAGE, REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY);
-                    return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
-                }
+                session.setAttribute(SessionAttribute.MESSAGE, REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY);
+                return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(CARD, cardData);
                 request.setAttribute(MESSAGE, INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.REPLENISH_BALANCE, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {
-            LOGGER.error("Error has occurred while updating user account: " + exception);
+            LOGGER.error("Error has occurred while replenishing balance: " + exception);
         }
         return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }

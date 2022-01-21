@@ -1,13 +1,14 @@
 package com.dev.productioncenter.model.dao.impl;
 
-import com.dev.productioncenter.model.dao.LessonDao;
-import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.entity.Lesson;
 import com.dev.productioncenter.exception.DaoException;
+import com.dev.productioncenter.model.connection.ConnectionPool;
+import com.dev.productioncenter.model.dao.LessonDao;
 import com.dev.productioncenter.model.dao.mapper.impl.LessonMapper;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class LessonDaoImpl implements LessonDao {
     private static final String SQL_INSERT_LESSON =
@@ -68,10 +69,10 @@ public class LessonDaoImpl implements LessonDao {
     }
 
     @Override
-    public boolean delete(Lesson lesson) throws DaoException {
+    public boolean delete(Long id) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_LESSON)) {
-            preparedStatement.setLong(1, lesson.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
@@ -92,6 +93,11 @@ public class LessonDaoImpl implements LessonDao {
             throw new DaoException("Error has occurred while finding lessons: ", exception);
         }
         return lessons;
+    }
+
+    @Override
+    public Optional<Lesson> findById(Long id) {
+        throw new UnsupportedOperationException("Finding lesson by id is unsupported");
     }
 
     @Override

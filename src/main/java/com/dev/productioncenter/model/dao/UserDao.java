@@ -10,7 +10,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserDao extends BaseDao<User> {
+public interface UserDao extends BaseDao<Long, User> {
     Optional<User> findUserByLogin(String login) throws DaoException;
 
     Optional<User> findTeacherByName(String surname, String name) throws DaoException;

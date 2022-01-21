@@ -14,7 +14,10 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SQL_INSERT_COURSE =
             "INSERT INTO courses(description, id_teacher, id_activity, id_age_group, lesson_price, student_amount) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_COURSE =
-            "UPDATE courses SET description = ?, id_teacher = ?, id_activity = ?, id_age_group = ?, lesson_price = ?, student_amount = ?, status = ? WHERE id_course = ?";
+            "UPDATE courses SET description = ?, id_teacher = ?, id_activity = ?, id_age_group = ?, " +
+                    "lesson_price = ?, student_amount = ?, status = ? WHERE id_course = ?";
+    private static final String SQL_UPDATE_STUDENT_AMOUNT =
+            "UPDATE courses SET student_amount = ? WHERE id_course = ?";
     private static final String SQL_DELETE_COURSE = "DELETE FROM courses WHERE id_course = ?";
     private static final String SQL_SELECT_ALL_COURSES =
             "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
@@ -144,10 +147,24 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public boolean delete(Course course) throws DaoException {
+    public boolean updateCourseStudentAmount(long id, int studentAmount) throws DaoException {
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_STUDENT_AMOUNT)) {
+            preparedStatement.setInt(1, studentAmount);
+            preparedStatement.setLong(2, id);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating student amount: " + exception);
+            throw new DaoException("Error has occurred while updating student amount: ", exception);
+        }
+    }
+
+    @Override
+    public boolean delete(Long id) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_COURSE)) {
-            preparedStatement.setLong(1, course.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
@@ -171,7 +188,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public Optional<Course> findCourseById(long id) throws DaoException {
+    public Optional<Course> findById(Long id) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSE_BY_ID)) {
             preparedStatement.setLong(1, id);

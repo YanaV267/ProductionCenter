@@ -7,6 +7,7 @@ import com.dev.productioncenter.model.dao.AgeGroupDao;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 public class AgeGroupDaoImpl implements AgeGroupDao {
     private static final String SQL_INSERT_AGE_GROUP =
@@ -42,12 +43,17 @@ public class AgeGroupDaoImpl implements AgeGroupDao {
     }
 
     @Override
-    public boolean delete(AgeGroup ageGroup) {
+    public boolean delete(Long id) {
         throw new UnsupportedOperationException("Deleting of an age group is unsupported");
     }
 
     @Override
     public List<AgeGroup> findAll() {
         throw new UnsupportedOperationException("Deleting of an age group is unsupported");
+    }
+
+    @Override
+    public Optional<AgeGroup> findById(Long id) {
+        throw new UnsupportedOperationException("Finding age group by id is unsupported");
     }
 }

@@ -5,13 +5,11 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/account/account.css" type="text/css"/>
-    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
-<jsp:include page="../main/home.jsp"/>
+<jsp:include page="../main/header.jsp"/>
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/uploadController" enctype="multipart/form-data">
@@ -58,4 +56,5 @@
 <script src="${pageContext.request.contextPath}/script/account.js"></script>
 
 </body>
+<jsp:include page="../main/footer.jsp"/>
 </html>

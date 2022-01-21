@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
-import static com.dev.productioncenter.controller.command.RequestAttribute.PICTURE;
 import static com.dev.productioncenter.controller.command.RequestParameter.UPLOADED_PICTURE;
 
 public class UploadProfilePictureCommand implements Command {
@@ -37,10 +35,10 @@ public class UploadProfilePictureCommand implements Command {
             Part part = request.getPart(UPLOADED_PICTURE);
             InputStream pictureStream = part.getInputStream();
             if (userService.updatePicture(login, pictureStream)) {
-                session.setAttribute(MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
                 Optional<String> picture = userService.loadPicture(login);
                 if (picture.isPresent()) {
-                    session.setAttribute(PICTURE, picture.get());
+                    session.setAttribute(SessionAttribute.MESSAGE, UPLOAD_PROFILE_PICTURE_CONFIRM_KEY);
+                    session.setAttribute(SessionAttribute.PICTURE, picture.get());
                     return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
                 }
             }

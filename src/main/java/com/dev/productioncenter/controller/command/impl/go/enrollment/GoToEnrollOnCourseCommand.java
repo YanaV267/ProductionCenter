@@ -4,10 +4,7 @@ import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.controller.command.SessionAttribute;
-import com.dev.productioncenter.entity.Course;
-import com.dev.productioncenter.entity.Lesson;
-import com.dev.productioncenter.entity.User;
-import com.dev.productioncenter.entity.UserRole;
+import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.ActivityService;
 import com.dev.productioncenter.model.service.CourseService;
@@ -41,24 +38,26 @@ public class GoToEnrollOnCourseCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(SessionAttribute.USER);
         String role = (String) session.getAttribute(SessionAttribute.ROLE);
         long chosenId = Long.parseLong(request.getParameter(CHOSEN_COURSE_ID));
         try {
-            Optional<Course> course = courseService.findCourse(chosenId);
             List<Course> courses = courseService.findAvailableCourses();
             List<String> categories = activityService.findCategories();
+
+            request.setAttribute(COURSES, courses);
+            request.setAttribute(CATEGORIES, categories);
+            if (UserRole.valueOf(role.toUpperCase()) == UserRole.GUEST) {
+                request.setAttribute(MESSAGE, ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
+            }
+            Optional<Enrollment> enrollment = enrollmentService.findEnrollment(user, chosenId);
+            if (enrollment.isPresent()) {
+                request.setAttribute(MESSAGE, ENROLLMENT_EXIST_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
+            }
+            Optional<Course> course = courseService.findCourse(chosenId);
             if (course.isPresent()) {
-                request.setAttribute(COURSES, courses);
-                request.setAttribute(CATEGORIES, categories);
-                if (UserRole.valueOf(role.toUpperCase()) == UserRole.GUEST) {
-                    request.setAttribute(MESSAGE, ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY);
-                    return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
-                }
-                User user = (User) session.getAttribute(SessionAttribute.USER);
-                if (enrollmentService.findEnrollments(user, chosenId)) {
-                    request.setAttribute(MESSAGE, ENROLLMENT_EXIST_ERROR_MESSAGE_KEY);
-                    return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
-                }
                 if (course.get().getStudentAmount() == 0) {
                     request.setAttribute(MESSAGE, ENROLLMENT_NO_PLACES_ERROR_MESSAGE_KEY);
                     return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);

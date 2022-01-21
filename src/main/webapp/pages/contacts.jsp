@@ -5,13 +5,11 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/contacts.css" type="text/css"/>
-    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
-<jsp:include page="main/home.jsp"/>
+<jsp:include page="main/header.jsp"/>
 <main>
     <div id="rect"></div>
     <form>
@@ -65,4 +63,5 @@
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/contacts_height.js"></script>
 </body>
+<jsp:include page="main/footer.jsp"/>
 </html>

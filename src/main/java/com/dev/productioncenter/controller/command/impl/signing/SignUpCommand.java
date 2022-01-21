@@ -3,6 +3,7 @@ package com.dev.productioncenter.controller.command.impl.signing;
 import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.SessionAttribute;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
@@ -48,7 +49,7 @@ public class SignUpCommand implements Command {
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (userService.registerUser(userData)) {
-                session.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(SessionAttribute.MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(USER, userData);

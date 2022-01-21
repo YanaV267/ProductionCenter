@@ -43,23 +43,36 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public boolean findEnrollments(User user, long chosenCourseId) throws ServiceException {
+    public Optional<Enrollment> findEnrollment(long enrollmentId) throws ServiceException {
         try {
-            Optional<Enrollment> enrollment = enrollmentDao.findEnrollmentsByCourseUser(user, new Course(chosenCourseId));
-            return enrollment.isPresent();
+            return enrollmentDao.findById(enrollmentId);
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while adding course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while adding course's lessons: " + exception);
+            LOGGER.error("Error has occurred while finding enrollment by id: " + exception);
+            throw new ServiceException("Error has occurred while finding enrollment by id: " + exception);
         }
     }
 
     @Override
-    public List<Enrollment> findEnrollments(User user) throws ServiceException {
+    public Optional<Enrollment> findEnrollment(User user, long chosenCourseId) throws ServiceException {
         try {
-            List<Enrollment> enrollments = enrollmentDao.findEnrollmentsByUser(user);
-            for (Enrollment enrollment : enrollments) {
+            return enrollmentDao.findEnrollmentsByCourseUser(user, new Course(chosenCourseId));
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding enrollment by user & course: " + exception);
+            throw new ServiceException("Error has occurred while finding enrollment by user & course: " + exception);
+        }
+    }
+
+    @Override
+    public Map<Enrollment, LocalDate> findEnrollment(User user) throws ServiceException {
+        try {
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user);
+            for (Enrollment enrollment : allEnrollments) {
                 List<Lesson> lessons = lessonDao.findLessonsByCourse(enrollment.getCourse().getId());
                 enrollment.getCourse().setLessons(lessons);
+            }
+            Map<Enrollment, LocalDate> enrollments = new HashMap<>();
+            for (Enrollment enrollment : allEnrollments) {
+                enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());
             }
             return enrollments;
         } catch (DaoException exception) {
@@ -69,7 +82,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Map<Enrollment, LocalDate> findEnrollments() throws ServiceException {
+    public Map<Enrollment, LocalDate> findEnrollment() throws ServiceException {
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findAll();
             Map<Enrollment, LocalDate> enrollments = new HashMap<>();
@@ -84,7 +97,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public boolean updateStatuses(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException {
+    public boolean updateStatus(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException {
         try {
             for (Map.Entry<String, EnrollmentStatus> enrollmentStatus : enrollmentStatuses.entrySet()) {
                 Enrollment enrollment = new Enrollment();
@@ -98,6 +111,26 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing enrollments' statuses: " + exception);
             throw new ServiceException("Error has occurred while changing enrollments' statuses: " + exception);
+        }
+    }
+
+    @Override
+    public boolean updateStatus(Enrollment enrollment) throws ServiceException {
+        try {
+            return enrollmentDao.updateEnrollmentStatus(enrollment);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while changing enrollment's status: " + exception);
+            throw new ServiceException("Error has occurred while changing enrollment's status: " + exception);
+        }
+    }
+
+    @Override
+    public boolean cancelEnrollment(long enrollmentId) throws ServiceException {
+        try {
+            return enrollmentDao.delete(enrollmentId);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while canceling enrollment: " + exception);
+            throw new ServiceException("Error has occurred while canceling enrollment: " + exception);
         }
     }
 }

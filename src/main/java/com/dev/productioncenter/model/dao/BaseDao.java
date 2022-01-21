@@ -10,17 +10,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Optional;
 
-public interface BaseDao<T extends AbstractEntity> {
+public interface BaseDao<K, T extends AbstractEntity> {
     Logger LOGGER = LogManager.getLogger();
 
     long add(T t) throws DaoException;
 
     boolean update(T t) throws DaoException;
 
-    boolean delete(T t) throws DaoException;
+    boolean delete(K k) throws DaoException;
 
     List<T> findAll() throws DaoException;
+
+    Optional<T> findById(K k) throws DaoException;
 
     default void close(Statement statement) {
         try {

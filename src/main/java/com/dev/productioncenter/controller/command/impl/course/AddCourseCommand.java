@@ -4,9 +4,7 @@ import com.dev.productioncenter.controller.command.*;
 import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.service.ActivityService;
 import com.dev.productioncenter.model.service.CourseService;
-import com.dev.productioncenter.model.service.impl.ActivityServiceImpl;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +22,6 @@ public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.add_course";
     private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.add_course";
-    private final ActivityService activityService = new ActivityServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
 
     @Override
@@ -52,10 +49,8 @@ public class AddCourseCommand implements Command {
                 } else {
                     courses = courseService.findAvailableCourses();
                 }
-                List<String> categories = activityService.findCategories();
-                session.setAttribute(RequestAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
-                session.setAttribute(RequestAttribute.COURSES, courses);
-                session.setAttribute(RequestAttribute.CATEGORIES, categories);
+                session.setAttribute(SessionAttribute.COURSES, courses);
+                session.setAttribute(SessionAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(RequestAttribute.COURSE, courseData);

@@ -2,8 +2,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
-<html>
-<body>
 <div id="menu">
     <div id="menu1"><a href="${pageContext.request.contextPath}/controller?command=go_to_home">
         <fmt:message key="header.home"/></a></div>
@@ -25,9 +23,9 @@
     <div>
         <p><a href="${pageContext.request.contextPath}/controller?command=go_to_account">
             <fmt:message key="header.profile"/></a></p>
+        <p><a href="${pageContext.request.contextPath}/controller?command=go_to_user_enrollments">
+            <fmt:message key="header.enrollments"/></a></p>
         <p><a href="${pageContext.request.contextPath}/controller?command=sign_out">
             <fmt:message key="header.sign_out"/></a></p>
     </div>
 </div>
-</body>
-</html>

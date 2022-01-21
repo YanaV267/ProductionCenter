@@ -85,7 +85,7 @@ public class CourseServiceImpl implements CourseService {
                     if (weekdays != null) {
                         Set<Course> courses = new HashSet<>();
                         for (String weekday : weekdays) {
-                            courses.addAll(courseDao.findCourseByWeekday(weekday));
+                            courses.addAll(courseDao.findCourseByActivityWeekday(activity, weekday));
                         }
                         return List.copyOf(courses);
                     } else {
@@ -127,10 +127,24 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<Course> findCourse(long id) throws ServiceException {
         try {
-            return courseDao.findCourseById(id);
+            return courseDao.findById(id);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new ServiceException("Error has occurred while finding available courses: " + exception);
         }
+    }
+
+    @Override
+    public boolean reservePlaceAtCourse(long id) throws ServiceException {
+        try {
+            Optional<Course> course = courseDao.findById(id);
+            if(course.isPresent()) {
+                return courseDao.updateCourseStudentAmount(id, course.get().getStudentAmount() - 1);
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while reserving place at course: " + exception);
+            throw new ServiceException("Error has occurred while reserving place at course: " + exception);
+        }
+        return false;
     }
 }

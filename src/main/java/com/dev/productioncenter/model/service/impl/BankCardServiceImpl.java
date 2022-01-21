@@ -57,9 +57,7 @@ public class BankCardServiceImpl implements BankCardService {
                         LAST_DAY_OF_MONTH.get(Integer.parseInt(expirationDateParameters[0])));
                 bankCard.setExpirationDate(localDate);
                 bankCard.setCvvNumber(Integer.parseInt(bankCardData.get(CVV_NUMBER)));
-                if (bankCardDao.checkBankCard(bankCard)) {
-                    return Optional.of(bankCard);
-                }
+                return bankCardDao.findBankCard(bankCard);
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding bank card: " + exception);
@@ -71,13 +69,29 @@ public class BankCardServiceImpl implements BankCardService {
     @Override
     public boolean replenishBalance(BankCard bankCard, String replenishmentValue) throws ServiceException {
         try {
-            BigDecimal currentBalance = bankCardDao.findBalance(bankCard);
-            BigDecimal newBalance = currentBalance.add(BigDecimal.valueOf(Double.parseDouble(replenishmentValue)));
-            bankCard.setBalance(newBalance);
-            return bankCardDao.update(bankCard);
+            if (BankCardValidatorImpl.getInstance().checkBalance(replenishmentValue)) {
+                BigDecimal currentBalance = bankCardDao.findBalance(bankCard);
+                BigDecimal newBalance = currentBalance.add(BigDecimal.valueOf(Double.parseDouble(replenishmentValue)));
+                bankCard.setBalance(newBalance);
+                return bankCardDao.update(bankCard);
+            }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while replenishing bank card balance: " + exception);
             throw new ServiceException("Error has occurred while replenishing bank card balance: " + exception);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean withdrawMoney(BankCard bankCard, BigDecimal withdrawalValue) throws ServiceException {
+        try {
+            BigDecimal currentBalance = bankCard.getBalance();
+            BigDecimal newBalance = currentBalance.subtract(withdrawalValue);
+            bankCard.setBalance(newBalance);
+            return bankCardDao.update(bankCard);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while withdrawing money from bank card: " + exception);
+            throw new ServiceException("Error has occurred while withdrawing money from bank card: " + exception);
         }
     }
 }

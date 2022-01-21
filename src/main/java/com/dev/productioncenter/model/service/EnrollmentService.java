@@ -3,21 +3,26 @@ package com.dev.productioncenter.model.service;
 import com.dev.productioncenter.entity.Enrollment;
 import com.dev.productioncenter.entity.EnrollmentStatus;
 import com.dev.productioncenter.entity.User;
-import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.exception.ServiceException;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface EnrollmentService {
     boolean enrollOnCourse(User user, long chosenCourseId, String lessonAmount) throws ServiceException;
 
-    boolean findEnrollments(User user, long chosenCourseId) throws ServiceException;
+    Optional<Enrollment> findEnrollment(long chosenCourseId) throws ServiceException;
 
-    List<Enrollment> findEnrollments(User user) throws ServiceException;
+    Optional<Enrollment> findEnrollment(User user, long chosenCourseId) throws ServiceException;
 
-    Map<Enrollment, LocalDate> findEnrollments() throws ServiceException;
+    Map<Enrollment, LocalDate> findEnrollment(User user) throws ServiceException;
 
-    boolean updateStatuses(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException;
+    Map<Enrollment, LocalDate> findEnrollment() throws ServiceException;
+
+    boolean updateStatus(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException;
+
+    boolean updateStatus(Enrollment enrollment) throws ServiceException;
+
+    boolean cancelEnrollment(long enrollmentId) throws ServiceException;
 }

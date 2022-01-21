@@ -20,6 +20,7 @@ public final class RequestAttribute {
     public static final String TEACHERS = "teachers";
     public static final String EMPLOYERS = "employers";
     public static final String ENROLLMENTS = "enrollments";
+    public static final String ENROLLMENT_ID = "enrollment_id";
     public static final String WEEKDAYS = "weekdays";
     public static final String CARD = "card";
 

@@ -34,7 +34,7 @@ public class GoToCoursesCommand implements Command {
             if (category != null) {
                 List<Activity> activities = activityService.findActivities(category);
                 request.setAttribute(SELECTED_CATEGORY, category);
-                session.setAttribute(ACTIVITIES, activities);
+                session.setAttribute(SessionAttribute.ACTIVITIES, activities);
             }
             List<Course> courses;
             if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
@@ -44,9 +44,9 @@ public class GoToCoursesCommand implements Command {
                 courses = courseService.findAvailableCourses();
             }
             List<String> categories = activityService.findCategories();
-            session.setAttribute(COURSES, courses);
-            session.setAttribute(CATEGORIES, categories);
-            session.setAttribute(WEEKDAYS, weekdays);
+            session.setAttribute(SessionAttribute.COURSES, courses);
+            session.setAttribute(SessionAttribute.CATEGORIES, categories);
+            session.setAttribute(SessionAttribute.WEEKDAYS, weekdays);
             return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to courses page: " + exception);

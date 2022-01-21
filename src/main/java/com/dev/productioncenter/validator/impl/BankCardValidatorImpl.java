@@ -67,10 +67,6 @@ public class BankCardValidatorImpl implements BankCardValidator {
             cardData.put(CVV_NUMBER, INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
-        if (!checkBalance(cardData.get(BALANCE))) {
-            cardData.put(BALANCE, INCORRECT_VALUE_PARAMETER);
-            isValid = false;
-        }
         return isValid;
     }
 }

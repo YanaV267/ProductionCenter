@@ -1,9 +1,6 @@
 package com.dev.productioncenter.controller.command.impl;
 
-import com.dev.productioncenter.controller.command.Command;
-import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestParameter;
-import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.*;
 import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.UserService;
@@ -15,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 
 public class ChangeUserStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -34,7 +29,7 @@ public class ChangeUserStatusCommand implements Command {
         }
         try {
             if (userService.updateStatuses(usersStatuses)) {
-                session.setAttribute(MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(SessionAttribute.MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             }
         } catch (ServiceException exception) {

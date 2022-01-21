@@ -23,16 +23,36 @@ p#title {
     align-items: center;
 }
 
-input:not([type='submit']) {
+input:not([type=submit]) {
     width: 220px;
     margin-bottom: 15px;
 }
 
-input[name='expiration_date'], input[name='cvv_number'] {
+input[name=expiration_date], input[name=cvv_number] {
     width: 100px !important;
     margin-right: 20px;
 }
 
-input[type='submit'] {
+input[type=submit], input[type=button] {
     margin: 15px 40px 10px 40px;
+}
+
+input[type=button] {
+    margin-top: 10px;
+    margin-left: 15px !important;
+    width: 140px;
+    cursor: pointer;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    margin-left: -20px;
+    margin-top: 25px;
+}
+
+#buttons > * {
+    margin: 0;
+    width: 125px;
 }

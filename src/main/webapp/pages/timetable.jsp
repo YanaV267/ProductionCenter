@@ -5,13 +5,11 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <meta charset="utf8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/timetable.css" type="text/css"/>
-    <title><fmt:message key="header.title"/></title>
 </head>
 
 <body>
-<jsp:include page="main/home.jsp"/>
+<jsp:include page="main/header.jsp"/>
 <main>
     <div id="rect"></div>
     <form>
@@ -22,11 +20,11 @@
                 <div>
                     <c:set var="lessons_today" value="false"/>
                     <c:forEach var="enrollment" items="${enrollments}">
-                        <c:forEach var="lesson" items="${enrollment.course.lessons}">
+                        <c:forEach var="lesson" items="${enrollment.key.course.lessons}">
                             <c:if test="${lesson.weekDay eq weekday}">
                                 <div>
                                     <div><c:out value="${lesson.startTime}"/></div>
-                                    <div><c:out value="${enrollment.course.activity.type}"/></div>
+                                    <div><c:out value="${enrollment.key.course.activity.type}"/></div>
                                     <c:set var="lessons_today" value="true"/>
                                 </div>
                             </c:if>
@@ -43,4 +41,5 @@
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
+<jsp:include page="main/footer.jsp"/>
 </html>

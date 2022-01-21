@@ -17,6 +17,8 @@ public final class PagePath {
     public static final String ADD_ACTIVITY = "/pages/activity/add.jsp";
     public static final String ENROLL_ON_COURSE = "/pages/enrollment/add.jsp";
     public static final String SHOW_ENROLLMENTS = "/pages/enrollment/show.jsp";
+    public static final String SHOW_USER_ENROLLMENTS = "/pages/enrollment/show_for_user.jsp";
+    public static final String PAY_FOR_ENROLLMENT = "/pages/enrollment/pay_for_enrollment.jsp";
     public static final String TIMETABLE = "/pages/timetable.jsp";
     public static final String CONTACTS = "/pages/contacts.jsp";
     public static final String USERS = "/pages/users.jsp";

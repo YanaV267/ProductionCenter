@@ -5,7 +5,7 @@ import com.dev.productioncenter.exception.DaoException;
 
 import java.util.List;
 
-public interface ActivityDao extends BaseDao<Activity> {
+public interface ActivityDao extends BaseDao<Long, Activity> {
     boolean findActivity(Activity activity) throws DaoException;
 
     long findActivityId(Activity activity) throws DaoException;

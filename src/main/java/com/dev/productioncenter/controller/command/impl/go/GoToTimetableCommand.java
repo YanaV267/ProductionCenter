@@ -14,8 +14,10 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.ENROLLMENTS;
 import static com.dev.productioncenter.controller.command.RequestAttribute.WEEKDAYS;
@@ -30,7 +32,7 @@ public class GoToTimetableCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttribute.USER);
         try {
-            List<Enrollment> enrollments = enrollmentService.findEnrollments(user);
+            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollment(user);
             request.setAttribute(ENROLLMENTS, enrollments);
             request.setAttribute(WEEKDAYS, weekdays);
             return new Router(PagePath.TIMETABLE, Router.RouterType.FORWARD);

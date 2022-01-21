@@ -13,7 +13,8 @@
 <jsp:include page="../main/header.jsp"/>
 <main>
     <div id="rect"></div>
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=replenish_balance">
+    <form method="post"
+          action="${pageContext.request.contextPath}/controller?command=pay_for_enrollment&chosen_enrollment_id=${enrollment_id}">
         <p id="title"><fmt:message key="account.balance.title"/></p>
         <div>
             <div id="authent">
@@ -30,11 +31,11 @@
                 <input type="tel" name="cvv_number" placeholder="CVV" autocomplete="off"
                        value="<c:out value="${card.cvvNumber}"/>" pattern="\d{3}"
                        title="<fmt:message key="account.balance.cvv_number"/>"><br/>
-                <input type="text" name="balance" pattern="^((\d{2,4}\.\d{2})|(\d{2,4}))$" autocomplete="off"
-                       placeholder="<fmt:message key="account.balance.summary"/>"
-                       value="<c:out value="${card.balance}"/>"
-                       title="<fmt:message key="account.balance.summary.placeholder"/>: xxxx.xx"><br/>
-                <input type="submit" value="<fmt:message key="account.balance.replenish"/>">
+                <div id="buttons">
+                    <input type="submit" value="<fmt:message key="account.balance.withdraw"/>">
+                    <input type="button" value="<fmt:message key="account.balance.back"/>"
+                           onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_user_enrollments'">
+                </div>
             </div>
         </div>
     </form>

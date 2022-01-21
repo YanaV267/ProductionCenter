@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface EnrollmentDao extends BaseDao<Enrollment> {
+public interface EnrollmentDao extends BaseDao<Long, Enrollment> {
     boolean checkEnrollmentReservationStatus() throws DaoException;
 
     boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException;

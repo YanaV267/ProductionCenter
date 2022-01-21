@@ -42,9 +42,9 @@ public class GoToCourseInfoCommand implements Command {
                         course.get().getTeacher().getName(), UserRole.TEACHER);
                 if (teacher.isPresent()) {
                     course.get().setTeacher(teacher.get());
+                    String phoneNumber = PhoneNumberFormatter.format(teacher.get().getPhoneNumber());
                     request.setAttribute(COURSE, course.get());
                     request.setAttribute(LESSONS, lessons);
-                    String phoneNumber = PhoneNumberFormatter.format(teacher.get().getPhoneNumber());
                     request.setAttribute(NUMBER, phoneNumber);
                     return new Router(PagePath.COURSE_INFO, Router.RouterType.FORWARD);
                 }

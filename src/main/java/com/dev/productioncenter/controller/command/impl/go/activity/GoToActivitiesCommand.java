@@ -22,8 +22,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
-
 public class GoToActivitiesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ActivityService activityService = new ActivityServiceImpl();
@@ -45,9 +43,9 @@ public class GoToActivitiesCommand implements Command {
                 allCourses = courseService.findAvailableCourses();
             }
             Map<Course, String> courses = userService.loadTeachersPictures(allCourses);
-            session.setAttribute(CATEGORIES, categories);
-            session.setAttribute(ACTIVITIES, activities);
-            session.setAttribute(COURSES, courses);
+            session.setAttribute(SessionAttribute.CATEGORIES, categories);
+            session.setAttribute(SessionAttribute.ACTIVITIES, activities);
+            session.setAttribute(SessionAttribute.COURSES, courses);
             return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to activities page: " + exception);

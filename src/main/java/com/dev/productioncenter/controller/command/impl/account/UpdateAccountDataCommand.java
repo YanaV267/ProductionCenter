@@ -66,9 +66,9 @@ public class UpdateAccountDataCommand implements Command {
             }
             if (userService.updateUserAccountData(userData)) {
                 user = userService.findUser(login);
-                session.setAttribute(USER, user);
-                session.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
-                session.setAttribute(NUMBER, userData.get(PHONE_NUMBER));
+                session.setAttribute(SessionAttribute.USER, user);
+                session.setAttribute(SessionAttribute.NUMBER, userData.get(PHONE_NUMBER));
+                session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(USER, userData);

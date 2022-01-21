@@ -1,9 +1,6 @@
 package com.dev.productioncenter.controller.command.impl.enrollment;
 
-import com.dev.productioncenter.controller.command.Command;
-import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestParameter;
-import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.*;
 import com.dev.productioncenter.entity.EnrollmentStatus;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.EnrollmentService;
@@ -15,8 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 
 public class ChangeEnrollmentStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -33,8 +28,8 @@ public class ChangeEnrollmentStatusCommand implements Command {
             enrollmentsStatuses.put(enrollments[i], EnrollmentStatus.valueOf(statuses[i].toUpperCase()));
         }
         try {
-            if (enrollmentService.updateStatuses(enrollmentsStatuses)) {
-                session.setAttribute(MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
+            if (enrollmentService.updateStatus(enrollmentsStatuses)) {
+                session.setAttribute(SessionAttribute.MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             }
         } catch (ServiceException exception) {

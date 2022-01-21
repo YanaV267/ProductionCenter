@@ -100,16 +100,16 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while updating user's picture: " + exception);
-            throw new DaoException("Error has occurred while updating user's picture: ", exception);
+            LOGGER.error("Error has occurred while updating user's profile picture: " + exception);
+            throw new DaoException("Error has occurred while updating user's profile picture: ", exception);
         }
     }
 
     @Override
-    public boolean delete(User user) throws DaoException {
+    public boolean delete(Long id) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_USER)) {
-            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setLong(1, id);
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
@@ -147,6 +147,11 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Error has occurred while finding users: ", exception);
         }
         return users;
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        throw new UnsupportedOperationException("Finding user by id is unsupported");
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.dev.productioncenter.model.dao.impl;
 
-import com.dev.productioncenter.entity.*;
+import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.ActivityDao;
@@ -9,6 +9,7 @@ import com.dev.productioncenter.model.dao.ColumnName;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ActivityDaoImpl implements ActivityDao {
     private static final String SQL_INSERT_ACTIVITY =
@@ -52,7 +53,7 @@ public class ActivityDaoImpl implements ActivityDao {
     }
 
     @Override
-    public boolean delete(Activity activity) {
+    public boolean delete(Long id) {
         throw new UnsupportedOperationException("Deleting of activity is unsupported");
     }
 
@@ -75,6 +76,11 @@ public class ActivityDaoImpl implements ActivityDao {
             throw new DaoException("Error has occurred while finding activities: ", exception);
         }
         return activities;
+    }
+
+    @Override
+    public Optional<Activity> findById(Long id) {
+        throw new UnsupportedOperationException("Finding activity by id is unsupported");
     }
 
     @Override
@@ -103,8 +109,8 @@ public class ActivityDaoImpl implements ActivityDao {
                 return resultSet.getLong(1);
             }
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding activity: " + exception);
-            throw new DaoException("Error has occurred while finding activity: ", exception);
+            LOGGER.error("Error has occurred while finding activity's id: " + exception);
+            throw new DaoException("Error has occurred while finding activity's id: ", exception);
         }
     }
 
