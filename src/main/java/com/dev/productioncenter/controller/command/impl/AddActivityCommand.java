@@ -1,9 +1,6 @@
 package com.dev.productioncenter.controller.command.impl;
 
-import com.dev.productioncenter.controller.command.Command;
-import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestAttribute;
-import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.*;
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.ActivityService;

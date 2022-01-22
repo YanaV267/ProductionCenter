@@ -80,7 +80,7 @@ form img {
     width: 85px;
 }
 
-input[type="button"] {
+input[type=button] {
     width: 150px;
     height: 34px;
     margin-top: 5px;
@@ -93,6 +93,6 @@ input[type="button"] {
     align-self: flex-end;
 }
 
-input[type="button"]:hover {
+input[type=button]:hover {
     cursor: pointer;
 }

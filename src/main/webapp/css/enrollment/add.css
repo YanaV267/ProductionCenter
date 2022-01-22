@@ -78,17 +78,17 @@ form > div > div > div {
     text-align: left;
 }
 
-#timetable {
+.timetable {
     display: flex;
     flex-direction: column;
     width: 220px;
 }
 
-#timetable > div {
+.timetable > div {
     text-align: left;
 }
 
-#timetable > div:not(:first-child) {
+.timetable > div:not(:first-child) {
     margin-left: 30px;
     margin-top: 5px;
 }
@@ -111,7 +111,7 @@ input:focus {
     outline: 0.4px solid rgba(115, 140, 224, 0.795);
 }
 
-input[type="submit"], input[type="button"] {
+input[type=submit], input[type=button] {
     width: 130px;
     height: 34px;
     border-radius: 6px;
@@ -122,11 +122,11 @@ input[type="submit"], input[type="button"] {
     margin-right: 20px;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover {
+input[type=submit]:hover, input[type=button]:hover {
     cursor: pointer;
 }
 
-input[type="button"] {
+input[type=button] {
     color: rgb(11, 35, 78);
     border: solid 0.7px rgb(95, 108, 167);
     background-color: rgb(239, 239, 239);

@@ -58,7 +58,7 @@
                     <label><input type="checkbox" name="weekdays" value="saturday">
                         <fmt:message key="courses.saturday"/></label>
                 </div>
-                <div id="time">
+                <div class="time">
                     <div>
                         <p><fmt:message key="courses.start_time"/>:</p>
                         <input type="time" name="time">
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div id="last">
                 <p><fmt:message key="courses.age"/>:</p>
                 <div id="age">
                     <input type="number" name="min_age" min=3 max=60 placeholder="min">
@@ -86,8 +86,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/courses.js"></script>
-
+<script src="${pageContext.request.contextPath}/script/course/show.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

@@ -24,5 +24,7 @@ public interface EnrollmentService {
 
     boolean updateStatus(Enrollment enrollment) throws ServiceException;
 
+    boolean updateLessonAmounts(Map<String, String> enrollmentsLessonAmount) throws ServiceException;
+
     boolean cancelEnrollment(long enrollmentId) throws ServiceException;
 }

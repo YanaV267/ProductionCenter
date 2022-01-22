@@ -1,5 +1,6 @@
 form {
-    height: 370px;
+    min-height: 370px;
+    height: auto;
     width: 780px;
     margin-top: -460px !important;
     font-size: 15px;
@@ -7,7 +8,6 @@ form {
 
 #rect {
     width: 860px;
-    height: 410px;
     margin-left: 210px;
     margin-top: 50px;
 }
@@ -26,7 +26,7 @@ p#title {
     width: 400px;
 }
 
-input[type="submit"] {
+input[type=submit] {
     width: 200px;
 }
 
@@ -76,14 +76,14 @@ form > div > div:nth-child(4) :last-child {
     margin-left: 30px;
 }
 
-#timetable {
+.timetable {
     display: flex;
     flex-direction: column;
     width: 220px;
     text-align: start;
 }
 
-#timetable > div:not(:first-child) {
+.timetable > div:not(:first-child) {
     margin-left: 40px;
     margin-top: 5px;
 }
@@ -96,14 +96,14 @@ input {
     width: 130px !important;
 }
 
-input[type="submit"] {
+input[type=submit] {
     border-color: rgb(146, 144, 11);
     background-color: rgb(190, 188, 14);
     color: white;
     margin-right: 20px;
 }
 
-input[type="button"] {
+input[type=button] {
     color: rgb(11, 35, 78);
     border: solid 0.7px rgb(95, 108, 167);
     background-color: rgb(239, 239, 239);

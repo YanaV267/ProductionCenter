@@ -72,10 +72,10 @@ p#title {
     border-radius: 0 15px 15px 0;
 }
 
-input[type="submit"] {
+input[type=submit] {
     width: 130px;
     height: 34px;
-    margin: 15px auto 35px;
+    margin: 25px auto 40px;
     padding: 5px 5px 5px 7px;
     border: solid 0.7px rgb(146, 144, 11);
     border-radius: 6px;
@@ -83,15 +83,15 @@ input[type="submit"] {
     color: white;
 }
 
-input[type="submit"]:hover {
+input[type=submit]:hover {
     cursor: pointer;
 }
 
-input[type="submit"]:disabled {
+input[type=submit]:disabled {
     background-color: rgb(185, 184, 80);
 }
 
-input[type="submit"]:enabled {
+input[type=submit]:enabled {
     background-color: rgb(190, 188, 14);
 }
 
@@ -128,15 +128,15 @@ input[type="submit"]:enabled {
     transition: .4s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
     background-color: #f32121;
 }
 
-input:focus+.slider {
+input:focus + .slider {
     box-shadow: 0 0 1px #f32121;
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
     transform: translateX(22px);
     bottom: 4px;
 }

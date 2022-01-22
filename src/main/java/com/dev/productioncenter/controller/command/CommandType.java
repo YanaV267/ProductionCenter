@@ -45,6 +45,7 @@ public enum CommandType {
     CHANGE_USER_ROLE(new ChangeUserRoleCommand()),
     CHANGE_ENROLLMENT_STATUS(new ChangeEnrollmentStatusCommand()),
     ENROLL_ON_COURSE(new EnrollOnCourseCommand()),
+    UPDATE_ENROLLMENT(new UpdateEnrollmentCommand()),
     DELETE_ENROLLMENT(new CancelEnrollmentCommand()),
     PAY_FOR_ENROLLMENT(new PayForEnrollmentCommand()),
     ADD_ACTIVITY(new AddActivityCommand()),

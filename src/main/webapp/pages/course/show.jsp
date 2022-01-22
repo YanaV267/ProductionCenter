@@ -57,11 +57,11 @@
                             <input type="button" value="<fmt:message key="courses.add"/>"
                                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_add_course'">
                             <input type="button" value="<fmt:message key="courses.update"/>" disabled
-                                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_update_course'">
+                                   onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_update_course&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
                         </c:when>
                         <c:otherwise>
                             <input type="button" value="<fmt:message key="courses.enroll"/>" disabled
-                                   onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course&&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
+                                   onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -90,8 +90,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/courses.js"></script>
-
+<script src="${pageContext.request.contextPath}/script/course/show.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

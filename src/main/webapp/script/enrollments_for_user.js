@@ -23,17 +23,33 @@ $('#all>div:not(:nth-child(-n+7))').on('click', function () {
             $(`#all > div:nth-child(${7 * row + i})`).toggleClass('color');
         }
         $('input[type=button]').prop('disabled', false);
-        $('input[type=submit]').prop('disabled', false);
     } else {
         $('input[type=button]').prop('disabled', true);
-        $('input[type=submit]').prop('disabled', true);
     }
+});
+
+$('input[type=number]').on('focusin', function () {
+    if ($(this).data('val') === undefined)
+        $(this).data('val', $(this).val());
+});
+
+$('input[type=number]').on('click', function () {
+    $('input[type=submit]').prop('disabled', false);
+    let clicked = this;
+    $('input[type=number]').each(function (index) {
+        if (this === clicked) {
+            if ($(`#all > div:nth-child(${7 * (index + 1) + 5})`).addClass('color'))
+                if ($(this).data('price') === undefined)
+                    $(this).data('price', $(`#all > div:nth-child(${7 * (index + 1) + 5})`).text() / $(this).data('val'));
+            $(`#all > div:nth-child(${7 * (index + 1) + 5})`).text($(this).data('price') * $(clicked).val());
+        }
+    });
 });
 
 if ($('form').css('height') === $('form').css('min-height')) {
     $('#buttons').css({
         'position': 'absolute',
-        'left': '375px',
+        'left': '315px',
         'top': '375px'
     });
 } else {

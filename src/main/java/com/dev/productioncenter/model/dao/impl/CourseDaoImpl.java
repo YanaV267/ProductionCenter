@@ -14,8 +14,8 @@ public class CourseDaoImpl implements CourseDao {
     private static final String SQL_INSERT_COURSE =
             "INSERT INTO courses(description, id_teacher, id_activity, id_age_group, lesson_price, student_amount) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_COURSE =
-            "UPDATE courses SET description = ?, id_teacher = ?, id_activity = ?, id_age_group = ?, " +
-                    "lesson_price = ?, student_amount = ?, status = ? WHERE id_course = ?";
+            "UPDATE courses SET description = ?, id_teacher = ?, id_age_group = ?, lesson_price = ?, " +
+                    "student_amount = ?, status = ? WHERE id_course = ?";
     private static final String SQL_UPDATE_STUDENT_AMOUNT =
             "UPDATE courses SET student_amount = ? WHERE id_course = ?";
     private static final String SQL_DELETE_COURSE = "DELETE FROM courses WHERE id_course = ?";
@@ -132,12 +132,11 @@ public class CourseDaoImpl implements CourseDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COURSE)) {
             preparedStatement.setString(1, course.getDescription());
             preparedStatement.setLong(2, course.getTeacher().getId());
-            preparedStatement.setLong(3, course.getActivity().getId());
-            preparedStatement.setLong(4, course.getAgeGroup().getId());
-            preparedStatement.setBigDecimal(5, course.getLessonPrice());
-            preparedStatement.setLong(6, course.getStudentAmount());
-            preparedStatement.setString(7, course.getCourseStatus().getStatus());
-            preparedStatement.setLong(8, course.getId());
+            preparedStatement.setLong(3, course.getAgeGroup().getId());
+            preparedStatement.setBigDecimal(4, course.getLessonPrice());
+            preparedStatement.setLong(5, course.getStudentAmount());
+            preparedStatement.setString(6, course.getCourseStatus().getStatus());
+            preparedStatement.setLong(7, course.getId());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {

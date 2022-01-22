@@ -61,7 +61,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/contacts_height.js"></script>
+<script src="${pageContext.request.contextPath}/script/contacts.js"></script>
 </body>
 <jsp:include page="main/footer.jsp"/>
 </html>

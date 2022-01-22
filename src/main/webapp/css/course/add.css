@@ -1,6 +1,6 @@
 form {
     height: 450px;
-    width: 850px;
+    width: 830px;
     border-radius: 5px;
     background: rgba(214, 233, 255, 0.8);
     display: flex;
@@ -12,7 +12,7 @@ form {
 
 #rect {
     max-height: 470px;
-    width: 850px;
+    width: 830px;
     margin: 30px 30px 30px 220px;
     position: relative;
     z-index: 1;
@@ -23,56 +23,58 @@ form {
 #courseProps {
     display: flex;
     flex-direction: row;
+    width: 830px;
 }
 
-#courseProps > div {
+#courseProps > div:first-of-type {
     margin-left: 40px;
     margin-right: 10px;
 }
 
-#courseProps > div:last-child {
+#courseProps > #last {
     margin-right: 40px;
     width: 420px;
 }
 
-#courseProps > div:last-child p {
+#courseProps > #last p {
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
 #courseProps p {
     cursor: default;
+    margin-bottom: 5px;
 }
 
-#time {
+.time {
     display: flex;
     flex-direction: row;
 }
 
-#time div {
+.time div {
     width: 110px;
     margin-right: 30px;
 }
 
-#time input, #courseProps > div:last-child input {
+.time input, #courseProps > #last input {
     width: 78px;
     margin-left: 22px;
     margin-top: 3px;
 }
 
-#time div:last-child input {
+.time div:last-child input {
     width: 50px;
 }
 
-#courseProps > div:last-child {
+#courseProps > #last {
     margin-top: 10px;
 }
 
-#courseProps > div:last-child input {
+#courseProps > #last input {
     margin-bottom: 5px;
 }
 
-input:not(#weekdays input):not([type="submit"]), textarea {
+input:not(#weekdays input):not([type=submit]):not([type=button]), textarea {
     border-radius: 6px;
     border: solid 0.7px rgb(95, 108, 167);
     height: 27px;
@@ -90,7 +92,7 @@ input:not(#weekdays input):not([type="submit"]), textarea {
     max-width: 58px;
 }
 
-input[type="submit"] {
+input[type=submit], input[type=submit] {
     margin: 35px auto 30px;
     min-height: 25px;
 }

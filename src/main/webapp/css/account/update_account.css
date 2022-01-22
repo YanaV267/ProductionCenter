@@ -104,7 +104,7 @@ input:focus {
     outline: 0.4px solid rgba(115, 140, 224, 0.795);
 }
 
-input[type="submit"] {
+input[type=submit] {
     width: 140px;
     height: 34px;
     background-color: rgb(190, 188, 14);
@@ -113,7 +113,7 @@ input[type="submit"] {
     margin-top: 10px;
 }
 
-input[type="submit"]:hover {
+input[type=submit]:hover {
     cursor: pointer;
 }
 

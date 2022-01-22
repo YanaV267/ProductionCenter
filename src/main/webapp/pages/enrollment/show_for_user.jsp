@@ -14,7 +14,7 @@
 <jsp:include page="../main/header.jsp"/>
 <main>
     <div id="rect"></div>
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=cancel_enrollment">
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=update_enrollment">
         <p id="title"><fmt:message key="enrollment.all.title"/></p>
         <c:if test="${enrollments.size() > 0}">
             <div id="all">
@@ -30,7 +30,8 @@
                             value="${enrollment.key.course.teacher.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
                     <div><c:out value="${enrollment.key.course.activity.type}"/></div>
-                    <div><c:out value="${enrollment.key.lessonAmount}"/></div>
+                    <div><input type="number" name="lesson_amount"
+                                value="<c:out value="${enrollment.key.lessonAmount}"/>"></div>
                     <div><c:out value="${enrollment.key.lessonAmount * enrollment.key.course.lessonPrice}"/></div>
                     <div><c:out value="${enrollment.value}"/></div>
                     <div id="status"><c:out value="${enrollment.key.enrollmentStatus.status}"/></div>
@@ -41,9 +42,11 @@
             <div id="none"><fmt:message key="enrollment.message"/></div>
         </c:if>
         <div id="buttons">
+            <input type="submit" value="<fmt:message key="enrollment.update"/>" disabled>
             <input type="button" value="<fmt:message key="enrollment.pay"/>" disabled
                    onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_pay_for_enrollment&chosen_enrollment_id=`+document.querySelector('[name=chosen_enrollment_id]').value">
-            <input type="submit" value="<fmt:message key="enrollment.cancel"/>" disabled>
+            <input type="button" value="<fmt:message key="enrollment.cancel"/>" disabled
+                   onclick="location.href=`${pageContext.request.contextPath}/controller?command=cancel_enrollment&chosen_enrollment_id=`+document.querySelector('[name=chosen_enrollment_id]').value">
         </div>
     </form>
 </main>

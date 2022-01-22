@@ -40,7 +40,7 @@
             </div>
             <div id="timetable">
                 <div><fmt:message key="courses.timetable"/>:</div>
-                <c:forEach var="lesson" items="${lessons}">
+                <c:forEach var="lesson" items="${course.lessons}">
                     <div><c:out value="${lesson.weekDay}"/>: <c:out value="${lesson.startTime}"/>
                         (<c:out value="${lesson.duration}"/>мин)
                     </div>

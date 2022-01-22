@@ -1,6 +1,9 @@
 package com.dev.productioncenter.controller.command.impl.course;
 
-import com.dev.productioncenter.controller.command.*;
+import com.dev.productioncenter.controller.command.Command;
+import com.dev.productioncenter.controller.command.PagePath;
+import com.dev.productioncenter.controller.command.RequestParameter;
+import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.exception.ServiceException;
@@ -10,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
@@ -21,7 +23,6 @@ public class SearchCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String WEEKDAYS_CHOICE_ERROR_MESSAGE_KEY = "error.invalid_weekdays_amount";
     private final CourseService courseService = new CourseServiceImpl();
-    private final List<String> weekdays = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
 
     @Override
     public Router execute(HttpServletRequest request) {

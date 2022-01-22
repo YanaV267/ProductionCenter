@@ -5,7 +5,6 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.controller.command.SessionAttribute;
 import com.dev.productioncenter.entity.Course;
-import com.dev.productioncenter.entity.Lesson;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.CourseService;
@@ -19,10 +18,10 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.COURSE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
 import static com.dev.productioncenter.controller.command.RequestParameter.LESSON_AMOUNT;
 
@@ -31,7 +30,6 @@ public class EnrollOnCourseCommand implements Command {
     private static final String ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrolling_on_course";
     private static final String ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrolling_on_course";
     private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
-    private final LessonService lessonService = new LessonServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
 
     @Override
@@ -47,10 +45,8 @@ public class EnrollOnCourseCommand implements Command {
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
                 Optional<Course> course = courseService.findCourse(chosenCourseId);
-                List<Lesson> lessons = lessonService.findLessons(chosenCourseId);
                 if (course.isPresent()) {
                     request.setAttribute(COURSE, course.get());
-                    request.setAttribute(LESSONS, lessons);
                     request.setAttribute(MESSAGE, ENROLLMENT_ERROR_MESSAGE_KEY);
                     return new Router(PagePath.ENROLL_ON_COURSE, Router.RouterType.FORWARD);
                 }

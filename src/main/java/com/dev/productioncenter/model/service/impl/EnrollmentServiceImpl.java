@@ -125,6 +125,24 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
+    public boolean updateLessonAmounts(Map<String, String> enrollmentsLessonAmount) throws ServiceException {
+        try {
+            for (Map.Entry<String, String> enrollmentLessonAmount : enrollmentsLessonAmount.entrySet()) {
+                Enrollment enrollment = new Enrollment();
+                enrollment.setLessonAmount(Integer.parseInt(enrollmentLessonAmount.getValue()));
+                enrollment.setId(Long.parseLong(enrollmentLessonAmount.getKey()));
+                if (!enrollmentDao.update(enrollment)) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while canceling enrollment: " + exception);
+            throw new ServiceException("Error has occurred while canceling enrollment: " + exception);
+        }
+    }
+
+    @Override
     public boolean cancelEnrollment(long enrollmentId) throws ServiceException {
         try {
             return enrollmentDao.delete(enrollmentId);

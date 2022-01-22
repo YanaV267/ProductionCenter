@@ -14,7 +14,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     private static final String SQL_INSERT_ENROLLMENT =
             "INSERT INTO enrollments(id_user, id_course, lesson_amount) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_ENROLLMENT =
-            "UPDATE enrollments SET id_user = ?, id_course = ?, lesson_amount = ?, status = ? WHERE id_enrollment = ?";
+            "UPDATE enrollments SET lesson_amount = ? WHERE id_enrollment = ?";
     private static final String SQL_CHECK_ENROLLMENT_RESERVATION_STATUS =
             "UPDATE enrollments SET status = 'expired' WHERE datediff(reservation_datetime, now()) < -3";
     private static final String SQL_UPDATE_ENROLLMENT_STATUS = "UPDATE enrollments SET status = ? WHERE id_enrollment = ?";
@@ -104,12 +104,8 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     public boolean update(Enrollment enrollment) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT)) {
-            preparedStatement.setLong(1, enrollment.getUser().getId());
-            preparedStatement.setLong(2, enrollment.getCourse().getId());
-            preparedStatement.setInt(3, enrollment.getLessonAmount());
-            preparedStatement.setTimestamp(4, Timestamp.valueOf(enrollment.getReservationDateTime()));
-            preparedStatement.setString(5, enrollment.getEnrollmentStatus().getStatus());
-            preparedStatement.setLong(6, enrollment.getId());
+            preparedStatement.setInt(1, enrollment.getLessonAmount());
+            preparedStatement.setLong(2, enrollment.getId());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {

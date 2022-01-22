@@ -64,7 +64,7 @@ img {
 }
 
 
-input[type="submit"] {
+input[type=submit] {
     width: 180px;
     height: 37px;
     padding: 5px;
@@ -75,6 +75,6 @@ input[type="submit"] {
     margin-top: 60px;
 }
 
-input[type="submit"]:hover {
+input[type=submit]:hover {
     cursor: pointer;
 }

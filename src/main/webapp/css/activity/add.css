@@ -58,7 +58,7 @@ select {
     margin-bottom: 10px;
 }
 
-input[type="button"], input[type="submit"] {
+input[type=button], input[type=submit] {
     width: 130px;
     height: 34px;
     padding: 5px 5px 5px 7px;
@@ -66,14 +66,14 @@ input[type="button"], input[type="submit"] {
 
 }
 
-input[type="submit"] {
+input[type=submit] {
     border: solid 0.7px rgb(146, 144, 11);
     background-color: rgb(190, 188, 14);
     color: white;
     margin-left: 10px;
 }
 
-input[type="submit"]:hover, input[type="button"]:hover {
+input[type=submit]:hover, input[type=button]:hover {
     cursor: pointer;
 }
 

@@ -40,7 +40,7 @@ public class SignUpCommand implements Command {
         try {
             if (!userService.isLoginAvailable(userData.get(LOGIN))) {
                 request.setAttribute(USER, userData);
-                request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
+                session.setAttribute(SessionAttribute.MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (!userService.isEmailAvailable(userData.get(EMAIL))) {

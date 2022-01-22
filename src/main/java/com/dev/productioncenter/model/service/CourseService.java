@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface CourseService {
     boolean addCourse(Map<String, String> courseData) throws ServiceException;
 
+    boolean updateCourse(Map<String, String> courseData) throws ServiceException;
+
     List<Course> findCourses() throws ServiceException;
 
     List<Course> findCourses(Activity activity, String[] weekdays) throws ServiceException;

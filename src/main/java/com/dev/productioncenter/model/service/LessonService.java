@@ -9,5 +9,7 @@ import java.util.Map;
 public interface LessonService {
     boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException;
 
+    boolean updateLessons(Map<String, String> lessonData, long courseId) throws ServiceException;
+
     List<Lesson> findLessons(long courseId) throws ServiceException;
 }

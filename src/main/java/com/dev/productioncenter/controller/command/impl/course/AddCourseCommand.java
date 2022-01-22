@@ -1,8 +1,6 @@
 package com.dev.productioncenter.controller.command.impl.course;
 
 import com.dev.productioncenter.controller.command.*;
-import com.dev.productioncenter.entity.Course;
-import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
@@ -13,13 +11,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String EMPTY_STRING_REGEX = "";
     private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.add_course";
     private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.add_course";
     private final CourseService courseService = new CourseServiceImpl();
@@ -27,12 +25,12 @@ public class AddCourseCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute(SessionAttribute.ROLE);
         Map<String, String> courseData = new HashMap<>();
         courseData.put(CATEGORY, Arrays.toString(request.getParameterValues(CATEGORY)));
         courseData.put(TYPE, request.getParameter(TYPE));
         courseData.put(TEACHER, request.getParameter(TEACHER));
-        courseData.put(WEEKDAYS, Arrays.toString(request.getParameterValues(WEEKDAYS)));
+        String weekdays = request.getParameterValues(WEEKDAYS) != null ? Arrays.toString(request.getParameterValues(WEEKDAYS)) : EMPTY_STRING_REGEX;
+        courseData.put(WEEKDAYS, weekdays);
         courseData.put(TIME, request.getParameter(TIME));
         courseData.put(DURATION, request.getParameter(DURATION));
         courseData.put(MIN_AGE, request.getParameter(MIN_AGE));
@@ -42,14 +40,6 @@ public class AddCourseCommand implements Command {
         courseData.put(DESCRIPTION, request.getParameter(DESCRIPTION));
         try {
             if (courseService.addCourse(courseData)) {
-                List<Course> courses;
-                if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
-                        || UserRole.valueOf(role.toUpperCase()) == UserRole.TEACHER) {
-                    courses = courseService.findCourses();
-                } else {
-                    courses = courseService.findAvailableCourses();
-                }
-                session.setAttribute(SessionAttribute.COURSES, courses);
                 session.setAttribute(SessionAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {

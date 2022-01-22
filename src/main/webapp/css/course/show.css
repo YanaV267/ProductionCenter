@@ -1,8 +1,8 @@
-input[type="button"]:disabled, input[type="submit"]:disabled {
+input[type=button]:disabled, input[type=submit]:disabled {
     background-color: rgb(185, 184, 80);
 }
 
-input[type="button"]:enabled, input[type="submit"]:enabled {
+input[type=button]:enabled, input[type=submit]:enabled {
     background-color: rgb(190, 188, 14);
 }
 

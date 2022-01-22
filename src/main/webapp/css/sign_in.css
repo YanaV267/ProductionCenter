@@ -80,7 +80,7 @@ div#reg {
     cursor: pointer;
 }
 
-input[type="submit"] {
+input[type=submit] {
     width: 140px;
     height: 34px;
     background-color: rgb(190, 188, 14);
@@ -88,6 +88,6 @@ input[type="submit"] {
     color: white;
 }
 
-input[type="submit"]:hover {
+input[type=submit]:hover {
     cursor: pointer;
 }

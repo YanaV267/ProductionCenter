@@ -59,21 +59,27 @@
             </div>
             <div id="timetable">
                 <div><fmt:message key="courses.timetable"/>:</div>
-                <c:forEach var="lesson" items="${lessons}">
+                <c:forEach var="lesson" items="${course.lessons}">
                     <div><fmt:message key="timetable.${lesson.weekDay}"/>: <c:out value="${lesson.startTime}"/>
-                        (<c:out value="${lesson.duration}"/>мин)
+                        (<c:out value="${lesson.duration}"/><fmt:message key="courses.duration.unit"/>)
                     </div>
                 </c:forEach>
             </div>
             <div>
                 <input type="hidden" name="chosen_course_id" value="<c:out value="${course.id}"/>">
-                <input type="submit" value="<fmt:message key="courses.enroll"/>">
+                <c:choose>
+                    <c:when test="${sessionScope.role eq 'guest' || sessionScope.role eq 'user'}">
+                        <input type="submit" value="<fmt:message key="courses.enroll"/>">
+                    </c:when>
+                </c:choose>
                 <input type="button" value="<fmt:message key="courses.back"/>"
                        onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">
             </div>
         </div>
     </form>
 </main>
+<script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/script/course/info.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

@@ -80,7 +80,7 @@ form > div > div:nth-child(2) > div div {
     margin-bottom: 15px;
 }
 
-input[type="button"], input[type="submit"], #upload_file {
+input[type=button], input[type=submit], #upload_file {
     color: rgb(11, 35, 78);
     width: 150px;
     height: 34px;
@@ -106,18 +106,18 @@ input[type="button"], input[type="submit"], #upload_file {
     width: 250px;
 }
 
-input[type="button"] {
+input[type=button] {
     border-color: rgb(146, 144, 11);
     background-color: rgb(190, 188, 14);
     color: white;
     margin-left: 30px;
 }
 
-input[type="button"]:hover, input[type="submit"]:hover, #upload_file:hover {
+input[type=button]:hover, input[type=submit]:hover, #upload_file:hover {
     cursor: pointer;
 }
 
-input[type="file"] {
+input[type=file] {
     visibility: hidden;
     display: none;
 }

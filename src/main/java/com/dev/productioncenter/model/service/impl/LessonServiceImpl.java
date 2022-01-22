@@ -18,8 +18,8 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class LessonServiceImpl implements LessonService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String WEEKDAYS_DELIMITER_REGEX = ",";
-    private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\]]";
+    private static final String DELIMITER_REGEX = " ";
+    private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\],]";
     private static final String REPLACEMENT_REGEX = "";
     private final LessonDao lessonDao = LessonDaoImpl.getInstance();
 
@@ -27,7 +27,7 @@ public class LessonServiceImpl implements LessonService {
     public boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
-                .split(WEEKDAYS_DELIMITER_REGEX);
+                .split(DELIMITER_REGEX);
         try {
             for (String weekday : weekdays) {
                 Lesson lesson = new Lesson();
@@ -41,6 +41,31 @@ public class LessonServiceImpl implements LessonService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while adding course's lessons: " + exception);
             throw new ServiceException("Error has occurred while adding course's lessons: " + exception);
+        }
+    }
+
+    @Override
+    public boolean updateLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
+        String[] weekdays = lessonData.get(WEEKDAYS)
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .split(DELIMITER_REGEX);
+        String[] durations = lessonData.get(DURATION)
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
+        String[] times = lessonData.get(TIME)
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
+        try {
+            for (int i = 0; i < weekdays.length; i++) {
+                Lesson lesson = new Lesson();
+                lesson.setCourse(new Course(courseId));
+                lesson.setWeekDay(weekdays[i]);
+                lesson.setStartTime(LocalTime.parse(times[i]));
+                lesson.setDuration(Integer.parseInt(durations[i]));
+                lessonDao.update(lesson);
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while updating course's lessons: " + exception);
+            throw new ServiceException("Error has occurred while updating course's lessons: " + exception);
         }
     }
 

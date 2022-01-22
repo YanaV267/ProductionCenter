@@ -5,12 +5,9 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.controller.command.SessionAttribute;
 import com.dev.productioncenter.entity.BankCard;
-import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.BankCardService;
-import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.model.service.impl.BankCardServiceImpl;
-import com.dev.productioncenter.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.CARD;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class ReplenishBalanceCommand implements Command {
@@ -28,13 +26,10 @@ public class ReplenishBalanceCommand implements Command {
     private static final String REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY = "confirm.balance.replenish_balance";
     private static final String INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY = "error.balance.incorrect_data";
     private final BankCardService bankCardService = new BankCardServiceImpl();
-    private final UserService userService = new UserServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(SessionAttribute.USER);
-        String login = user.getLogin();
         Map<String, String> cardData = new HashMap<>();
         cardData.put(CARD_NUMBER, request.getParameter(CARD_NUMBER));
         cardData.put(OWNER_NAME, request.getParameter(OWNER_NAME));

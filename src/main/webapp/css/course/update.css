@@ -1,0 +1,78 @@
+form {
+    min-height: 450px;
+    height: auto;
+}
+
+#rect {
+    max-height: 700px;
+}
+
+form > div:nth-of-type(2) {
+    display: flex;
+}
+
+#timetable {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.time {
+    flex-wrap: wrap;
+    width: 300px;
+}
+
+.time > p {
+    margin-right: 200px;
+    margin-bottom: 0 !important;
+    font-size: 16px;
+}
+
+.time > div:nth-child(2) {
+    margin-left: 20px;
+}
+
+.time > div:first-child {
+    margin-left: 40px;
+}
+
+textarea {
+    margin-top: 20px;
+    height: 120px;
+}
+
+#status {
+    margin-top: 20px;
+    margin-left: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+}
+
+#status p {
+    margin-right: 20px;
+    margin-bottom: 0;
+}
+
+#status label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+#status label:last-of-type {
+    margin-top: 0;
+}
+
+input[type=radio] {
+    vertical-align: middle;
+    margin: 0 5px 0 10px;
+}
+
+#buttons {
+    margin: 0 auto;
+    align-items: center;
+}
+
+#buttons > input:last-of-type {
+    margin-left: 20px;
+}

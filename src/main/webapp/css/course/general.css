@@ -31,7 +31,8 @@ p#title {
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 2px;
-    width: 250px;
+    width: 350px;
+    text-align: center;
 }
 
 #layout {
@@ -78,7 +79,7 @@ select {
     height: 15px;
 }
 
-input[type="button"], input[type="submit"] {
+input[type=button], input[type=submit] {
     width: 130px;
     height: 34px;
     margin-top: 15px;
@@ -89,6 +90,6 @@ input[type="button"], input[type="submit"] {
     color: white;
 }
 
-input[type="button"]:hover, input[type="submit"]:hover {
+input[type=button]:hover, input[type=submit]:hover {
     cursor: pointer;
 }
