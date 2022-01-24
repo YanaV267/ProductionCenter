@@ -4,26 +4,27 @@ import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.controller.command.SessionAttribute;
-import com.dev.productioncenter.entity.*;
+import com.dev.productioncenter.entity.BankCard;
+import com.dev.productioncenter.entity.Enrollment;
+import com.dev.productioncenter.entity.EnrollmentStatus;
+import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.BankCardService;
-import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.EnrollmentService;
 import com.dev.productioncenter.model.service.impl.BankCardServiceImpl;
-import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.EnrollmentServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.CARD;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class PayForEnrollmentCommand implements Command {
@@ -32,7 +33,6 @@ public class PayForEnrollmentCommand implements Command {
     private static final String NO_FUNDS_ERROR_MESSAGE_KEY = "error.balance.no_funds";
     private static final String INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY = "error.balance.incorrect_data";
     private final BankCardService bankCardService = new BankCardServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
     private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
 
     @Override
@@ -49,25 +49,17 @@ public class PayForEnrollmentCommand implements Command {
         try {
             Optional<BankCard> bankCard = bankCardService.findCard(cardData);
             if (bankCard.isPresent()) {
-                Optional<Course> course = courseService.findCourse(chosenEnrollmentId);
-                Optional<Enrollment> enrollment = enrollmentService.findEnrollment(user, chosenEnrollmentId);
-                if (course.isPresent() && enrollment.isPresent()) {
-                    BigDecimal totalCost = course.get().getLessonPrice()
-                            .multiply(BigDecimal.valueOf(enrollment.get().getLessonAmount()));
-                    if (bankCard.get().getBalance().compareTo(totalCost) >= 0
-                            && bankCardService.withdrawMoney(bankCard.get(), totalCost)) {
-                        enrollment.get().setEnrollmentStatus(EnrollmentStatus.PAID);
-                        if (enrollmentService.updateStatus(enrollment.get())) {
-                            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollment(user);
-                            request.setAttribute(ENROLLMENTS, enrollments);
-                            request.setAttribute(MESSAGE, PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY);
-                            return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
-                        }
-                    } else {
-                        request.setAttribute(CARD, cardData);
-                        request.setAttribute(MESSAGE, NO_FUNDS_ERROR_MESSAGE_KEY);
-                        return new Router(PagePath.PAY_FOR_ENROLLMENT, Router.RouterType.FORWARD);
+                if (bankCardService.withdrawMoneyForEnrollment(bankCard.get(), chosenEnrollmentId)) {
+                    if (enrollmentService.updateStatus(chosenEnrollmentId, EnrollmentStatus.PAID)) {
+                        Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
+                        session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
+                        session.setAttribute(SessionAttribute.MESSAGE, PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY);
+                        return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
                     }
+                } else {
+                    request.setAttribute(CARD, cardData);
+                    request.setAttribute(MESSAGE, NO_FUNDS_ERROR_MESSAGE_KEY);
+                    return new Router(PagePath.PAY_FOR_ENROLLMENT, Router.RouterType.FORWARD);
                 }
             } else {
                 request.setAttribute(CARD, cardData);

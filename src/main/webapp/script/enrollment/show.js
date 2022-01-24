@@ -5,9 +5,6 @@ $('input[type=number]').bind('input', function () {
     else $('#total').text('');
 });
 
-$('#all>div:nth-child(7n):not(:nth-child(-n+7))').on('click', function () {
-});
-
 $('#all>div:nth-child(8n):not(:nth-child(-n+8))').on('click', function () {
     let row = Math.trunc($(this).index() / 8);
     let status = $(`input[name=status]:eq(${row - 1})`).val();
@@ -20,3 +17,20 @@ $('#all>div:nth-child(8n):not(:nth-child(-n+8))').on('click', function () {
         $('#status').text($(`input[name=status]:eq(${row - 1})`).val());
     }
 });
+
+
+if ($('form').css('height') === $('form').css('min-height')) {
+    $('input[type=submit]').css({
+        'position': 'absolute',
+        'left': '440px',
+        'top': '375px'
+    });
+    $('#pages').css({
+        'position': 'absolute',
+        'left': '440px',
+        'top': '315px'
+    });
+} else {
+    $('input[type=submit]').css('position', 'relative');
+    $('#pages').css('position', 'relative');
+}

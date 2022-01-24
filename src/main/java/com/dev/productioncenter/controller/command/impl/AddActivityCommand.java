@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class AddActivityCommand implements Command {
@@ -35,16 +34,16 @@ public class AddActivityCommand implements Command {
         activityData.put(CATEGORY, category);
         activityData.put(TYPE, type);
         try {
-            List<String> categories = activityService.findCategories();
-            request.setAttribute(RequestAttribute.CATEGORIES, categories);
             if (activityService.addActivity(activityData)) {
+                List<String> categories = activityService.findCategories();
                 List<Activity> activities = activityService.findActivities();
-                session.setAttribute(ACTIVITIES, activities);
-                session.setAttribute(MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(RequestAttribute.CATEGORIES, categories);
+                session.setAttribute(SessionAttribute.ACTIVITIES, activities);
+                session.setAttribute(SessionAttribute.MESSAGE, ADD_ACTIVITY_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_ACTIVITIES, Router.RouterType.REDIRECT);
             } else {
-                request.setAttribute(ACTIVITY, activityData);
-                request.setAttribute(MESSAGE, ADD_ACTIVITY_ERROR_MESSAGE_KEY);
+                request.setAttribute(RequestAttribute.ACTIVITY, activityData);
+                session.setAttribute(SessionAttribute.MESSAGE, ADD_ACTIVITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.ADD_ACTIVITY, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {

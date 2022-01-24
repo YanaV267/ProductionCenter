@@ -1,5 +1,5 @@
 #all {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 260px 190px 150px 160px 100px 110px;
 }
 
 #all > div:not(:nth-child(-n+7)) {

@@ -52,19 +52,19 @@ public class BankCardValidatorImpl implements BankCardValidator {
     public boolean checkCardData(Map<String, String> cardData) {
         boolean isValid = true;
         if (!checkNumber(cardData.get(CARD_NUMBER))) {
-            cardData.put(CARD_NUMBER, INCORRECT_VALUE_PARAMETER);
+            cardData.put(CARD_NUMBER, cardData.get(CARD_NUMBER) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkOwnerName(cardData.get(OWNER_NAME))) {
-            cardData.put(OWNER_NAME, INCORRECT_VALUE_PARAMETER);
+            cardData.put(OWNER_NAME, cardData.get(OWNER_NAME) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkExpirationDate(cardData.get(EXPIRATION_DATE))) {
-            cardData.put(EXPIRATION_DATE, INCORRECT_VALUE_PARAMETER);
+            cardData.put(EXPIRATION_DATE, cardData.get(EXPIRATION_DATE) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkCVVNumber(cardData.get(CVV_NUMBER))) {
-            cardData.put(CVV_NUMBER, INCORRECT_VALUE_PARAMETER);
+            cardData.put(CVV_NUMBER, cardData.get(CVV_NUMBER) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         return isValid;

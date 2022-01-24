@@ -4,7 +4,9 @@ import com.dev.productioncenter.controller.command.CommandType;
 import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.RequestParameter;
 import com.dev.productioncenter.controller.command.SessionAttribute;
+import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
+import com.dev.productioncenter.entity.UserStatus;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +21,10 @@ import java.util.Optional;
 import static com.dev.productioncenter.controller.command.CommandType.*;
 import static com.dev.productioncenter.entity.UserRole.*;
 
-@WebFilter(urlPatterns = {"/controller"})//TODO:сверить команды
-public class SecurityAccessFilter implements Filter {
-    private EnumMap<UserRole, List<CommandType>> accessibleCommands;
+@WebFilter(urlPatterns = "/controller")
+public class SecurityAccessRightsFilter implements Filter {
     private static final String DEFAULT_COMMAND = "go_to_home";
+    private EnumMap<UserRole, List<CommandType>> accessibleCommands;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -36,10 +38,10 @@ public class SecurityAccessFilter implements Filter {
                 GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES, GO_TO_TIMETABLE, SEARCH_COURSES, CHANGE_LOCALE, SIGN_OUT,
                 UPDATE_ACCOUNT_DATA, UPLOAD_PROFILE_PICTURE, DEFAULT));
         accessibleCommands.put(USER, List.of(GO_TO_HOME, GO_TO_COURSES, GO_TO_COURSE_INFO, GO_TO_ACCOUNT,
-                GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES, GO_TO_ENROLL_ON_COURSE, GO_TO_USER_ENROLLMENTS,
-                GO_TO_PAY_FOR_ENROLLMENT, GO_TO_TIMETABLE, GO_TO_CONTACTS, SEARCH_COURSES, CHANGE_LOCALE, SIGN_OUT,
-                UPDATE_ACCOUNT_DATA, REPLENISH_BALANCE, UPLOAD_PROFILE_PICTURE, ENROLL_ON_COURSE, UPDATE_ENROLLMENT,
-                DELETE_ENROLLMENT, PAY_FOR_ENROLLMENT, DEFAULT));
+                GO_TO_REPLENISH_BALANCE, GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES, GO_TO_ENROLL_ON_COURSE,
+                GO_TO_USER_ENROLLMENTS, GO_TO_PAY_FOR_ENROLLMENT, GO_TO_TIMETABLE, GO_TO_CONTACTS, SEARCH_COURSES,
+                CHANGE_LOCALE, SIGN_OUT, UPDATE_ACCOUNT_DATA, REPLENISH_BALANCE, UPLOAD_PROFILE_PICTURE, ENROLL_ON_COURSE,
+                UPDATE_ENROLLMENT, DELETE_ENROLLMENT, PAY_FOR_ENROLLMENT, DEFAULT));
         accessibleCommands.put(GUEST, List.of(GO_TO_HOME, GO_TO_SIGN_IN, GO_TO_SIGN_UP, GO_TO_COURSES, GO_TO_COURSE_INFO,
                 GO_TO_ACTIVITIES, GO_TO_ENROLL_ON_COURSE, GO_TO_CONTACTS, SEARCH_COURSES, CHANGE_LOCALE, SIGN_IN,
                 SIGN_UP, DEFAULT));

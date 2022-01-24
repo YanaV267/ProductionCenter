@@ -22,7 +22,7 @@
             <div id="authent">
                 <input type="text" name="login"
                        placeholder="<fmt:message key="sign_in.login.placeholder"/>"
-                       pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="<c:out value="${user.login}"/>"
+                       pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="<c:out value="${requestScope.user.login}"/>"
                        title="<fmt:message key="sign_in.login.title"/>"><br/>
                 <input type="password" name="password" pattern="[a-zA-Z][A-Za-z0-9]{7,29}"
                        placeholder="<fmt:message key="account.update.old_password.placeholder"/>"
@@ -38,13 +38,13 @@
             <div id="personal">
                 <input type="text" name="surname"
                        placeholder="<fmt:message key="sign_up.surname.placeholder"/>"
-                       pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="<c:out value="${user.surname}"/>"
+                       pattern="[А-ЯA-Z][а-яa-z]{1,20}" autocomplete="off" value="<c:out value="${requestScope.user.surname}"/>"
                        title="<fmt:message key="sign_up.surname.title"/>"><br/>
                 <input type="text" name="name"
                        placeholder="<fmt:message key="sign_up.name.placeholder"/>"
-                       pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="<c:out value="${user.name}"/>"
+                       pattern="[А-ЯA-Z][а-яёa-z]{1,15}" autocomplete="off" value="<c:out value="${requestScope.user.name}"/>"
                        title="<fmt:message key="sign_up.name.title"/>"><br/>
-                <input type="email" name="email" placeholder="Email" value="<c:out value="${user.email}"/>"
+                <input type="email" name="email" placeholder="Email" value="<c:out value="${requestScope.user.email}"/>"
                        pattern="(([A-Za-z\d._]+){5,25}@([A-Za-z]+){3,7}\.([a-z]+){2,3})" autocomplete="off"
                        title="<fmt:message key="sign_up.email.title"/>: *****@***.**"><br/>
                 <input type="tel" name="number"
@@ -57,7 +57,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/update_account.js"></script>
+<script src="${pageContext.request.contextPath}/script/account/update.js"></script>
 <script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
 
 </body>

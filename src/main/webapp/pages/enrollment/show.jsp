@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="ctg" uri="custom_tags" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -15,7 +17,7 @@
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=change_enrollment_status">
         <p id="title"><fmt:message key="enrollment.all.title"/></p>
-        <c:if test="${enrollments.size() > 0}">
+        <c:if test="${fn:length(requestScope.enrollments) > 0}">
             <div id="all">
                 <div><fmt:message key="enrollment.name"/></div>
                 <input type="hidden">
@@ -25,7 +27,8 @@
                 <div><fmt:message key="enrollment.reservation_date"/></div>
                 <div><fmt:message key="enrollment.status"/></div>
                 <div><fmt:message key="enrollment.approval"/></div>
-                <c:forEach var="enrollment" items="${enrollments}">
+                <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="enrollment"
+                           items="${enrollments}">
                     <div><c:out value="${enrollment.key.user.surname}"/> <c:out
                             value="${enrollment.key.user.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
@@ -48,16 +51,17 @@
                     </div>
                 </c:forEach>
             </div>
+            <ctg:pages page="${requestScope.page}" size="${fn:length(requestScope.enrollments)}"
+                       command="go_to_enrollments"/>
         </c:if>
-        <c:if test="${enrollments.size() == 0}">
+        <c:if test="${fn:length(requestScope.enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.message"/></div>
         </c:if>
         <input type="submit" value="<fmt:message key="enrollment.save"/>">
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/users.js"></script>
-<script src="${pageContext.request.contextPath}/script/enrollment.js"></script>
+<script src="${pageContext.request.contextPath}/script/enrollment/show.js"></script>
 <script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>

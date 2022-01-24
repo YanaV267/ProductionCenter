@@ -16,13 +16,13 @@ public interface EnrollmentService {
 
     Optional<Enrollment> findEnrollment(User user, long chosenCourseId) throws ServiceException;
 
-    Map<Enrollment, LocalDate> findEnrollment(User user) throws ServiceException;
+    Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException;
 
-    Map<Enrollment, LocalDate> findEnrollment() throws ServiceException;
+    Map<Enrollment, LocalDate> findEnrollments() throws ServiceException;
 
     boolean updateStatus(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException;
 
-    boolean updateStatus(Enrollment enrollment) throws ServiceException;
+    boolean updateStatus(long enrollmentId, EnrollmentStatus status) throws ServiceException;
 
     boolean updateLessonAmounts(Map<String, String> enrollmentsLessonAmount) throws ServiceException;
 

@@ -30,11 +30,11 @@ public class UpdateCourseCommand implements Command {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute(SessionAttribute.ROLE);
         Map<String, String> courseData = new HashMap<>();
-        courseData.put(CHOSEN_COURSE_ID, request.getParameter(CHOSEN_COURSE_ID));
+        courseData.put(ID, request.getParameter(CHOSEN_COURSE_ID));
         courseData.put(TYPE, request.getParameter(TYPE));
         courseData.put(TEACHER, request.getParameter(TEACHER));
-        String weekdays = request.getParameterValues(WEEKDAYS) != null ? Arrays.toString(request.getParameterValues(WEEKDAYS)) : EMPTY_STRING_REGEX;
-        courseData.put(WEEKDAYS, weekdays);
+        String[] weekdays = request.getParameterValues(WEEKDAYS);
+        courseData.put(WEEKDAYS, weekdays != null ? Arrays.toString(weekdays) : EMPTY_STRING_REGEX);
         courseData.put(TIME, Arrays.toString(request.getParameterValues(TIME)));
         courseData.put(DURATION, Arrays.toString(request.getParameterValues(DURATION)));
         courseData.put(MIN_AGE, request.getParameter(MIN_AGE));
@@ -52,11 +52,10 @@ public class UpdateCourseCommand implements Command {
                 } else {
                     courses = courseService.findAvailableCourses();
                 }
-                session.setAttribute(SessionAttribute.COURSES, courses);
+                request.setAttribute(RequestAttribute.COURSES, courses);
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_COURSE_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
-                request.setAttribute(RequestAttribute.COURSE, courseData);
                 request.setAttribute(RequestAttribute.MESSAGE, UPDATE_COURSE_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.UPDATE_COURSE, Router.RouterType.FORWARD);
             }

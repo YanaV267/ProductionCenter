@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -16,7 +17,7 @@
         <p id="title"><fmt:message key="contacts.title"/></p>
         <div>
             <p class="subtitle"><fmt:message key="contacts.employers"/></p>
-            <c:forEach var="employer" items="${employers}">
+            <c:forEach var="employer" items="${requestScope.employers}">
                 <div id="data">
                     <div><c:out value="${employer.key.surname}"/> <c:out value="${employer.key.name}"/></div>
                     <div>
@@ -32,13 +33,13 @@
                 </div>
             </c:forEach>
         </div>
-        <c:if test="${teachers.size() != 0}">
+        <c:if test="${fn:length(requestScope.teachers) != 0}">
             <div>
                 <p class="subtitle"><fmt:message key="header.teachers"/></p>
-                <c:forEach var="teacher" items="${teachers}">
+                <c:forEach var="teacher" items="${requestScope.teachers}">
                     <div id="data">
                         <div><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/>
-                            <c:forEach var="course" items="${courses}">
+                            <c:forEach var="course" items="${requestScope.courses}">
                                 <c:if test="${course.teacher.surname eq teacher.key.surname
                                 && course.teacher.name eq teacher.key.name}"> - <c:out value="${course.activity.type}"/>
                                 </c:if>

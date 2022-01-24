@@ -10,10 +10,12 @@ public final class SessionAttribute {
     public static final String MESSAGE = "message";
     public static final String PICTURE = "picture";
     public static final String COURSES = "courses";
+    public static final String COURSE = "course";
     public static final String ACTIVITIES = "activities";
     public static final String CATEGORIES = "categories";
     public static final String WEEKDAYS = "weekdays";
     public static final String ENROLLMENTS = "enrollments";
+    public static final String TEACHERS = "teachers";
 
     private SessionAttribute() {
     }

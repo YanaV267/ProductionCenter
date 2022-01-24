@@ -10,7 +10,7 @@ public final class RequestAttribute {
     public static final String PICTURE = "picture";
     public static final String COURSES = "courses";
     public static final String COURSE = "course";
-    public static final String LESSONS = "lessons";
+    public static final String TYPE = "activity.type";
     public static final String ACTIVITY = "activity";
     public static final String ACTIVITIES = "activities";
     public static final String CATEGORIES = "categories";
@@ -23,6 +23,7 @@ public final class RequestAttribute {
     public static final String ENROLLMENT_ID = "enrollment_id";
     public static final String WEEKDAYS = "weekdays";
     public static final String CARD = "card";
+    public static final String PAGE = "page";
 
     private RequestAttribute() {
     }

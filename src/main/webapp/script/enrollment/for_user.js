@@ -49,7 +49,7 @@ $('input[type=number]').on('click', function () {
 if ($('form').css('height') === $('form').css('min-height')) {
     $('#buttons').css({
         'position': 'absolute',
-        'left': '315px',
+        'left': '325px',
         'top': '375px'
     });
 } else {

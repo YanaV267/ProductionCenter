@@ -15,7 +15,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.USER;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class SignUpCommand implements Command {

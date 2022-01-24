@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.CARD;
-import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class ReplenishBalanceCommand implements Command {
@@ -43,7 +42,7 @@ public class ReplenishBalanceCommand implements Command {
                 return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(CARD, cardData);
-                request.setAttribute(MESSAGE, INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY);
+                session.setAttribute(SessionAttribute.MESSAGE, INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.REPLENISH_BALANCE, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {

@@ -17,7 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.USER;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class UpdateAccountDataCommand implements Command {

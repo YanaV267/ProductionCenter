@@ -22,9 +22,9 @@
                     <div><fmt:message key="courses.age_group"/>:</div>
                 </div>
                 <div>
-                    <div><c:out value="${course.activity.type}"/></div>
-                    <div><c:out value="${course.teacher.surname}"/> <c:out value="${course.teacher.name}"/></div>
-                    <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/>
+                    <div><c:out value="${requestScope.course.activity.type}"/></div>
+                    <div><c:out value="${requestScope.course.teacher.surname}"/> <c:out value="${requestScope.course.teacher.name}"/></div>
+                    <div><c:out value="${requestScope.course.ageGroup.minAge}"/>-<c:out value="${requestScope.course.ageGroup.maxAge}"/>
                         <fmt:message key="courses.age.title"/></div>
                 </div>
             </div>
@@ -34,13 +34,13 @@
                     <div><fmt:message key="enrollment.total_price"/>:</div>
                 </div>
                 <div>
-                    <div id="price"><c:out value="${course.lessonPrice}"/>р</div>
+                    <div id="price"><c:out value="${requestScope.course.lessonPrice}"/>р</div>
                     <div id="total"></div>
                 </div>
             </div>
-            <div id="timetable">
+            <div class="timetable">
                 <div><fmt:message key="courses.timetable"/>:</div>
-                <c:forEach var="lesson" items="${course.lessons}">
+                <c:forEach var="lesson" items="${requestScope.course.lessons}">
                     <div><c:out value="${lesson.weekDay}"/>: <c:out value="${lesson.startTime}"/>
                         (<c:out value="${lesson.duration}"/>мин)
                     </div>
@@ -54,13 +54,13 @@
                 <input type="submit" value="<fmt:message key="courses.enroll"/>">
                 <input type="button" value="<fmt:message key="courses.back"/>"
                        onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">
-                <input type="hidden" name="chosen_course_id" value="<c:out value="${course.id}"/>">
+                <input type="hidden" name="chosen_course_id" value="<c:out value="${requestScope.course.id}"/>">
             </div>
         </div>
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/enrollment.js"></script>
+<script src="${pageContext.request.contextPath}/script/enrollment/show.js"></script>
 <script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>

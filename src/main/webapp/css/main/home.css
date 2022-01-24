@@ -282,3 +282,31 @@ div.stage {
 #language div p:hover::after {
     width: 48%;
 }
+
+#pages {
+    margin: 30px auto 0;
+    font-size: 18px;
+    font-weight: bold;
+    width: 130px;
+    align-items: center;
+}
+
+#pages > * {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+}
+
+#pages > input {
+    cursor: pointer;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(11, 35, 78);
+    background-color: rgb(185, 204, 225);
+    outline: none;
+}
+
+#pages > input:disabled {
+    color: rgba(11, 35, 78, 0.5);
+}

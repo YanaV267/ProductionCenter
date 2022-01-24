@@ -1,11 +1,13 @@
 package com.dev.productioncenter.model.service.impl;
 
 import com.dev.productioncenter.entity.BankCard;
+import com.dev.productioncenter.entity.Enrollment;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.BankCardDao;
 import com.dev.productioncenter.model.dao.impl.BankCardDaoImpl;
 import com.dev.productioncenter.model.service.BankCardService;
+import com.dev.productioncenter.model.service.EnrollmentService;
 import com.dev.productioncenter.validator.impl.BankCardValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +28,7 @@ public class BankCardServiceImpl implements BankCardService {
     private static final int EXPIRATION_DATE_CENTURY_VALUE = 2000;
     private static final Map<Integer, Integer> LAST_DAY_OF_MONTH = new HashMap<>();
     private final BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
+    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
 
     public BankCardServiceImpl() {
         LAST_DAY_OF_MONTH.put(1, 31);
@@ -83,15 +86,23 @@ public class BankCardServiceImpl implements BankCardService {
     }
 
     @Override
-    public boolean withdrawMoney(BankCard bankCard, BigDecimal withdrawalValue) throws ServiceException {
+    public boolean withdrawMoneyForEnrollment(BankCard bankCard, long enrollmentId) throws ServiceException {
+        Optional<Enrollment> enrollment = enrollmentService.findEnrollment(enrollmentId);
         try {
-            BigDecimal currentBalance = bankCard.getBalance();
-            BigDecimal newBalance = currentBalance.subtract(withdrawalValue);
-            bankCard.setBalance(newBalance);
-            return bankCardDao.update(bankCard);
+            if (enrollment.isPresent()) {
+                BigDecimal totalCost = enrollment.get().getCourse().getLessonPrice()
+                        .multiply(BigDecimal.valueOf(enrollment.get().getLessonAmount()));
+                if (bankCard.getBalance().compareTo(totalCost) >= 0) {
+                    BigDecimal currentBalance = bankCard.getBalance();
+                    BigDecimal newBalance = currentBalance.subtract(totalCost);
+                    bankCard.setBalance(newBalance);
+                    return bankCardDao.update(bankCard);
+                }
+            }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while withdrawing money from bank card: " + exception);
             throw new ServiceException("Error has occurred while withdrawing money from bank card: " + exception);
         }
+        return false;
     }
 }

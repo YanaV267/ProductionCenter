@@ -13,12 +13,12 @@
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/uploadController" enctype="multipart/form-data">
-        <p id="title"><c:out value="${user.login}"/></p>
+        <p id="title"><c:out value="${sessionScope.user.login}"/></p>
         <div>
             <div>
                 <c:choose>
-                    <c:when test="${not empty picture}">
-                        <img src="<c:out value="${picture}"/>" alt="account">
+                    <c:when test="${not empty requestScope.picture}">
+                        <img src="<c:out value="${requestScope.picture}"/>" alt="account">
                     </c:when>
                     <c:otherwise>
                         <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
@@ -32,9 +32,9 @@
                     <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                 </div>
                 <div>
-                    <div><c:out value="${user.surname}"/> <c:out value="${user.name}"/></div>
-                    <div><c:out value="${user.email}"/></div>
-                    <div><c:out value="${number}"/></div>
+                    <div><c:out value="${sessionScope.user.surname}"/> <c:out value="${sessionScope.user.name}"/></div>
+                    <div><c:out value="${sessionScope.user.email}"/></div>
+                    <div><c:out value="${sessionScope.number}"/></div>
                 </div>
             </div>
             <div id="wrapper">
@@ -53,7 +53,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/account.js"></script>
+<script src="${pageContext.request.contextPath}/script/account/upload.js"></script>
 
 </body>
 <jsp:include page="../main/footer.jsp"/>

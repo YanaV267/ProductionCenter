@@ -32,7 +32,7 @@ public class GoToTimetableCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttribute.USER);
         try {
-            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollment(user);
+            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
             request.setAttribute(ENROLLMENTS, enrollments);
             request.setAttribute(WEEKDAYS, weekdays);
             return new Router(PagePath.TIMETABLE, Router.RouterType.FORWARD);

@@ -22,4 +22,6 @@ public interface CourseService {
     Optional<Course> findCourse(long id) throws ServiceException;
 
     boolean reservePlaceAtCourse(long id) throws ServiceException;
+
+    boolean releasePlaceAtCourse(long id) throws ServiceException;
 }

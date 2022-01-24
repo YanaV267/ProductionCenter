@@ -18,10 +18,6 @@
                     <div>Internal Server Error</div>
                 </div>
                 <div><fmt:message key="error.500.message"/></div>
-                Exception: ${pageContext.exception}<br/>
-                <c:forEach var="trace" items="${pageContext.exception.stackTrace}">
-                    ${trace}<br/>
-                </c:forEach>
                 <input type="submit" value="<fmt:message key="error.back"/>"/>
             </div>
         </div>

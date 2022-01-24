@@ -35,6 +35,8 @@ public final class RequestParameter {
     public static final String EXPIRATION_DATE = "expiration_date";
     public static final String CVV_NUMBER = "cvv_number";
     public static final String BALANCE = "balance";
+    public static final String ID = "id";
+    public static final String PAGE = "page";
 
     private RequestParameter() {
     }

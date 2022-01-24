@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="cmt" uri="custom_tags" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -16,24 +18,25 @@
     <div id="rect"></div>
     <form method="post"
           action="${pageContext.request.contextPath}/controller?command=update_course&chosen_course_id=${course.id}">
-        <p id="title"><fmt:message key="courses.info.title"/> "<c:out value="${course.activity.type}"/>"</p>
+        <p id="title"><fmt:message key="courses.update.title"/> "<c:out value="${course.activity.type}"/>"</p>
         <div id="courseProps">
             <div>
                 <select name="teacher">
                     <option disabled selected><fmt:message key="courses.teacher"/> --</option>
-                    <c:forEach var="teacher" items="${teachers}">
-                        <option <c:if test="${teacher.key.surname eq course.teacher.surname
-                        && teacher.key.name eq course.teacher.name}">selected</c:if>><c:out
-                                value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/></option>
+                    <c:forEach var="teacher" items="${sessionScope.teachers}">
+                        <option
+                                <c:if test="${teacher.key.surname eq course.teacher.surname && teacher.key.name
+                                                                                eq course.teacher.name}">selected</c:if>>
+                            <c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/></option>
                     </c:forEach>
                 </select>
                 <p><fmt:message key="courses.weekdays"/>:</p>
                 <div id="weekdays">
-                    <c:forEach var="weekday" items="${weekdays}">
-                        <label><input type="checkbox" name="weekdays" value="<c:out value="${weekday}"/>"
+                    <c:forEach var="weekday" items="${sessionScope.weekdays}">
+                        <label><input type="checkbox" value="<fmt:message key="timetable.${weekday}"/>"
                         <c:forEach var="lesson" items="${course.lessons}">
                                       <c:if test="${lesson.weekDay eq weekday}">checked </c:if>
-                            </c:forEach>>
+                        </c:forEach>>
                             <fmt:message key="courses.${weekday}"/></label>
                     </c:forEach>
                 </div>
@@ -42,6 +45,7 @@
                 <c:forEach var="lesson" items="${course.lessons}">
                     <div class="time">
                         <p><fmt:message key="timetable.${lesson.weekDay}"/>:</p>
+                        <input type="hidden" name="weekdays" value="<fmt:message key="timetable.${lesson.weekDay}"/>">
                         <div>
                             <p><fmt:message key="courses.start_time"/>:</p>
                             <input type="time" name="time" value="<c:out value="${lesson.startTime}"/>">
@@ -50,6 +54,20 @@
                             <p><fmt:message key="courses.duration"/>:</p>
                             <input type="number" name="duration" min="30" max="120" step="15"
                                    value="<c:out value="${lesson.duration}"/>">
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:forEach begin="1" end="3" varStatus="loop">
+                    <div class="time" style="display: none">
+                        <p></p>
+                        <input type="hidden" name="weekdays">
+                        <div>
+                            <p><fmt:message key="courses.start_time"/>:</p>
+                            <input type="time" name="time">
+                        </div>
+                        <div>
+                            <p><fmt:message key="courses.duration"/>:</p>
+                            <input type="number" name="duration" min="30" max="120" step="15">
                         </div>
                     </div>
                 </c:forEach>
@@ -77,17 +95,17 @@
                 <p><fmt:message key="courses.status"/>:</p>
                 <label>
                     <input type="radio" name="status" value="<fmt:message key="courses.status.upcoming"/>"
-                           <c:if test="${course.courseStatus.status eq 'upcoming'}">checked</c:if>><fmt:message
+                           <c:if test="${course.status eq 'UPCOMING'}">checked</c:if>><fmt:message
                         key="courses.status.upcoming"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="<fmt:message key="courses.status.running"/>"
-                           <c:if test="${course.courseStatus.status eq 'running'}">checked</c:if>><fmt:message
+                           <c:if test="${course.status eq 'RUNNING'}">checked</c:if>><fmt:message
                         key="courses.status.running"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="<fmt:message key="courses.status.paused"/>"
-                           <c:if test="${course.courseStatus.status eq 'paused'}">checked</c:if>><fmt:message
+                           <c:if test="${course.status eq 'PAUSED'}">checked</c:if>><fmt:message
                         key="courses.status.paused"/>
                 </label>
             </div>
@@ -101,7 +119,9 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/script/checkbox.js"></script>
 <script src="${pageContext.request.contextPath}/script/course/update.js"></script>
+<script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

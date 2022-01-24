@@ -12,15 +12,16 @@ import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.COURSE;
-import static com.dev.productioncenter.controller.command.RequestAttribute.TEACHERS;
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
+import static com.dev.productioncenter.controller.command.SessionAttribute.COURSE;
+import static com.dev.productioncenter.controller.command.SessionAttribute.TEACHERS;
 
 public class GoToUpdateCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -29,13 +30,14 @@ public class GoToUpdateCourseCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         long chosenId = Long.parseLong(request.getParameter(CHOSEN_COURSE_ID));
         try {
             Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
             Optional<Course> course = courseService.findCourse(chosenId);
             if (course.isPresent()) {
-                request.setAttribute(TEACHERS, teachers);
-                request.setAttribute(COURSE, course.get());
+                session.setAttribute(TEACHERS, teachers);
+                session.setAttribute(COURSE, course.get());
                 return new Router(PagePath.UPDATE_COURSE, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {

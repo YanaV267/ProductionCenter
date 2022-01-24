@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -31,15 +32,15 @@
                         <div>
                             <c:set var="teacher_appointed" value="false"/>
                             <c:forEach var="course" items="${courses}">
-                                <c:choose>
-                                    <c:when test="${not empty course.value}">
-                                        <img src="<c:out value="${course.value}"/>" alt="account">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
-                                    </c:otherwise>
-                                </c:choose>
                                 <c:if test="${course.key.activity.category eq category && course.key.activity.type eq activity.type}">
+                                    <c:choose>
+                                        <c:when test="${not empty course.value}">
+                                            <img src="<c:out value="${course.value}"/>" alt="account">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
+                                        </c:otherwise>
+                                    </c:choose>
                                     <p>
                                         <c:out value="${course.key.teacher.surname}"/> <c:out
                                             value="${course.key.teacher.name}"/>
@@ -48,6 +49,7 @@
                                 </c:if>
                             </c:forEach>
                             <c:if test="${teacher_appointed eq 'false'}">
+                                <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
                                 <p><fmt:message key="activities.no_teacher"/></p>
                             </c:if>
                             <p><c:out value="${activity.type}"/></p>
@@ -56,14 +58,13 @@
                 </c:forEach>
             </div>
         </c:forEach>
-        <c:if test="${categories.size() == 0}">
+        <c:if test="${fn:length(categories) == 0}">
             <div><fmt:message key="activities.message"/></div>
         </c:if>
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/height.js"></script>
-
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

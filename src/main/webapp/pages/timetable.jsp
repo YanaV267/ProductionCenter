@@ -14,12 +14,12 @@
     <div id="rect"></div>
     <form>
         <p id="title"><fmt:message key="timetable.title"/></p>
-        <c:forEach var="weekday" items="${weekdays}">
+        <c:forEach var="weekday" items="${requestScope.weekdays}">
             <div>
                 <div><fmt:message key="timetable.${weekday}"/></div>
                 <div>
                     <c:set var="lessons_today" value="false"/>
-                    <c:forEach var="enrollment" items="${enrollments}">
+                    <c:forEach var="enrollment" items="${requestScope.enrollments}">
                         <c:forEach var="lesson" items="${enrollment.key.course.lessons}">
                             <c:if test="${lesson.weekDay eq weekday}">
                                 <div>

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -16,7 +17,7 @@
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=update_enrollment">
         <p id="title"><fmt:message key="enrollment.all.title"/></p>
-        <c:if test="${enrollments.size() > 0}">
+        <c:if test="${fn:length(sessionScope.enrollments) > 0}">
             <div id="all">
                 <div><fmt:message key="enrollment.teacher"/></div>
                 <input type="hidden" name="chosen_enrollment_id">
@@ -25,7 +26,7 @@
                 <div><fmt:message key="enrollment.total_price"/></div>
                 <div><fmt:message key="enrollment.reservation_date"/></div>
                 <div><fmt:message key="enrollment.status"/></div>
-                <c:forEach var="enrollment" items="${enrollments}">
+                <c:forEach var="enrollment" items="${sessionScope.enrollments}">
                     <div><c:out value="${enrollment.key.course.teacher.surname}"/> <c:out
                             value="${enrollment.key.course.teacher.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
@@ -38,7 +39,7 @@
                 </c:forEach>
             </div>
         </c:if>
-        <c:if test="${enrollments.size() == 0}">
+        <c:if test="${fn:length(sessionScope.enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.message"/></div>
         </c:if>
         <div id="buttons">
@@ -51,7 +52,7 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/script/enrollments_for_user.js"></script>
+<script src="${pageContext.request.contextPath}/script/enrollment/for_user.js"></script>
 <script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>

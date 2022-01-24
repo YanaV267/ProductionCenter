@@ -135,7 +135,7 @@ public class CourseDaoImpl implements CourseDao {
             preparedStatement.setLong(3, course.getAgeGroup().getId());
             preparedStatement.setBigDecimal(4, course.getLessonPrice());
             preparedStatement.setLong(5, course.getStudentAmount());
-            preparedStatement.setString(6, course.getCourseStatus().getStatus());
+            preparedStatement.setString(6, course.getStatus().getStatus());
             preparedStatement.setLong(7, course.getId());
             preparedStatement.execute();
             return true;

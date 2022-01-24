@@ -11,8 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
@@ -48,11 +50,17 @@ public class LessonServiceImpl implements LessonService {
     public boolean updateLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .toLowerCase()
                 .split(DELIMITER_REGEX);
         String[] durations = lessonData.get(DURATION)
-                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .split(DELIMITER_REGEX);
         String[] times = lessonData.get(TIME)
-                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .split(DELIMITER_REGEX);
         try {
             for (int i = 0; i < weekdays.length; i++) {
                 Lesson lesson = new Lesson();
@@ -60,7 +68,22 @@ public class LessonServiceImpl implements LessonService {
                 lesson.setWeekDay(weekdays[i]);
                 lesson.setStartTime(LocalTime.parse(times[i]));
                 lesson.setDuration(Integer.parseInt(durations[i]));
-                lessonDao.update(lesson);
+                Optional<Lesson> foundLesson = lessonDao.findLessonsByCourseWeekDay(lesson.getWeekDay(), courseId);
+                if (foundLesson.isPresent()) {
+                    lesson.setId(foundLesson.get().getId());
+                    lessonDao.update(lesson);
+                } else {
+                    lessonDao.add(lesson);
+                }
+            }
+            List<Lesson> lessons = lessonDao.findLessonsByCourse(courseId);
+            for (Lesson lesson : lessons) {
+                Optional<String> weekday = Arrays.stream(weekdays)
+                        .filter(d -> d.equals(lesson.getWeekDay()))
+                        .findAny();
+                if (weekday.isEmpty()) {
+                    lessonDao.delete(lesson.getId());
+                }
             }
             return true;
         } catch (DaoException exception) {

@@ -21,11 +21,11 @@
                 <select name="category" onchange="location.href=
                         '${pageContext.request.contextPath}/controller?command=go_to_add_course&category='
                         + this.options[this.selectedIndex].value">
-                    <option disabled <c:if test="${empty selected_category}">selected</c:if>>
+                    <option disabled <c:if test="${empty requestScope.selected_category}">selected</c:if>>
                         <fmt:message key="activities.category"/> --
                     </option>
                     <c:forEach var="category" items="${categories}">
-                        <option <c:if test="${category eq selected_category}">selected</c:if>>
+                        <option <c:if test="${category eq requestScope.selected_category}">selected</c:if>>
                             <c:out value="${category}"/></option>
                     </c:forEach>
                 </select>
@@ -37,7 +37,7 @@
                 </select>
                 <select name="teacher">
                     <option disabled selected><fmt:message key="courses.teacher"/> --</option>
-                    <c:forEach var="teacher" items="${teachers}">
+                    <c:forEach var="teacher" items="${requestScope.teachers}">
                         <option><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/></option>
                     </c:forEach>
                 </select>
@@ -86,7 +86,9 @@
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/script/checkbox.js"></script>
 <script src="${pageContext.request.contextPath}/script/course/show.js"></script>
+<script src="${pageContext.request.contextPath}/script/incorrect_input.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

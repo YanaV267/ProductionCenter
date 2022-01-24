@@ -19,8 +19,8 @@ public class LessonDaoImpl implements LessonDao {
     private static final String SQL_SELECT_ALL_LESSONS = "SELECT id_lesson, week_day, start_time, duration FROM lessons";
     private static final String SQL_SELECT_LESSONS_BY_COURSE =
             "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE id_course = ?";
-    private static final String SQL_SELECT_LESSON_BY_WEEK_DAY =
-            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE week_day = ?";
+    private static final String SQL_SELECT_LESSON_BY_COURSE_WEEK_DAY =
+            "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE week_day = ? AND id_course = ?";
     private static final String SQL_SELECT_LESSON_BY_START_TIME =
             "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE start_time = ?";
     private static final String SQL_SELECT_LESSON_BY_DURATION =
@@ -59,7 +59,7 @@ public class LessonDaoImpl implements LessonDao {
             preparedStatement.setString(1, lesson.getWeekDay());
             preparedStatement.setString(2, lesson.getStartTime().toString());
             preparedStatement.setInt(3, lesson.getDuration());
-            preparedStatement.setLong(4, lesson.getCourse().getId());
+            preparedStatement.setLong(4, lesson.getId());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
@@ -117,19 +117,20 @@ public class LessonDaoImpl implements LessonDao {
     }
 
     @Override
-    public List<Lesson> findLessonsByWeekDay(String weekDay) throws DaoException {
+    public Optional<Lesson> findLessonsByCourseWeekDay(String weekDay, long courseId) throws DaoException {
         List<Lesson> lessons;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_WEEK_DAY)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_LESSON_BY_COURSE_WEEK_DAY)) {
             preparedStatement.setString(1, weekDay);
+            preparedStatement.setLong(2, courseId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 lessons = LessonMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding lessons by week day: " + exception);
-            throw new DaoException("Error has occurred while finding lessons by week day: ", exception);
+            LOGGER.error("Error has occurred while finding lessons by course & week day: " + exception);
+            throw new DaoException("Error has occurred while finding lessons by course & week day: ", exception);
         }
-        return lessons;
+        return lessons.isEmpty() ? Optional.empty() : Optional.of(lessons.get(0));
     }
 
     @Override

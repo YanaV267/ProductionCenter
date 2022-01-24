@@ -33,7 +33,7 @@ p#title {
 
 #all {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: 190px 260px 250px 150px 120px;
     grid-row-gap: 1vw;
     margin-left: 40px;
     margin-right: 40px;

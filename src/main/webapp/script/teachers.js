@@ -13,6 +13,12 @@ if ($('form').css('height') === $('form').css('min-height')) {
         'left': '440px',
         'top': '375px'
     });
+    $('#pages').css({
+        'position': 'absolute',
+        'left': '440px',
+        'top': '315px'
+    });
 } else {
     $('input[type=submit]').css('position', 'relative');
+    $('#pages').css('position', 'relative');
 }

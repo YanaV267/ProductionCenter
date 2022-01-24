@@ -20,9 +20,8 @@ public class SessionAttributeFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
-        excludingCommands = EnumSet.of(GO_TO_ADD_COURSE, ADD_COURSE, GO_TO_COURSES, SEARCH_COURSES, GO_TO_COURSE_INFO,
-                GO_TO_UPDATE_COURSE, UPDATE_COURSE, GO_TO_ENROLL_ON_COURSE, ENROLL_ON_COURSE, GO_TO_ADD_ACTIVITY, ADD_ACTIVITY,
-                GO_TO_PAY_FOR_ENROLLMENT, PAY_FOR_ENROLLMENT, GO_TO_REPLENISH_BALANCE, REPLENISH_BALANCE);
+        excludingCommands = EnumSet.of(GO_TO_COURSE_INFO, GO_TO_UPDATE_COURSE, UPDATE_COURSE, GO_TO_ENROLL_ON_COURSE,
+                ENROLL_ON_COURSE, GO_TO_ADD_ACTIVITY, ADD_ACTIVITY, GO_TO_REPLENISH_BALANCE, REPLENISH_BALANCE);
     }
 
     @Override
@@ -35,13 +34,13 @@ public class SessionAttributeFilter implements Filter {
         }
         CommandType commandType = CommandType.valueOf(command.toUpperCase());
         if (!excludingCommands.contains(commandType)) {
-            session.removeAttribute(COURSES);
+            session.removeAttribute(TEACHERS);
             session.removeAttribute(CATEGORIES);
-            session.removeAttribute(ACTIVITIES);
-            session.removeAttribute(ENROLLMENTS);
-            session.removeAttribute(LESSONS);
             session.removeAttribute(PICTURE);
         }
+        session.removeAttribute(ACTIVITIES);
+        session.removeAttribute(ENROLLMENTS);
+        session.removeAttribute(COURSES);
         session.removeAttribute(MESSAGE);
         chain.doFilter(request, response);
     }

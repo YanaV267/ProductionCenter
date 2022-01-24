@@ -15,11 +15,12 @@
     <form method="post" action="${pageContext.request.contextPath}/controller?command=sign_in">
         <p id="title"><fmt:message key="sign_in.title"/></p>
         <input type="text" name="login" placeholder="<fmt:message key="sign_in.login.placeholder"/>"
-               pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off" value="<c:out value="${user_login}"/>" required
+               pattern="[a-zA-Z][A-Za-z0-9]{4,29}" autocomplete="off"
+               value="<c:out value="${requestScope.user_login}"/>" required
                title="<fmt:message key="sign_in.login.title"/>"><br/>
         <input type="password" name="password"
                placeholder="<fmt:message key="sign_in.password.placeholder"/>"
-               pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="<c:out value="${user_password}"/>" required
+               pattern="[a-zA-Z][A-Za-z0-9]{7,29}" value="<c:out value="${requestScope.user_password}"/>" required
                title="<fmt:message key="sign_in.password.title"/>"><br/>
         <div id="subm">
             <div><input type="submit" value="<fmt:message key="sign_in.submit"/>"></div>

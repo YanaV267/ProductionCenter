@@ -14,12 +14,12 @@
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course">
-        <p id="title"><fmt:message key="courses.info.title"/> "<c:out value="${course.activity.type}"/>"</p>
+        <p id="title"><fmt:message key="courses.info.title"/> "<c:out value="${requestScope.course.activity.type}"/>"</p>
         <div>
             <div>
                 <c:choose>
-                    <c:when test="${not empty picture}">
-                        <img src="<c:out value="${picture}"/>" alt="account">
+                    <c:when test="${not empty requestScope.picture}">
+                        <img src="<c:out value="${requestScope.picture}"/>" alt="account">
                     </c:when>
                     <c:otherwise>
                         <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
@@ -27,46 +27,46 @@
                 </c:choose>
             </div>
             <div id="data">
-                <div><fmt:message key="courses.teacher"/>: <c:out value="${course.teacher.surname}"/>
-                    <c:out value="${course.teacher.name}"/></div>
+                <div><fmt:message key="courses.teacher"/>: <c:out value="${requestScope.course.teacher.surname}"/>
+                    <c:out value="${requestScope.course.teacher.name}"/></div>
                 <div>
                     <div id="icons">
                         <img src="${pageContext.request.contextPath}/pics/mail.png" alt="mail">
                         <img src="${pageContext.request.contextPath}/pics/phone.png" alt="phone">
                     </div>
                     <div>
-                        <div><c:out value="${course.teacher.email}"/></div>
-                        <div><c:out value="${number}"/></div>
+                        <div><c:out value="${requestScope.course.teacher.email}"/></div>
+                        <div><c:out value="${requestScope.number}"/></div>
                     </div>
                 </div>
             </div>
             <div>
-                <div><fmt:message key="courses.age_group"/>: <c:out value="${course.ageGroup.minAge}"/>-
-                    <c:out value="${course.ageGroup.maxAge}"/>
+                <div><fmt:message key="courses.age_group"/>: <c:out value="${requestScope.course.ageGroup.minAge}"/>-
+                    <c:out value="${requestScope.course.ageGroup.maxAge}"/>
                     <fmt:message key="courses.age.title"/></div>
-                <div><fmt:message key="courses.lesson_price"/>: <c:out value="${course.lessonPrice}"/>р</div>
+                <div><fmt:message key="courses.lesson_price"/>: <c:out value="${requestScope.course.lessonPrice}"/>р</div>
             </div>
             <div>
                 <div><fmt:message key="courses.description"/>:</div>
                 <c:choose>
-                    <c:when test="${not empty course.description}">
-                        <div><c:out value="${description}"/></div>
+                    <c:when test="${not empty requestScope.course.description}">
+                        <div><c:out value="${requestScope.course.description}"/></div>
                     </c:when>
                     <c:otherwise>
                         <div><fmt:message key="courses.no_description"/></div>
                     </c:otherwise>
                 </c:choose>
             </div>
-            <div id="timetable">
+            <div class="timetable">
                 <div><fmt:message key="courses.timetable"/>:</div>
-                <c:forEach var="lesson" items="${course.lessons}">
+                <c:forEach var="lesson" items="${requestScope.course.lessons}">
                     <div><fmt:message key="timetable.${lesson.weekDay}"/>: <c:out value="${lesson.startTime}"/>
                         (<c:out value="${lesson.duration}"/><fmt:message key="courses.duration.unit"/>)
                     </div>
                 </c:forEach>
             </div>
             <div>
-                <input type="hidden" name="chosen_course_id" value="<c:out value="${course.id}"/>">
+                <input type="hidden" name="chosen_course_id" value="<c:out value="${requestScope.course.id}"/>">
                 <c:choose>
                     <c:when test="${sessionScope.role eq 'guest' || sessionScope.role eq 'user'}">
                         <input type="submit" value="<fmt:message key="courses.enroll"/>">

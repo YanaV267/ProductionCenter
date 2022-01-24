@@ -6,6 +6,12 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    <jsp-config>
+        <taglib>
+            <taglib-uri>custom_tags</taglib-uri>
+            <taglib-location>/WEB-INF/tld/custom.tld</taglib-location>
+        </taglib>
+    </jsp-config>
     <error-page>
         <error-code>403</error-code>
         <location>/pages/error/error403.jsp</location>

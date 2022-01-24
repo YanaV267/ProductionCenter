@@ -38,7 +38,7 @@ public class UpdateEnrollmentCommand implements Command {
         }
         try {
             if (enrollmentService.updateLessonAmounts(enrollmentsLessonAmount)) {
-                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollment(user);
+                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
                 session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);

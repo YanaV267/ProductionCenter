@@ -10,7 +10,7 @@ public class CourseValidatorImpl implements CourseValidator {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String CATEGORY_REGEX = "[а-яА-Я]{3,20}";
     private static final String TYPE_REGEX = "[\\p{Alpha}а-яА-Я -&]{3,30}";
-    private static final String TEACHER_REGEX = "[\\p{Alpha}а-яА-Я ]{5,30}";
+    private static final String TEACHER_REGEX = "[\\p{Alpha}а-яёА-Я ]{5,30}";
     private static final String AGE_REGEX = "\\b([3-9]|[1-5]\\d|60)\\b";
     private static final String STUDENT_AMOUNT_REGEX = "\\b([1-9]|[1-5]\\d|30)\\b";
     private static final String LESSON_PRICE_REGEX = "^((\\d\\d?\\.)?\\d{1,2})$";
@@ -77,9 +77,7 @@ public class CourseValidatorImpl implements CourseValidator {
 
     @Override
     public boolean checkWeekdays(String weekdays) {
-        return weekdays != null && weekdays.replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
-                .split(DELIMITER_REGEX)
-                .length == 2;
+        return weekdays != null;
     }
 
     @Override
@@ -96,24 +94,37 @@ public class CourseValidatorImpl implements CourseValidator {
     public boolean checkLessons(Map<String, String> lessonData) {
         boolean isValid = true;
         if (!checkWeekdays(lessonData.get(WEEKDAYS))) {
-            lessonData.put(WEEKDAYS, INCORRECT_VALUE_PARAMETER);
+            lessonData.put(WEEKDAYS, lessonData.get(WEEKDAYS) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         String[] durations = lessonData.get(DURATION)
-                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .split(DELIMITER_REGEX);
         for (String duration : durations) {
             if (!checkDuration(duration)) {
-                lessonData.put(DURATION, INCORRECT_VALUE_PARAMETER);
+                lessonData.put(DURATION, duration + INCORRECT_VALUE_PARAMETER);
                 isValid = false;
             }
         }
-        String[] times = lessonData.get(TIME)
-                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX).split(DELIMITER_REGEX);
-        for (String time : times) {
+        String[] startTime = lessonData.get(TIME)
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .split(DELIMITER_REGEX);
+        for (String time : startTime) {
             if (!checkTime(time)) {
-                lessonData.put(TIME, INCORRECT_VALUE_PARAMETER);
+                lessonData.put(TIME, time + INCORRECT_VALUE_PARAMETER);
                 isValid = false;
             }
+        }
+        int weekdaysAmount = lessonData.get(WEEKDAYS)
+                .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
+                .trim()
+                .split(DELIMITER_REGEX)
+                .length;
+        if (lessonData.get(CHOSEN_COURSE_ID) != null && (weekdaysAmount != durations.length
+                || weekdaysAmount != startTime.length)) {
+            isValid = false;
         }
         return isValid;
     }
@@ -122,20 +133,20 @@ public class CourseValidatorImpl implements CourseValidator {
     public boolean checkCourse(Map<String, String> courseData) {
         boolean isValid = true;
         if (!checkTeacher(courseData.get(TEACHER))) {
-            courseData.put(TEACHER, INCORRECT_VALUE_PARAMETER);
+            courseData.put(TEACHER, courseData.get(TEACHER) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkAge(courseData.get(MIN_AGE), courseData.get(MAX_AGE))) {
-            courseData.put(MIN_AGE, INCORRECT_VALUE_PARAMETER);
-            courseData.put(MAX_AGE, INCORRECT_VALUE_PARAMETER);
+            courseData.put(MIN_AGE, courseData.get(MIN_AGE) + INCORRECT_VALUE_PARAMETER);
+            courseData.put(MAX_AGE, courseData.get(MAX_AGE) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkStudentAmount(courseData.get(STUDENT_AMOUNT))) {
-            courseData.put(STUDENT_AMOUNT, INCORRECT_VALUE_PARAMETER);
+            courseData.put(STUDENT_AMOUNT, courseData.get(STUDENT_AMOUNT) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkLessonPrice(courseData.get(LESSON_PRICE))) {
-            courseData.put(LESSON_PRICE, INCORRECT_VALUE_PARAMETER);
+            courseData.put(LESSON_PRICE, courseData.get(LESSON_PRICE) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkLessons(courseData)) {

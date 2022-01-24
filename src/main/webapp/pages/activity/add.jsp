@@ -20,10 +20,10 @@
                 <option><c:out value="${category}"/></option>
             </c:forEach>
         </select>
-        <input type="text" name="new_category" autocomplete="off" value="<c:out value="${activity.category}"/>"
+        <input type="text" name="new_category" autocomplete="off" value="<c:out value="${requestScope.activity.category}"/>"
                placeholder="<fmt:message key="activities.new_category.placeholder"/>"
                pattern="[а-яА-Я]{3,20}" title="<fmt:message key="activities.new_category.title"/>">
-        <input type="text" name="type" autocomplete="off" value="<c:out value="${activity.type}"/>"
+        <input type="text" name="type" autocomplete="off" value="<c:out value="${requestScope.activity.type}"/>"
                placeholder="<fmt:message key="activities.type"/>"
                pattern="[a-zA-Zа-яА-Я -&]{3,30}" title="<fmt:message key="activities.type.title"/>">
         <div id="buttons">

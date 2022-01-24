@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="ctg" uri="custom_tags" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -22,22 +24,22 @@
                         + this.options[this.selectedIndex].value">
                     <option disabled selected><fmt:message key="activities.category"/> --</option>
                     <c:forEach var="category" items="${categories}">
-                        <option <c:if test="${category eq selected_category}">selected</c:if>>
+                        <option <c:if test="${category eq requestScope.selected_category}">selected</c:if>>
                             <c:out value="${category}"/></option>
                     </c:forEach>
                 </select>
                 <select name="type">
                     <option disabled selected><fmt:message key="activities.type"/> --</option>
                     <c:forEach var="activity" items="${activities}">
-                        <option <c:if test="${activity.type eq selected_type}">selected</c:if>>
+                        <option <c:if test="${activity.type eq requestScope.selected_type}">selected</c:if>>
                             <c:out value="${activity.type}"/></option>
                     </c:forEach>
                 </select>
                 <p><fmt:message key="courses.weekdays"/>:</p>
                 <div id="weekdays">
-                    <c:forEach var="weekday" items="${weekdays}">
+                    <c:forEach var="weekday" items="${sessionScope.weekdays}">
                         <label><input type="checkbox" name="weekdays" value="<c:out value="${weekday}"/>"
-                        <c:forEach var="selected_weekday" items="${selected_weekdays}">
+                        <c:forEach var="selected_weekday" items="${requestScope.selected_weekdays}">
                                       <c:if test="${selected_weekday eq weekday}">checked</c:if>
                         </c:forEach>>
                             <fmt:message key="courses.${weekday}"/></label>
@@ -66,30 +68,37 @@
                     </c:choose>
                 </div>
             </div>
-            <c:if test="${courses.size() > 0}">
-                <div id="all">
-                    <div><fmt:message key="activities.type"/></div>
-                    <input type="hidden" name="chosen_course_id">
-                    <div><fmt:message key="courses.teacher"/></div>
-                    <div><fmt:message key="courses.age_group"/></div>
-                    <div><fmt:message key="courses.lesson_price"/></div>
-                    <c:forEach var="course" items="${courses}">
-                        <div><c:out value="${course.activity.type}"/></div>
-                        <input type="hidden" name="course_id" value="<c:out value="${course.id}"/>">
-                        <div><c:out value="${course.teacher.surname}"/> <c:out value="${course.teacher.name}"/></div>
-                        <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/>
-                            <fmt:message key="courses.age.title"/></div>
-                        <div><c:out value="${course.lessonPrice}"/>р</div>
-                    </c:forEach>
-                </div>
-            </c:if>
-            <c:if test="${courses.size() == 0}">
-                <div id="none"><fmt:message key="courses.message"/></div>
-            </c:if>
+            <div>
+                <c:if test="${fn:length(courses) > 0}">
+                    <div id="all">
+                        <div><fmt:message key="activities.type"/></div>
+                        <input type="hidden" name="chosen_course_id">
+                        <div><fmt:message key="courses.teacher"/></div>
+                        <div><fmt:message key="courses.age_group"/></div>
+                        <div><fmt:message key="courses.lesson_price"/></div>
+                        <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="course"
+                                   items="${courses}">
+                            <div><c:out value="${course.activity.type}"/></div>
+                            <input type="hidden" name="course_id" value="<c:out value="${course.id}"/>">
+                            <div><c:out value="${course.teacher.surname}"/> <c:out
+                                    value="${course.teacher.name}"/></div>
+                            <div><c:out value="${course.ageGroup.minAge}"/>-<c:out value="${course.ageGroup.maxAge}"/>
+                                <fmt:message key="courses.age.title"/></div>
+                            <div><c:out value="${course.lessonPrice}"/>р</div>
+                        </c:forEach>
+                    </div>
+                    <ctg:pages page="${requestScope.page}" size="${fn:length(requestScope.courses)}"
+                               command="go_to_courses"/>
+                </c:if>
+                <c:if test="${fn:length(courses) == 0}">
+                    <div id="none"><fmt:message key="courses.message"/></div>
+                </c:if>
+            </div>
         </div>
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/script/checkbox.js"></script>
 <script src="${pageContext.request.contextPath}/script/course/show.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>

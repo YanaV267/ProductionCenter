@@ -12,7 +12,7 @@ public class UserValidatorImpl implements UserValidator {
     private static final String LOGIN_REGEX = "[\\p{Alpha}][\\p{Alpha}\\d]{4,29}";
     private static final String PASSWORD_REGEX = "[\\p{Alpha}][\\p{Alpha}\\d]{7,29}";
     private static final String SURNAME_REGEX = "[А-Я\\p{Upper}][а-я\\p{Lower}]{1,20}";
-    private static final String NAME_REGEX = "[А-Я\\p{Upper}][а-я\\p{Lower}]{1,15}";
+    private static final String NAME_REGEX = "[А-Я\\p{Upper}][а-яё\\p{Lower}]{1,15}";
     private static final String EMAIL_REGEX = "(([\\p{Alpha}\\d._]+){5,25}@([\\p{Lower}]+){3,7}\\.([\\p{Lower}]+){2,3})";
     private static final String NUMBER_REGEX = "\\+375\\(\\d{2}\\)\\d{3}-\\d{2}-\\d{2}";
 
@@ -57,11 +57,11 @@ public class UserValidatorImpl implements UserValidator {
     public boolean checkUserData(Map<String, String> userData) {
         boolean isValid = true;
         if (!checkLogin(userData.get(LOGIN))) {
-            userData.put(LOGIN, INCORRECT_VALUE_PARAMETER);
+            userData.put(LOGIN, userData.get(LOGIN) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkPassword(userData.get(PASSWORD))) {
-            userData.put(PASSWORD, INCORRECT_VALUE_PARAMETER);
+            userData.put(PASSWORD, userData.get(LOGIN) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         isValid = checkUserPersonalData(userData) && isValid;
@@ -72,19 +72,19 @@ public class UserValidatorImpl implements UserValidator {
     public boolean checkUserPersonalData(Map<String, String> userData) {
         boolean isValid = true;
         if (!checkSurname(userData.get(SURNAME))) {
-            userData.put(SURNAME, INCORRECT_VALUE_PARAMETER);
+            userData.put(SURNAME, userData.get(SURNAME) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkName(userData.get(NAME))) {
-            userData.put(NAME, INCORRECT_VALUE_PARAMETER);
+            userData.put(NAME, userData.get(NAME) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkEmail(userData.get(EMAIL))) {
-            userData.put(EMAIL, INCORRECT_VALUE_PARAMETER);
+            userData.put(EMAIL, userData.get(EMAIL) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         if (!checkNumber(userData.get(PHONE_NUMBER))) {
-            userData.put(PHONE_NUMBER, INCORRECT_VALUE_PARAMETER);
+            userData.put(PHONE_NUMBER, userData.get(PHONE_NUMBER) + INCORRECT_VALUE_PARAMETER);
             isValid = false;
         }
         return isValid;

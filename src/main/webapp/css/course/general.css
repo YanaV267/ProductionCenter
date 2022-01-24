@@ -1,5 +1,5 @@
 form {
-    min-height: 440px;
+    min-height: 475px;
     height: auto;
     width: 1050px;
     border-radius: 5px;
@@ -77,6 +77,7 @@ select {
     margin-right: 7px;
     width: 15px;
     height: 15px;
+    cursor: pointer;
 }
 
 input[type=button], input[type=submit] {

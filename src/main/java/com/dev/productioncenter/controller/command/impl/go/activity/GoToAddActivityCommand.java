@@ -1,13 +1,11 @@
 package com.dev.productioncenter.controller.command.impl.go.activity;
 
-import com.dev.productioncenter.controller.command.Command;
-import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestAttribute;
-import com.dev.productioncenter.controller.command.Router;
+import com.dev.productioncenter.controller.command.*;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.ActivityService;
 import com.dev.productioncenter.model.service.impl.ActivityServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,9 +17,10 @@ public class GoToAddActivityCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
         try {
             List<String> categories = activityService.findCategories();
-            request.setAttribute(RequestAttribute.CATEGORIES, categories);
+            session.setAttribute(SessionAttribute.CATEGORIES, categories);
             return new Router(PagePath.ADD_ACTIVITY, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to activities page: " + exception);

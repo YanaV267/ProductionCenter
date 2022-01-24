@@ -12,7 +12,7 @@ public class Course extends AbstractEntity {
     private List<Lesson> lessons;
     private BigDecimal lessonPrice;
     private int studentAmount;
-    private CourseStatus courseStatus;
+    private CourseStatus status;
 
     public Course() {
         activity = new Activity();
@@ -83,12 +83,12 @@ public class Course extends AbstractEntity {
         this.studentAmount = studentAmount;
     }
 
-    public CourseStatus getCourseStatus() {
-        return courseStatus;
+    public CourseStatus getStatus() {
+        return status;
     }
 
-    public void setCourseStatus(CourseStatus courseStatus) {
-        this.courseStatus = courseStatus;
+    public void setStatus(CourseStatus status) {
+        this.status = status;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Course extends AbstractEntity {
         if (studentAmount != course.studentAmount) {
             return false;
         }
-        return courseStatus != null ? courseStatus.equals(course.courseStatus) : course.courseStatus == null;
+        return status != null ? status.equals(course.status) : course.status == null;
     }
 
     @Override
@@ -135,7 +135,7 @@ public class Course extends AbstractEntity {
         result = result * 31 + (lessons != null ? lessons.hashCode() : 0);
         result = result * 31 + (lessonPrice != null ? lessonPrice.hashCode() : 0);
         result = result * 31 + Integer.hashCode(studentAmount);
-        result = result * 31 + (courseStatus != null ? courseStatus.hashCode() : 0);
+        result = result * 31 + (status != null ? status.hashCode() : 0);
         return result;
     }
 
@@ -149,7 +149,7 @@ public class Course extends AbstractEntity {
         sb.append("', lessons=").append(lessons);
         sb.append("', lessonPrice=").append(lessonPrice);
         sb.append("', studentAmount=").append(studentAmount);
-        sb.append("', courseStatus=").append(courseStatus);
+        sb.append("', courseStatus=").append(status);
         return sb.toString();
     }
 
@@ -196,7 +196,7 @@ public class Course extends AbstractEntity {
         }
 
         public CourseBuilder setCourseStatus(CourseStatus courseStatus) {
-            course.courseStatus = courseStatus;
+            course.status = courseStatus;
             return this;
         }
 

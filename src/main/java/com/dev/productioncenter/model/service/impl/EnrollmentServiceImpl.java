@@ -63,7 +63,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Map<Enrollment, LocalDate> findEnrollment(User user) throws ServiceException {
+    public Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException {
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user);
             for (Enrollment enrollment : allEnrollments) {
@@ -82,7 +82,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Map<Enrollment, LocalDate> findEnrollment() throws ServiceException {
+    public Map<Enrollment, LocalDate> findEnrollments() throws ServiceException {
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findAll();
             Map<Enrollment, LocalDate> enrollments = new HashMap<>();
@@ -115,8 +115,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public boolean updateStatus(Enrollment enrollment) throws ServiceException {
+    public boolean updateStatus(long enrollmentId, EnrollmentStatus status) throws ServiceException {
         try {
+            Enrollment enrollment = new Enrollment();
+            enrollment.setId(enrollmentId);
+            enrollment.setEnrollmentStatus(status);
             return enrollmentDao.updateEnrollmentStatus(enrollment);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing enrollment's status: " + exception);

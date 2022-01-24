@@ -1,6 +1,9 @@
 package com.dev.productioncenter.model.dao.impl;
 
-import com.dev.productioncenter.entity.*;
+import com.dev.productioncenter.entity.Course;
+import com.dev.productioncenter.entity.Enrollment;
+import com.dev.productioncenter.entity.EnrollmentStatus;
+import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.EnrollmentDao;
@@ -26,6 +29,14 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity";
+    private static final String SQL_SELECT_ENROLLMENTS_BY_ID =
+            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
+                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
+                    "JOIN users ON enrollments.id_user = users.id_user " +
+                    "JOIN courses ON enrollments.id_course = courses.id_course " +
+                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
+                    "JOIN activities ON activities.id_activity = courses.id_activity " +
+                    "WHERE id_enrollment = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_USER =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -168,14 +179,16 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
     @Override
     public Optional<Enrollment> findById(Long id) throws DaoException {
+        List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ENROLLMENTS)) {
-            return Optional.of(EnrollmentMapper.getInstance().retrieve(resultSet).get(0));
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ENROLLMENTS_BY_ID)) {
+            enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollment by id: " + exception);
             throw new DaoException("Error has occurred while finding enrollment by id: ", exception);
         }
+        return enrollments.isEmpty() ? Optional.empty() : Optional.of(enrollments.get(0));
     }
 
     @Override
@@ -213,17 +226,19 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
 
     @Override
     public Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException {
+        List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE_USER)) {
             preparedStatement.setLong(1, user.getId());
             preparedStatement.setLong(2, course.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                return Optional.ofNullable(EnrollmentMapper.getInstance().retrieve(resultSet).get(0));
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by course & user: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by course & user: ", exception);
         }
+        return enrollments.isEmpty() ? Optional.empty() : Optional.of(enrollments.get(0));
     }
 
     @Override

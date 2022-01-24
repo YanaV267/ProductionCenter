@@ -1,6 +1,7 @@
 package com.dev.productioncenter.controller.command.impl.course;
 
 import com.dev.productioncenter.controller.command.*;
+import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
@@ -40,6 +42,8 @@ public class AddCourseCommand implements Command {
         courseData.put(DESCRIPTION, request.getParameter(DESCRIPTION));
         try {
             if (courseService.addCourse(courseData)) {
+                List<Course> courses = courseService.findCourses();
+                session.setAttribute(SessionAttribute.COURSES, courses);
                 session.setAttribute(SessionAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {

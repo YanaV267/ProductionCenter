@@ -91,7 +91,7 @@ public class CourseServiceImpl implements CourseService {
                         courseData.get(TEACHER).split(SPACE_DELIMITER_REGEX)[1]);
                 if (teacher.isPresent()) {
                     Course course = new Course.CourseBuilder()
-                            .setId(Long.parseLong(courseData.get(CHOSEN_COURSE_ID)))
+                            .setId(Long.parseLong(courseData.get(ID)))
                             .setTeacher(teacher.get())
                             .setStudentAmount(Integer.parseInt(courseData.get(STUDENT_AMOUNT)))
                             .setLessonPrice(BigDecimal.valueOf(Double.parseDouble(courseData.get(LESSON_PRICE))))
@@ -193,6 +193,20 @@ public class CourseServiceImpl implements CourseService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while reserving place at course: " + exception);
             throw new ServiceException("Error has occurred while reserving place at course: " + exception);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean releasePlaceAtCourse(long id) throws ServiceException {
+        try {
+            Optional<Course> course = courseDao.findById(id);
+            if (course.isPresent()) {
+                return courseDao.updateCourseStudentAmount(id, course.get().getStudentAmount() + 1);
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while releasing place at course: " + exception);
+            throw new ServiceException("Error has occurred while releasing place at course: " + exception);
         }
         return false;
     }

@@ -9,10 +9,8 @@ import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.EnrollmentService;
-import com.dev.productioncenter.model.service.LessonService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.EnrollmentServiceImpl;
-import com.dev.productioncenter.model.service.impl.LessonServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -39,8 +37,8 @@ public class EnrollOnCourseCommand implements Command {
         long chosenCourseId = Long.parseLong(request.getParameter(CHOSEN_COURSE_ID));
         String lessonAmount = request.getParameter(LESSON_AMOUNT);
         try {
-            if (enrollmentService.enrollOnCourse(user, chosenCourseId, lessonAmount)) {
-                courseService.reservePlaceAtCourse(chosenCourseId);
+            if (enrollmentService.enrollOnCourse(user, chosenCourseId, lessonAmount)
+                    && courseService.reservePlaceAtCourse(chosenCourseId)) {
                 session.setAttribute(SessionAttribute.MESSAGE, ENROLLMENT_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
