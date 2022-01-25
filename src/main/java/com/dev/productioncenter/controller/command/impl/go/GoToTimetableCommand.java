@@ -24,7 +24,7 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.WEEKD
 
 public class GoToTimetableCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
     private final List<String> weekdays = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
 
     @Override
@@ -32,12 +32,13 @@ public class GoToTimetableCommand implements Command {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttribute.USER);
         try {
-            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
-            request.setAttribute(ENROLLMENTS, enrollments);
-            request.setAttribute(WEEKDAYS, weekdays);
-            return new Router(PagePath.TIMETABLE, Router.RouterType.FORWARD);
-        } catch (
-                ServiceException exception) {
+            if (enrollmentService.checkEnrollmentsReservationStatus()) {
+                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
+                request.setAttribute(ENROLLMENTS, enrollments);
+                request.setAttribute(WEEKDAYS, weekdays);
+                return new Router(PagePath.TIMETABLE, Router.RouterType.FORWARD);
+            }
+        } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to timetable page: " + exception);
         }
         return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);

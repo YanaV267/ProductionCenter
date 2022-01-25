@@ -71,6 +71,10 @@
                     <c:when test="${sessionScope.role eq 'guest' || sessionScope.role eq 'user'}">
                         <input type="submit" value="<fmt:message key="courses.enroll"/>">
                     </c:when>
+                    <c:otherwise>
+                        <input type="button" name="enrolled" value="<fmt:message key="courses.enrolled"/>"
+                        onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enrolled_on_course&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
+                    </c:otherwise>
                 </c:choose>
                 <input type="button" value="<fmt:message key="courses.back"/>"
                        onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">

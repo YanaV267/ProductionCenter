@@ -21,9 +21,9 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 public class UpdateCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String EMPTY_STRING_REGEX = "";
-    private static final String UPDATE_COURSE_ERROR_MESSAGE_KEY = "error.update_course";
-    private static final String UPDATE_COURSE_CONFIRM_MESSAGE_KEY = "confirm.update_course";
-    private final CourseService courseService = new CourseServiceImpl();
+    private static final String UPDATE_COURSE_ERROR_MESSAGE_KEY = "error.course.update";
+    private static final String UPDATE_COURSE_CONFIRM_MESSAGE_KEY = "confirm.course.update";
+    private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

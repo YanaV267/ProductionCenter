@@ -27,8 +27,8 @@ public class EnrollOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrolling_on_course";
     private static final String ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrolling_on_course";
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
+    private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

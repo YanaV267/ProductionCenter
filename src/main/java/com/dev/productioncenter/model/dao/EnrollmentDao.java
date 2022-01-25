@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EnrollmentDao extends BaseDao<Long, Enrollment> {
-    boolean checkEnrollmentReservationStatus() throws DaoException;
-
     boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException;
 
     List<Enrollment> findEnrollmentsByUser(User user) throws DaoException;
@@ -21,10 +19,7 @@ public interface EnrollmentDao extends BaseDao<Long, Enrollment> {
 
     Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException;
 
-    List<Enrollment> findEnrollmentsByLessonAmount(int minAmount, int maxAmount) throws DaoException;
-
-    List<Enrollment> findEnrollmentsByReservationDatetime(Date dateTime) throws DaoException;
-
     List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException;
 
+    List<Enrollment> findExpiredEnrollments() throws DaoException;
 }

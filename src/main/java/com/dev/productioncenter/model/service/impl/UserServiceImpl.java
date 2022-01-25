@@ -35,7 +35,15 @@ public class UserServiceImpl implements UserService {
     private static final String NUMBER_REPLACEMENT_REGEX = "";
     private static final String PICTURE_HEADER = "data:image/jpg;base64,";
     private static final String EMPTY_VALUE_PARAMETER = "";
+    private static final UserService instance = new UserServiceImpl();
     private final UserDao userDao = UserDaoImpl.getInstance();
+
+    private UserServiceImpl() {
+    }
+
+    public static UserService getInstance() {
+        return instance;
+    }
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
@@ -64,7 +72,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
-            throw new ServiceException("Error has occurred while finding user by login: " + exception);
+            throw new ServiceException("Error has occurred while finding user by login: " , exception);
         }
         return Optional.empty();
     }
@@ -77,7 +85,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
-            throw new ServiceException("Error has occurred while finding user by login: " + exception);
+            throw new ServiceException("Error has occurred while finding user by login: " , exception);
         }
         return Optional.empty();
     }
@@ -93,7 +101,7 @@ public class UserServiceImpl implements UserService {
             return users;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
-            throw new ServiceException("Error has occurred while finding users: " + exception);
+            throw new ServiceException("Error has occurred while finding users: " , exception);
         }
     }
 
@@ -104,7 +112,7 @@ public class UserServiceImpl implements UserService {
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking login availability: " + exception);
-            throw new ServiceException("Error has occurred while checking login availability: " + exception);
+            throw new ServiceException("Error has occurred while checking login availability: " , exception);
         }
     }
 
@@ -115,7 +123,7 @@ public class UserServiceImpl implements UserService {
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking email availability: " + exception);
-            throw new ServiceException("Error has occurred while checking email availability: " + exception);
+            throw new ServiceException("Error has occurred while checking email availability: " , exception);
         }
     }
 
@@ -146,7 +154,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while registering user: " + exception);
-            throw new ServiceException("Error has occurred while registering user: " + exception);
+            throw new ServiceException("Error has occurred while registering user: " , exception);
         }
         return false;
     }
@@ -162,7 +170,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: " , exception);
         }
     }
 
@@ -177,7 +185,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: " , exception);
         }
     }
 
@@ -220,7 +228,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
-            throw new ServiceException("Error has occurred while updating user account: " + exception);
+            throw new ServiceException("Error has occurred while updating user account: " , exception);
         }
         return false;
     }
@@ -231,7 +239,7 @@ public class UserServiceImpl implements UserService {
             return userDao.updatePicture(login, pictureStream);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account picture: " + exception);
-            throw new ServiceException("Error has occurred while updating user account picture: " + exception);
+            throw new ServiceException("Error has occurred while updating user account picture: " , exception);
         }
     }
 
@@ -248,7 +256,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException | IOException exception) {
             LOGGER.error("Error has occurred while loading user account picture: " + exception);
-            throw new ServiceException("Error has occurred while loading user account picture: " + exception);
+            throw new ServiceException("Error has occurred while loading user account picture: " , exception);
         }
         return Optional.empty();
     }

@@ -28,15 +28,23 @@ public class CourseServiceImpl implements CourseService {
     private static final String SPACE_DELIMITER_REGEX = " ";
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\],]";
     private static final String REPLACEMENT_REGEX = "";
+    private static final CourseService instance = new CourseServiceImpl();
     private final CourseDao courseDao = CourseDaoImpl.getInstance();
     private final AgeGroupDao ageGroupDao = AgeGroupDaoImpl.getInstance();
-    private final ActivityDao activityDao = ActivityDaoImpl.getInstance();
     private final UserDao userDao = UserDaoImpl.getInstance();
-    private final LessonService lessonService = new LessonServiceImpl();
+
+    private CourseServiceImpl() {
+    }
+
+    public static CourseService getInstance() {
+        return instance;
+    }
 
     @Override
     public boolean addCourse(Map<String, String> courseData) throws ServiceException {
         CourseValidator validator = CourseValidatorImpl.getInstance();
+        LessonService lessonService = LessonServiceImpl.getInstance();
+        ActivityDao activityDao = ActivityDaoImpl.getInstance();
         try {
             if (validator.checkCourse(courseData) && validator.checkActivity(courseData)) {
                 AgeGroup ageGroup = new AgeGroup(Integer.parseInt(courseData.get(MIN_AGE)),
@@ -69,13 +77,14 @@ public class CourseServiceImpl implements CourseService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while adding course: " + exception);
-            throw new ServiceException("Error has occurred while adding course: " + exception);
+            throw new ServiceException("Error has occurred while adding course: ", exception);
         }
         return false;
     }
 
     @Override
     public boolean updateCourse(Map<String, String> courseData) throws ServiceException {
+        LessonService lessonService = LessonServiceImpl.getInstance();
         try {
             if (CourseValidatorImpl.getInstance().checkCourse(courseData)) {
                 AgeGroup ageGroup = new AgeGroup(Integer.parseInt(courseData.get(MIN_AGE)),
@@ -105,7 +114,7 @@ public class CourseServiceImpl implements CourseService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while adding course: " + exception);
-            throw new ServiceException("Error has occurred while adding course: " + exception);
+            throw new ServiceException("Error has occurred while adding course: ", exception);
         }
         return false;
     }
@@ -116,7 +125,7 @@ public class CourseServiceImpl implements CourseService {
             return courseDao.findAll();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding all courses: " + exception);
-            throw new ServiceException("Error has occurred while finding all courses: " + exception);
+            throw new ServiceException("Error has occurred while finding all courses: ", exception);
         }
     }
 
@@ -152,7 +161,7 @@ public class CourseServiceImpl implements CourseService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding courses: " + exception);
-            throw new ServiceException("Error has occurred while finding courses: " + exception);
+            throw new ServiceException("Error has occurred while finding courses: ", exception);
         }
         return new ArrayList<>();
     }
@@ -163,12 +172,13 @@ public class CourseServiceImpl implements CourseService {
             return courseDao.findAvailableCourses();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
-            throw new ServiceException("Error has occurred while finding available courses: " + exception);
+            throw new ServiceException("Error has occurred while finding available courses: ", exception);
         }
     }
 
     @Override
     public Optional<Course> findCourse(long id) throws ServiceException {
+        LessonService lessonService = LessonServiceImpl.getInstance();
         try {
             Optional<Course> course = courseDao.findById(id);
             if (course.isPresent()) {
@@ -178,7 +188,7 @@ public class CourseServiceImpl implements CourseService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
-            throw new ServiceException("Error has occurred while finding available courses: " + exception);
+            throw new ServiceException("Error has occurred while finding available courses: ", exception);
         }
         return Optional.empty();
     }
@@ -187,12 +197,12 @@ public class CourseServiceImpl implements CourseService {
     public boolean reservePlaceAtCourse(long id) throws ServiceException {
         try {
             Optional<Course> course = courseDao.findById(id);
-            if (course.isPresent()) {
+            if (course.isPresent() && course.get().getStudentAmount() != 0) {
                 return courseDao.updateCourseStudentAmount(id, course.get().getStudentAmount() - 1);
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while reserving place at course: " + exception);
-            throw new ServiceException("Error has occurred while reserving place at course: " + exception);
+            throw new ServiceException("Error has occurred while reserving place at course: ", exception);
         }
         return false;
     }
@@ -206,7 +216,7 @@ public class CourseServiceImpl implements CourseService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while releasing place at course: " + exception);
-            throw new ServiceException("Error has occurred while releasing place at course: " + exception);
+            throw new ServiceException("Error has occurred while releasing place at course: ", exception);
         }
         return false;
     }

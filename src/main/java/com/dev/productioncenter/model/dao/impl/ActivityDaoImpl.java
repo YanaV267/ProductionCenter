@@ -4,7 +4,7 @@ import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.ActivityDao;
-import com.dev.productioncenter.model.dao.ColumnName;
+import com.dev.productioncenter.controller.command.ColumnName;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,12 +22,12 @@ public class ActivityDaoImpl implements ActivityDao {
             "SELECT id_activity, category, type FROM activities WHERE category = ?";
     private static final String SQL_SELECT_ALL_CATEGORIES =
             "SELECT category FROM activities GROUP BY category";
-    private static final ActivityDaoImpl instance = new ActivityDaoImpl();
+    private static final ActivityDao instance = new ActivityDaoImpl();
 
     private ActivityDaoImpl() {
     }
 
-    public static ActivityDaoImpl getInstance() {
+    public static ActivityDao getInstance() {
         return instance;
     }
 

@@ -23,10 +23,10 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_ENROLLMENT_ID;
 
-public class CancelEnrollmentCommand implements Command {
+public class RenewEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DELETE_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.delete";
-    private static final String DELETE_ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrollment.delete";
+    private static final String RENEW_ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrollment.no_places";
+    private static final String RENEW_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.renew";
     private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
     private final CourseService courseService = CourseServiceImpl.getInstance();
 
@@ -37,22 +37,23 @@ public class CancelEnrollmentCommand implements Command {
         long chosenEnrollmentId = Long.parseLong(request.getParameter(CHOSEN_ENROLLMENT_ID));
         try {
             Optional<Enrollment> enrollment = enrollmentService.findEnrollment(chosenEnrollmentId);
-            if (enrollment.isPresent()) {
-                if (enrollment.get().getEnrollmentStatus() == EnrollmentStatus.PAID) {
-                    session.setAttribute(SessionAttribute.MESSAGE, DELETE_ENROLLMENT_ERROR_MESSAGE_KEY);
-                    return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
-                }
-                if (enrollmentService.cancelEnrollment(chosenEnrollmentId)
-                        && courseService.releasePlaceAtCourse(enrollment.get().getCourse().getId())) {
+            if (enrollment.isPresent() && courseService.reservePlaceAtCourse(enrollment.get().getCourse().getId())) {
+                if (enrollmentService.updateStatus(chosenEnrollmentId, EnrollmentStatus.RENEWED)
+                        && enrollmentService.checkEnrollmentsReservationStatus()) {
                     Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
                     session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
-                    session.setAttribute(SessionAttribute.MESSAGE, DELETE_ENROLLMENT_CONFIRM_MESSAGE_KEY);
+                    session.setAttribute(SessionAttribute.MESSAGE, RENEW_ENROLLMENT_CONFIRM_MESSAGE_KEY);
                     return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
+                } else {
+                    session.setAttribute(SessionAttribute.MESSAGE, RENEW_ENROLLMENT_ERROR_MESSAGE_KEY);
+                    return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.FORWARD);
                 }
             }
         } catch (ServiceException exception) {
-            LOGGER.error("Error has occurred while deleting user enrollment: " + exception);
+            LOGGER.error("Error has occurred while renewing user enrollment: " + exception);
         }
-        return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
+        return new
+
+                Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }
 }

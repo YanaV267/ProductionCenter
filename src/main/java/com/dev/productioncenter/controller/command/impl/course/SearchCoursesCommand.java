@@ -22,7 +22,7 @@ import static com.dev.productioncenter.controller.command.RequestParameter.TYPE;
 public class SearchCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String WEEKDAYS_CHOICE_ERROR_MESSAGE_KEY = "error.invalid_weekdays_amount";
-    private final CourseService courseService = new CourseServiceImpl();
+    private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

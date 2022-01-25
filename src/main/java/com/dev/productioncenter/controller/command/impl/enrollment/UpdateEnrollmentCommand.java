@@ -23,8 +23,9 @@ import static com.dev.productioncenter.controller.command.RequestParameter.LESSO
 
 public class UpdateEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.update_enrollment";
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    private static final String UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.update";
+    private static final String UPDATE_ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrollment.update";
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -37,12 +38,15 @@ public class UpdateEnrollmentCommand implements Command {
             enrollmentsLessonAmount.put(enrollmentsId[i], lessonAmounts[i]);
         }
         try {
-            if (enrollmentService.updateLessonAmounts(enrollmentsLessonAmount)) {
+            if (enrollmentService.updateLessonAmounts(enrollmentsLessonAmount)
+                    && enrollmentService.checkEnrollmentsReservationStatus()) {
                 Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
                 session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY);
-                return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
+            } else {
+                session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ENROLLMENT_ERROR_MESSAGE_KEY);
             }
+            return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while deleting user enrollment: " + exception);
         }

@@ -4,9 +4,7 @@ import com.dev.productioncenter.controller.command.CommandType;
 import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.RequestParameter;
 import com.dev.productioncenter.controller.command.SessionAttribute;
-import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
-import com.dev.productioncenter.entity.UserStatus;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,11 +27,11 @@ public class SecurityAccessRightsFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
         accessibleCommands = new EnumMap<>(UserRole.class);
-        accessibleCommands.put(ADMIN, List.of(GO_TO_HOME, GO_TO_COURSES, GO_TO_COURSE_INFO, GO_TO_ADD_COURSE,
-                GO_TO_UPDATE_COURSE, GO_TO_ACCOUNT, GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES, GO_TO_ADD_ACTIVITY,
-                GO_TO_ENROLLMENTS, GO_TO_USERS, GO_TO_TEACHERS, CHANGE_LOCALE, SIGN_OUT, UPDATE_ACCOUNT_DATA,
-                UPLOAD_PROFILE_PICTURE, CHANGE_USER_STATUS, CHANGE_USER_ROLE, CHANGE_ENROLLMENT_STATUS, SEARCH_COURSES,
-                ADD_COURSE, ADD_ACTIVITY, UPDATE_COURSE, DEFAULT));
+        accessibleCommands.put(ADMIN, List.of(GO_TO_HOME, GO_TO_COURSES, GO_TO_COURSE_INFO, GO_TO_ENROLLED_ON_COURSE,
+                GO_TO_ADD_COURSE, GO_TO_UPDATE_COURSE, GO_TO_ACCOUNT, GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES,
+                GO_TO_ADD_ACTIVITY, GO_TO_ENROLLMENTS, GO_TO_USERS, GO_TO_TEACHERS, CHANGE_LOCALE, SIGN_OUT,
+                UPDATE_ACCOUNT_DATA, UPLOAD_PROFILE_PICTURE, CHANGE_USER_STATUS, CHANGE_USER_ROLE,
+                CHANGE_ENROLLMENT_STATUS, SEARCH_COURSES, ADD_COURSE, ADD_ACTIVITY, UPDATE_COURSE, DEFAULT));
         accessibleCommands.put(TEACHER, List.of(GO_TO_HOME, GO_TO_COURSES, GO_TO_COURSE_INFO, GO_TO_ACCOUNT,
                 GO_TO_UPDATE_ACCOUNT_DATA, GO_TO_ACTIVITIES, GO_TO_TIMETABLE, SEARCH_COURSES, CHANGE_LOCALE, SIGN_OUT,
                 UPDATE_ACCOUNT_DATA, UPLOAD_PROFILE_PICTURE, DEFAULT));

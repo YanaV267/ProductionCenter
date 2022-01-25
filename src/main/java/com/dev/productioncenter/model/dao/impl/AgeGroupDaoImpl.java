@@ -4,7 +4,7 @@ import com.dev.productioncenter.entity.AgeGroup;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.AgeGroupDao;
-import com.dev.productioncenter.model.dao.ColumnName;
+import com.dev.productioncenter.controller.command.ColumnName;
 
 import java.sql.*;
 import java.util.List;
@@ -15,12 +15,12 @@ public class AgeGroupDaoImpl implements AgeGroupDao {
             "INSERT INTO age_group(min_age, max_age) VALUES (?, ?)";
     private static final String SQL_SELECT_AGE_GROUP =
             "SELECT id_age_group FROM age_group WHERE min_age = ? AND max_age = ?";
-    private static final AgeGroupDaoImpl instance = new AgeGroupDaoImpl();
+    private static final AgeGroupDao instance = new AgeGroupDaoImpl();
 
     private AgeGroupDaoImpl() {
     }
 
-    public static AgeGroupDaoImpl getInstance() {
+    public static AgeGroupDao getInstance() {
         return instance;
     }
 

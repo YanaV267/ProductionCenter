@@ -24,8 +24,8 @@ import static com.dev.productioncenter.controller.command.RequestParameter.CHOSE
 
 public class GoToCourseInfoCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final CourseService courseService = new CourseServiceImpl();
-    private final UserService userService = new UserServiceImpl();
+    private final CourseService courseService = CourseServiceImpl.getInstance();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

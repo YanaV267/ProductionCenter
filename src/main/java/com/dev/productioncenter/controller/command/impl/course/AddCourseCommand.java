@@ -20,9 +20,9 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String EMPTY_STRING_REGEX = "";
-    private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.add_course";
-    private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.add_course";
-    private final CourseService courseService = new CourseServiceImpl();
+    private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.course.add";
+    private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.course.add";
+    private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

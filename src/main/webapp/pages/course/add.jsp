@@ -17,7 +17,6 @@
         <p id="title"><fmt:message key="courses.add.title"/></p>
         <div id="courseProps">
             <div>
-                <%--                TODO:переключение чтобы не было сброса данных--%>
                 <select name="category" onchange="location.href=
                         '${pageContext.request.contextPath}/controller?command=go_to_add_course&category='
                         + this.options[this.selectedIndex].value">

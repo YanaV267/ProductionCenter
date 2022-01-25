@@ -29,11 +29,11 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class PayForEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.paying_for_enrollment";
+    private static final String PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.pay";
     private static final String NO_FUNDS_ERROR_MESSAGE_KEY = "error.balance.no_funds";
     private static final String INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY = "error.balance.incorrect_data";
-    private final BankCardService bankCardService = new BankCardServiceImpl();
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    private final BankCardService bankCardService = BankCardServiceImpl.getInstance();
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -50,7 +50,8 @@ public class PayForEnrollmentCommand implements Command {
             Optional<BankCard> bankCard = bankCardService.findCard(cardData);
             if (bankCard.isPresent()) {
                 if (bankCardService.withdrawMoneyForEnrollment(bankCard.get(), chosenEnrollmentId)) {
-                    if (enrollmentService.updateStatus(chosenEnrollmentId, EnrollmentStatus.PAID)) {
+                    if (enrollmentService.updateStatus(chosenEnrollmentId, EnrollmentStatus.PAID)
+                            && enrollmentService.checkEnrollmentsReservationStatus()) {
                         Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
                         session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
                         session.setAttribute(SessionAttribute.MESSAGE, PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY);

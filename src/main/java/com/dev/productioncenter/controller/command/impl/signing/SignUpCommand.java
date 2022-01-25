@@ -25,7 +25,7 @@ public class SignUpCommand implements Command {
     private static final String SIGN_UP_ERROR_MESSAGE_KEY = "error.sign_up";
     private static final String LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY = "error.login_availability";
     private static final String EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY = "error.email_availability";
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

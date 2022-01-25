@@ -19,7 +19,7 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.PICTU
 
 public class GoToAccountCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

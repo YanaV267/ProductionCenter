@@ -22,8 +22,8 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToContactsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final UserService userService = new UserServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
+    private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -13,13 +13,13 @@ public class BankCardValidatorImpl implements BankCardValidator {
     private static final String EXPIRATION_DATE_REGEX = "(0[1-9]|1[0-2])/(2[2-6])";
     private static final String CVV_NUMBER_REGEX = "\\d{3}";
     private static final String BALANCE_REGEX = "^((\\d{2,4}\\.\\d{2})|(\\d{2,4}))$";
-    private static final BankCardValidatorImpl instance = new BankCardValidatorImpl();
+    private static final BankCardValidator instance = new BankCardValidatorImpl();
 
     private BankCardValidatorImpl() {
 
     }
 
-    public static BankCardValidatorImpl getInstance() {
+    public static BankCardValidator getInstance() {
         return instance;
     }
 

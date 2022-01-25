@@ -14,12 +14,12 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToUserEnrollmentsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DEFAULT_PAGE = "1";
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -30,10 +30,12 @@ public class GoToUserEnrollmentsCommand implements Command {
             page = DEFAULT_PAGE;
         }
         try {
-            Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
-            session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
-            request.setAttribute(PAGE, page);
-            return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.FORWARD);
+            if (enrollmentService.checkEnrollmentsReservationStatus()) {
+                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
+                request.setAttribute(ENROLLMENTS, enrollments);
+                request.setAttribute(PAGE, page);
+                return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.FORWARD);
+            }
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to user's enrollments page: " + exception);
         }

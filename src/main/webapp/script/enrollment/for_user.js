@@ -14,15 +14,16 @@ $('#all>div:not(:nth-child(-n+7))').on('click', function () {
         let counter = 1;
         $('input[name=enrollment_id]').each(function () {
             if (counter === row) {
-                let id = $(this).val();
-                $('input[name=chosen_enrollment_id]').val(id);
+                $('input[name=chosen_enrollment_id]').val($(this).val());
             }
             counter++;
         });
         for (let i = 1; i < 8; i++) {
             $(`#all > div:nth-child(${7 * row + i})`).toggleClass('color');
         }
-        $('input[type=button]').prop('disabled', false);
+        if ($(`#status:eq(${row - 1})`).text() === 'expired')
+            $('input[name=renew]').prop('disabled', false);
+        else $('input[type=button]:not([name=renew])').prop('disabled', false);
     } else {
         $('input[type=button]').prop('disabled', true);
     }
@@ -49,7 +50,7 @@ $('input[type=number]').on('click', function () {
 if ($('form').css('height') === $('form').css('min-height')) {
     $('#buttons').css({
         'position': 'absolute',
-        'left': '325px',
+        'left': '245px',
         'top': '375px'
     });
 } else {

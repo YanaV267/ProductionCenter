@@ -16,7 +16,7 @@
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=change_user_status">
         <p id="title"><fmt:message key="users.title"/></p>
-        <c:if test="${fn:length(requestScope.users) > 0}">
+        <c:if test="${fn:length(users) > 0}">
             <div id="all">
                 <div><fmt:message key="users.login"/></div>
                 <input type="hidden">
@@ -25,8 +25,7 @@
                 <div><fmt:message key="users.email"/></div>
                 <div><fmt:message key="users.phone_number"/></div>
                 <div><fmt:message key="users.status"/></div>
-                <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="user"
-                           items="${requestScope.users}">
+                <c:forEach begin="${page * 15 - 15}" end="${page * 15}" var="user" items="${users}">
                     <div><c:out value="${user.key.login}"/></div>
                     <input type="hidden" name="login" value="<c:out value="${user.key.login}"/>">
                     <input type="hidden" name="status" value="<c:out value="${user.key.userStatus.status}"/>">
@@ -43,10 +42,10 @@
                 </c:forEach>
             </div>
         </c:if>
-        <c:if test="${fn:length(requestScope.users) == 0}">
+        <c:if test="${fn:length(users) == 0}">
             <div id="none"><fmt:message key="users.message"/></div>
         </c:if>
-        <ctg:pages page="${requestScope.page}" size="${fn:length(requestScope.users)}" command="go_to_users"/>
+        <ctg:pages page="${page}" size="${fn:length(users)}" command="go_to_users"/>
         <input type="submit" value="<fmt:message key="users.save"/>">
     </form>
 </main>

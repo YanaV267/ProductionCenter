@@ -25,12 +25,12 @@ public class BankCardServiceImpl implements BankCardService {
     private static final String DATE_DELIMITER_REGEX = "/";
     private static final String CARD_NUMBER_REMOVING_SYMBOL_REGEX = " ";
     private static final String CARD_NUMBER_REPLACEMENT_SYMBOL_REGEX = "";
-    private static final int EXPIRATION_DATE_CENTURY_VALUE = 2000;
+    private static final int EXPIRATION_DATE_MILLENNIUM_VALUE = 2000;
     private static final Map<Integer, Integer> LAST_DAY_OF_MONTH = new HashMap<>();
+    private static final BankCardService instance = new BankCardServiceImpl();
     private final BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
 
-    public BankCardServiceImpl() {
+    private BankCardServiceImpl() {
         LAST_DAY_OF_MONTH.put(1, 31);
         LAST_DAY_OF_MONTH.put(2, 28);
         LAST_DAY_OF_MONTH.put(3, 31);
@@ -45,6 +45,10 @@ public class BankCardServiceImpl implements BankCardService {
         LAST_DAY_OF_MONTH.put(12, 31);
     }
 
+    public static BankCardService getInstance() {
+        return instance;
+    }
+
     @Override
     public Optional<BankCard> findCard(Map<String, String> bankCardData) throws ServiceException {
         try {
@@ -54,7 +58,7 @@ public class BankCardServiceImpl implements BankCardService {
                         .replaceAll(CARD_NUMBER_REMOVING_SYMBOL_REGEX, CARD_NUMBER_REPLACEMENT_SYMBOL_REGEX)));
                 bankCard.setOwnerName(bankCardData.get(OWNER_NAME));
                 String[] expirationDateParameters = bankCardData.get(EXPIRATION_DATE).split(DATE_DELIMITER_REGEX);
-                LocalDate localDate = LocalDate.of(EXPIRATION_DATE_CENTURY_VALUE
+                LocalDate localDate = LocalDate.of(EXPIRATION_DATE_MILLENNIUM_VALUE
                                 + Integer.parseInt(expirationDateParameters[1]),
                         Integer.parseInt(expirationDateParameters[0]),
                         LAST_DAY_OF_MONTH.get(Integer.parseInt(expirationDateParameters[0])));
@@ -64,7 +68,7 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding bank card: " + exception);
-            throw new ServiceException("Error has occurred while finding bank card: " + exception);
+            throw new ServiceException("Error has occurred while finding bank card: " , exception);
         }
         return Optional.empty();
     }
@@ -80,13 +84,14 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while replenishing bank card balance: " + exception);
-            throw new ServiceException("Error has occurred while replenishing bank card balance: " + exception);
+            throw new ServiceException("Error has occurred while replenishing bank card balance: " , exception);
         }
         return false;
     }
 
     @Override
     public boolean withdrawMoneyForEnrollment(BankCard bankCard, long enrollmentId) throws ServiceException {
+        EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
         Optional<Enrollment> enrollment = enrollmentService.findEnrollment(enrollmentId);
         try {
             if (enrollment.isPresent()) {
@@ -101,7 +106,7 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while withdrawing money from bank card: " + exception);
-            throw new ServiceException("Error has occurred while withdrawing money from bank card: " + exception);
+            throw new ServiceException("Error has occurred while withdrawing money from bank card: " , exception);
         }
         return false;
     }

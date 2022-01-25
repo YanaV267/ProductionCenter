@@ -22,9 +22,9 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class ReplenishBalanceCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY = "confirm.balance.replenish_balance";
+    private static final String REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY = "confirm.balance.replenish";
     private static final String INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY = "error.balance.incorrect_data";
-    private final BankCardService bankCardService = new BankCardServiceImpl();
+    private final BankCardService bankCardService = BankCardServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

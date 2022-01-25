@@ -7,21 +7,33 @@ import com.dev.productioncenter.model.dao.EnrollmentDao;
 import com.dev.productioncenter.model.dao.LessonDao;
 import com.dev.productioncenter.model.dao.impl.EnrollmentDaoImpl;
 import com.dev.productioncenter.model.dao.impl.LessonDaoImpl;
+import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.EnrollmentService;
 import com.dev.productioncenter.validator.impl.EnrollmentValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.dev.productioncenter.entity.EnrollmentStatus.*;
+
 public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final EnrollmentService instance = new EnrollmentServiceImpl();
     private final EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
     private final LessonDao lessonDao = LessonDaoImpl.getInstance();
+
+    private EnrollmentServiceImpl() {
+    }
+
+    public static EnrollmentService getInstance() {
+        return instance;
+    }
 
     @Override
     public boolean enrollOnCourse(User user, long chosenCourseId, String lessonAmount) throws ServiceException {
@@ -37,7 +49,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while adding course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while adding course's lessons: " + exception);
+            throw new ServiceException("Error has occurred while adding course's lessons: ", exception);
         }
         return false;
     }
@@ -48,7 +60,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollmentDao.findById(enrollmentId);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding enrollment by id: " + exception);
-            throw new ServiceException("Error has occurred while finding enrollment by id: " + exception);
+            throw new ServiceException("Error has occurred while finding enrollment by id: ", exception);
         }
     }
 
@@ -58,7 +70,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollmentDao.findEnrollmentsByCourseUser(user, new Course(chosenCourseId));
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding enrollment by user & course: " + exception);
-            throw new ServiceException("Error has occurred while finding enrollment by user & course: " + exception);
+            throw new ServiceException("Error has occurred while finding enrollment by user & course: ", exception);
         }
     }
 
@@ -77,7 +89,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollments;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user's enrollments: " + exception);
-            throw new ServiceException("Error has occurred while finding user's enrollments: " + exception);
+            throw new ServiceException("Error has occurred while finding user's enrollments: ", exception);
         }
     }
 
@@ -92,7 +104,22 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollments;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding all enrollments: " + exception);
-            throw new ServiceException("Error has occurred while finding all enrollments: " + exception);
+            throw new ServiceException("Error has occurred while finding all enrollments: ", exception);
+        }
+    }
+
+    @Override
+    public Map<Enrollment, LocalDate> findEnrollments(long courseId) throws ServiceException {
+        try {
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByCourse(new Course(courseId));
+            Map<Enrollment, LocalDate> enrollments = new HashMap<>();
+            for (Enrollment enrollment : allEnrollments) {
+                enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());
+            }
+            return enrollments;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding all enrollments on course: " + exception);
+            throw new ServiceException("Error has occurred while finding all enrollments on course: ", exception);
         }
     }
 
@@ -110,7 +137,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing enrollments' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing enrollments' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing enrollments' statuses: ", exception);
         }
     }
 
@@ -123,26 +150,29 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollmentDao.updateEnrollmentStatus(enrollment);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing enrollment's status: " + exception);
-            throw new ServiceException("Error has occurred while changing enrollment's status: " + exception);
+            throw new ServiceException("Error has occurred while changing enrollment's status: ", exception);
         }
     }
 
     @Override
     public boolean updateLessonAmounts(Map<String, String> enrollmentsLessonAmount) throws ServiceException {
         try {
-            for (Map.Entry<String, String> enrollmentLessonAmount : enrollmentsLessonAmount.entrySet()) {
-                Enrollment enrollment = new Enrollment();
-                enrollment.setLessonAmount(Integer.parseInt(enrollmentLessonAmount.getValue()));
-                enrollment.setId(Long.parseLong(enrollmentLessonAmount.getKey()));
-                if (!enrollmentDao.update(enrollment)) {
-                    return false;
+            if (EnrollmentValidatorImpl.getInstance().checkLessonAmount(enrollmentsLessonAmount)) {
+                for (Map.Entry<String, String> enrollmentLessonAmount : enrollmentsLessonAmount.entrySet()) {
+                    Enrollment enrollment = new Enrollment();
+                    enrollment.setLessonAmount(Integer.parseInt(enrollmentLessonAmount.getValue()));
+                    enrollment.setId(Long.parseLong(enrollmentLessonAmount.getKey()));
+                    if (!enrollmentDao.update(enrollment)) {
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while canceling enrollment: " + exception);
-            throw new ServiceException("Error has occurred while canceling enrollment: " + exception);
+            throw new ServiceException("Error has occurred while canceling enrollment: ", exception);
         }
+        return false;
     }
 
     @Override
@@ -151,7 +181,38 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return enrollmentDao.delete(enrollmentId);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while canceling enrollment: " + exception);
-            throw new ServiceException("Error has occurred while canceling enrollment: " + exception);
+            throw new ServiceException("Error has occurred while canceling enrollment: ", exception);
+        }
+    }
+
+    @Override
+    public boolean checkEnrollmentsReservationStatus() throws ServiceException {
+        CourseService courseService = CourseServiceImpl.getInstance();
+        try {
+            List<Enrollment> expiredEnrollments = enrollmentDao.findExpiredEnrollments();
+            for (Enrollment enrollment : expiredEnrollments) {
+                if (enrollment.getReservationDateTime().plusDays(5).isBefore(LocalDateTime.now())) {
+                    enrollmentDao.delete(enrollment.getId());
+                    if (enrollment.getEnrollmentStatus() == RESERVED || enrollment.getEnrollmentStatus() == RENEWED) {
+                        if (!courseService.releasePlaceAtCourse(enrollment.getCourse().getId())) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (enrollment.getEnrollmentStatus() == RESERVED) {
+                        enrollment.setEnrollmentStatus(EXPIRED);
+                        if (!courseService.releasePlaceAtCourse(enrollment.getCourse().getId())
+                                || !enrollmentDao.updateEnrollmentStatus(enrollment)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        } catch (
+                DaoException exception) {
+            LOGGER.error("Error has occurred while checking enrollments reservation status: " + exception);
+            throw new ServiceException("Error has occurred while checking enrollments reservation status: ", exception);
         }
     }
 }

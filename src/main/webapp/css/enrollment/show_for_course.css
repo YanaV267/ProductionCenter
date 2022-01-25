@@ -1,0 +1,65 @@
+form > div:nth-of-type(1), form > div:nth-of-type(2) {
+    margin: 0 auto;
+}
+
+form, #rect {
+    width: 730px !important;
+}
+
+form {
+    margin-left: 240px;
+}
+
+#rect {
+    margin-left: 210px;
+}
+
+#title {
+    margin-bottom: 10px !important;
+}
+
+#all {
+    margin-top: 30px;
+    grid-template-columns: 240px 140px 160px 110px;
+}
+
+input[type=button] {
+    width: 130px;
+    height: 34px;
+    margin: 0 auto;
+    padding: 5px 5px 5px 7px;
+    border: solid 0.7px rgb(146, 144, 11);
+    border-radius: 6px;
+    background-color: rgb(190, 188, 14);
+    color: white;
+}
+
+input[type=button]:hover {
+    cursor: pointer;
+}
+
+#all > div:nth-child(7n+1) {
+    border-left: none;
+    border-radius: 0;
+}
+
+#all > div:nth-child(7n) {
+    border-right: none;
+    border-radius: 0;
+}
+
+#all > div:nth-child(4n+1) {
+    border-left: 1px solid rgb(11, 35, 78);
+    border-radius: 15px 0 0 15px;
+}
+
+#all > div:nth-child(4n) {
+    border-right: 1px solid rgb(11, 35, 78);
+    border-radius: 0 15px 15px 0;
+    cursor: default;
+}
+
+#all > div:not(:nth-child(-n+7)) {
+    line-height: unset;
+    height: 21px;
+}

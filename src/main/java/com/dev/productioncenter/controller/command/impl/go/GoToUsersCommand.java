@@ -20,7 +20,7 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 public class GoToUsersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DEFAULT_PAGE = "1";
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

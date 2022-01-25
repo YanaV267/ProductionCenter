@@ -23,7 +23,15 @@ public class LessonServiceImpl implements LessonService {
     private static final String DELIMITER_REGEX = " ";
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\],]";
     private static final String REPLACEMENT_REGEX = "";
+    private static final LessonService instance = new LessonServiceImpl();
     private final LessonDao lessonDao = LessonDaoImpl.getInstance();
+
+    private LessonServiceImpl() {
+    }
+
+    public static LessonService getInstance() {
+        return instance;
+    }
 
     @Override
     public boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
@@ -42,7 +50,7 @@ public class LessonServiceImpl implements LessonService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while adding course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while adding course's lessons: " + exception);
+            throw new ServiceException("Error has occurred while adding course's lessons: " , exception);
         }
     }
 
@@ -88,7 +96,7 @@ public class LessonServiceImpl implements LessonService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while updating course's lessons: " + exception);
+            throw new ServiceException("Error has occurred while updating course's lessons: " , exception);
         }
     }
 
@@ -98,7 +106,7 @@ public class LessonServiceImpl implements LessonService {
             return lessonDao.findLessonsByCourse(courseId);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user's lessons: " + exception);
-            throw new ServiceException("Error has occurred while finding user's lessons: " + exception);
+            throw new ServiceException("Error has occurred while finding user's lessons: " , exception);
         }
     }
 }

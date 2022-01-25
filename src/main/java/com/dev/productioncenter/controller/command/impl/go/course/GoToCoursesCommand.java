@@ -22,8 +22,8 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 public class GoToCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DEFAULT_PAGE = "1";
-    private final CourseService courseService = new CourseServiceImpl();
-    private final ActivityService activityService = new ActivityServiceImpl();
+    private final CourseService courseService = CourseServiceImpl.getInstance();
+    private final ActivityService activityService = ActivityServiceImpl.getInstance();
     private final List<String> weekdays = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
 
     @Override

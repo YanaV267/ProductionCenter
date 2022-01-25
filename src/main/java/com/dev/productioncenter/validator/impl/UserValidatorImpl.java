@@ -7,7 +7,6 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class UserValidatorImpl implements UserValidator {
-    private static final UserValidatorImpl instance = new UserValidatorImpl();
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String LOGIN_REGEX = "[\\p{Alpha}][\\p{Alpha}\\d]{4,29}";
     private static final String PASSWORD_REGEX = "[\\p{Alpha}][\\p{Alpha}\\d]{7,29}";
@@ -15,11 +14,12 @@ public class UserValidatorImpl implements UserValidator {
     private static final String NAME_REGEX = "[А-Я\\p{Upper}][а-яё\\p{Lower}]{1,15}";
     private static final String EMAIL_REGEX = "(([\\p{Alpha}\\d._]+){5,25}@([\\p{Lower}]+){3,7}\\.([\\p{Lower}]+){2,3})";
     private static final String NUMBER_REGEX = "\\+375\\(\\d{2}\\)\\d{3}-\\d{2}-\\d{2}";
+    private static final UserValidator instance = new UserValidatorImpl();
 
     private UserValidatorImpl() {
     }
 
-    public static UserValidatorImpl getInstance() {
+    public static UserValidator getInstance() {
         return instance;
     }
 

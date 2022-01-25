@@ -50,7 +50,7 @@ public class PagesTag extends TagSupport {
             pageContext.getOut().write(pageTag.toString());
         } catch (IOException exception) {
             LOGGER.error("Error has occurred while writing tag into stream: " + exception);
-            throw new JspTagException("Error has occurred while writing tag into stream: " + exception);
+            throw new JspTagException("Error has occurred while writing tag into stream: " , exception);
         }
         return SKIP_BODY;
     }

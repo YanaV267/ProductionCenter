@@ -17,7 +17,7 @@
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=change_enrollment_status">
         <p id="title"><fmt:message key="enrollment.all.title"/></p>
-        <c:if test="${fn:length(requestScope.enrollments) > 0}">
+        <c:if test="${fn:length(enrollments) > 0}">
             <div id="all">
                 <div><fmt:message key="enrollment.name"/></div>
                 <input type="hidden">
@@ -27,8 +27,7 @@
                 <div><fmt:message key="enrollment.reservation_date"/></div>
                 <div><fmt:message key="enrollment.status"/></div>
                 <div><fmt:message key="enrollment.approval"/></div>
-                <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="enrollment"
-                           items="${enrollments}">
+                <c:forEach begin="${page * 15 - 15}" end="${page * 15}" var="enrollment" items="${enrollments}">
                     <div><c:out value="${enrollment.key.user.surname}"/> <c:out
                             value="${enrollment.key.user.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
@@ -51,10 +50,9 @@
                     </div>
                 </c:forEach>
             </div>
-            <ctg:pages page="${requestScope.page}" size="${fn:length(requestScope.enrollments)}"
-                       command="go_to_enrollments"/>
+            <ctg:pages page="${page}" size="${fn:length(enrollments)}" command="go_to_enrollments"/>
         </c:if>
-        <c:if test="${fn:length(requestScope.enrollments) == 0}">
+        <c:if test="${fn:length(enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.message"/></div>
         </c:if>
         <input type="submit" value="<fmt:message key="enrollment.save"/>">

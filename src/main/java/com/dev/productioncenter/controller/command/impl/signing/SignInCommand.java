@@ -6,6 +6,7 @@ import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.service.impl.UserServiceImpl;
 import com.dev.productioncenter.util.PhoneNumberFormatter;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +20,7 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 public class SignInCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SIGN_IN_ERROR_MESSAGE_KEY = "error.sign_in";
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -29,6 +30,8 @@ public class SignInCommand implements Command {
         try {
             Optional<User> user = userService.findUser(login, password);
             if (user.isPresent()) {
+                ServletContext servletContext = request.getServletContext();
+                servletContext.setAttribute(login, user.get().getUserStatus());
                 String number = PhoneNumberFormatter.format(user.get().getPhoneNumber());
                 session.setAttribute(SessionAttribute.NUMBER, number);
                 session.setAttribute(SessionAttribute.USER, user.get());

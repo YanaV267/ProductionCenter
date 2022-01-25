@@ -36,18 +36,28 @@ public class SecurityAccessStatusFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         HttpSession session = httpServletRequest.getSession();
+        ServletContext servletContext = request.getServletContext();
         UserRole role = UserRole.valueOf(String.valueOf(session.getAttribute(SessionAttribute.ROLE)).toUpperCase());
         if (!httpServletRequest.getServletPath().contains(ERROR_PAGE_PATH) && role != UserRole.GUEST) {
-            String pagePath = httpServletRequest.getServletPath();
-            CommandType command = CommandType.valueOf(request.getParameter(RequestParameter.COMMAND).toUpperCase());
             User user = (User) session.getAttribute(SessionAttribute.USER);
-            Optional<CommandType> foundCommand = accessibleCommands
-                    .stream()
-                    .filter(p -> p.equals(command))
-                    .findFirst();
-            if (user.getUserStatus() == UserStatus.BLOCKED && foundCommand.isEmpty() && !pagePath.equals(ACCESSIBLE_PAGE)) {
-                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + PagePath.ERROR_403);
-                return;
+            UserStatus userStatus = (UserStatus) servletContext.getAttribute(user.getLogin());
+            String command = request.getParameter(RequestParameter.COMMAND);
+            if (command != null) {
+                CommandType commandType = CommandType.valueOf(request.getParameter(RequestParameter.COMMAND).toUpperCase());
+                Optional<CommandType> foundCommand = accessibleCommands
+                        .stream()
+                        .filter(p -> p.equals(commandType))
+                        .findFirst();
+                if (userStatus == UserStatus.BLOCKED && foundCommand.isEmpty()) {
+                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + PagePath.ERROR_403);
+                    return;
+                }
+            } else {
+                String pagePath = httpServletRequest.getServletPath();
+                if (userStatus == UserStatus.BLOCKED && !pagePath.equals(ACCESSIBLE_PAGE)) {
+                    httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + PagePath.ERROR_403);
+                    return;
+                }
             }
         }
         chain.doFilter(request, response);

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.EnumSet;
 
 import static com.dev.productioncenter.controller.command.CommandType.*;
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
 @WebFilter(urlPatterns = {"/controller"})
 public class SessionAttributeFilter implements Filter {
@@ -41,6 +41,9 @@ public class SessionAttributeFilter implements Filter {
         session.removeAttribute(ACTIVITIES);
         session.removeAttribute(ENROLLMENTS);
         session.removeAttribute(COURSES);
+        session.removeAttribute(COURSE);
+        session.removeAttribute(USERS);
+        session.removeAttribute(PAGE);
         session.removeAttribute(MESSAGE);
         chain.doFilter(request, response);
     }

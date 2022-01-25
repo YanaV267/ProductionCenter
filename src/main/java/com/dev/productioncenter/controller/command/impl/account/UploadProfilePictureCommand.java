@@ -24,7 +24,7 @@ import static com.dev.productioncenter.controller.command.RequestParameter.UPLOA
 public class UploadProfilePictureCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String UPLOAD_PROFILE_PICTURE_CONFIRM_KEY = "confirm.upload_profile_picture";
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

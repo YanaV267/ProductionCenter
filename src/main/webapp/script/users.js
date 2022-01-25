@@ -8,6 +8,11 @@ $('#all>div:nth-child(7n):not(:nth-child(-n+7))').on('click', function () {
 });
 
 if ($('form').css('height') === $('form').css('min-height')) {
+    $('input[type=button]').css({
+        'position': 'absolute',
+        'left': '440px',
+        'top': '375px'
+    });
     $('#pages').css({
         'position': 'absolute',
         'left': '440px',

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dev.productioncenter.model.dao.ColumnName.*;
+import static com.dev.productioncenter.controller.command.ColumnName.*;
 
 public class CourseMapper implements Mapper<Course> {
     private static final CourseMapper instance = new CourseMapper();

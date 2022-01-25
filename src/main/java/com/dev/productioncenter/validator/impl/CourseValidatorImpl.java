@@ -19,12 +19,12 @@ public class CourseValidatorImpl implements CourseValidator {
     private static final String DELIMITER_REGEX = " ";
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\],]";
     private static final String REPLACEMENT_REGEX = "";
-    private static final CourseValidatorImpl instance = new CourseValidatorImpl();
+    private static final CourseValidator instance = new CourseValidatorImpl();
 
     private CourseValidatorImpl() {
     }
 
-    public static CourseValidatorImpl getInstance() {
+    public static CourseValidator getInstance() {
         return instance;
     }
 

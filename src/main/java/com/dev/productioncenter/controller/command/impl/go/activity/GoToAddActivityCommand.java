@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GoToAddActivityCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final ActivityService activityService = new ActivityServiceImpl();
+    private final ActivityService activityService = ActivityServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

@@ -11,12 +11,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
-import java.math.BigInteger;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
+import static com.dev.productioncenter.controller.command.ColumnName.USER_PROFILE_PICTURE;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -37,18 +36,16 @@ public class UserDaoImpl implements UserDao {
                     "WHERE surname = ? AND name = ? AND role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE email = ?";
-    private static final String SQL_SELECT_USERS_BY_PHONE_NUMBER =
-            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE phone_number = ?";
     private static final String SQL_SELECT_USERS_BY_STATUS =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE status = ?";
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE role = ?";
-    private static final UserDaoImpl instance = new UserDaoImpl();
+    private static final UserDao instance = new UserDaoImpl();
 
     private UserDaoImpl() {
     }
 
-    public static UserDaoImpl getInstance() {
+    public static UserDao getInstance() {
         return instance;
     }
 
@@ -201,22 +198,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("Error has occurred while finding user by email: ", exception);
         }
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
-    }
-
-    @Override
-    public List<User> findUsersByPhoneNumber(BigInteger phoneNumber) throws DaoException {
-        List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_PHONE_NUMBER)) {
-            preparedStatement.setInt(1, phoneNumber.intValue());
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding users by phone number: " + exception);
-            throw new DaoException("Error has occurred while finding users by phone number: ", exception);
-        }
-        return users;
     }
 
     @Override

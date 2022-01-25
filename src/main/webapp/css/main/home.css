@@ -284,7 +284,7 @@ div.stage {
 }
 
 #pages {
-    margin: 30px auto 0;
+    margin: 30px auto 20px;
     font-size: 18px;
     font-weight: bold;
     width: 130px;
@@ -293,7 +293,7 @@ div.stage {
 
 #pages > * {
     display: inline-block;
-    width: 30%;
+    width: 33.3%;
     text-align: center;
 }
 

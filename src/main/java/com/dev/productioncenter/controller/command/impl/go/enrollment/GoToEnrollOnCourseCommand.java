@@ -26,11 +26,11 @@ import static com.dev.productioncenter.controller.command.RequestParameter.CHOSE
 
 public class GoToEnrollOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY = "error.enrollment_role_permission";
-    private static final String ENROLLMENT_EXIST_ERROR_MESSAGE_KEY = "error.enrollment_exist";
-    private static final String ENROLLMENT_NO_PLACES_ERROR_MESSAGE_KEY = "error.enrollment_no_places";
-    private final CourseService courseService = new CourseServiceImpl();
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    private static final String ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY = "error.enrollment.role_permission";
+    private static final String ENROLLMENT_EXIST_ERROR_MESSAGE_KEY = "error.enrollment.exist";
+    private static final String ENROLLMENT_NO_PLACES_ERROR_MESSAGE_KEY = "error.enrollment.no_places";
+    private final CourseService courseService = CourseServiceImpl.getInstance();
+    private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {

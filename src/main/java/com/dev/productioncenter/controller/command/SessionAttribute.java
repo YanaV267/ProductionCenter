@@ -16,6 +16,8 @@ public final class SessionAttribute {
     public static final String WEEKDAYS = "weekdays";
     public static final String ENROLLMENTS = "enrollments";
     public static final String TEACHERS = "teachers";
+    public static final String USERS = "users";
+    public static final String PAGE = "page";
 
     private SessionAttribute() {
     }

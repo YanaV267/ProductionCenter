@@ -18,8 +18,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
             "INSERT INTO enrollments(id_user, id_course, lesson_amount) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_ENROLLMENT =
             "UPDATE enrollments SET lesson_amount = ? WHERE id_enrollment = ?";
-    private static final String SQL_CHECK_ENROLLMENT_RESERVATION_STATUS =
-            "UPDATE enrollments SET status = 'expired' WHERE datediff(reservation_datetime, now()) < -3";
     private static final String SQL_UPDATE_ENROLLMENT_STATUS = "UPDATE enrollments SET status = ? WHERE id_enrollment = ?";
     private static final String SQL_DELETE_ENROLLMENT = "DELETE FROM enrollments WHERE id_enrollment = ?";
     private static final String SQL_SELECT_ALL_ENROLLMENTS =
@@ -52,7 +50,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE category = ? AND type = ?";
+                    "WHERE enrollments.id_course = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE_USER =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -61,22 +59,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE enrollments.id_user = ? AND enrollments.id_course = ?";
-    private static final String SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT =
-            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
-                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
-                    "JOIN users ON enrollments.id_user = users.id_user " +
-                    "JOIN courses ON enrollments.id_course = courses.id_course " +
-                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
-                    "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE lesson_amount >= ? && lesson_amount <= ?";
-    private static final String SQL_SELECT_ENROLLMENTS_BY_RESERVATION_DATETIME =
-            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
-                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
-                    "JOIN users ON enrollments.id_user = users.id_user " +
-                    "JOIN courses ON enrollments.id_course = courses.id_course " +
-                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
-                    "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE reservation_datetime = ?";
     private static final String SQL_SELECT_ENROLLMENTS_BY_STATUS =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -85,12 +67,21 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE enrollments.status = ?";
-    private static final EnrollmentDaoImpl instance = new EnrollmentDaoImpl();
+    private static final String SQL_SELECT_EXPIRED_ENROLLMENTS =
+            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
+                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
+                    "JOIN users ON enrollments.id_user = users.id_user " +
+                    "JOIN courses ON enrollments.id_course = courses.id_course " +
+                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
+                    "JOIN activities ON activities.id_activity = courses.id_activity " +
+                    "WHERE datediff(reservation_datetime, now()) < -3 AND enrollments.status != 'paid' " +
+                    "AND enrollments.status != 'approved'";
+    private static final EnrollmentDao instance = new EnrollmentDaoImpl();
 
     private EnrollmentDaoImpl() {
     }
 
-    public static EnrollmentDaoImpl getInstance() {
+    public static EnrollmentDao getInstance() {
         return instance;
     }
 
@@ -136,17 +127,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while updating enrollment status: " + exception);
             throw new DaoException("Error has occurred while updating enrollment status: ", exception);
-        }
-    }
-
-    public boolean checkEnrollmentReservationStatus() throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(SQL_CHECK_ENROLLMENT_RESERVATION_STATUS);
-            return true;
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while checking enrollment reservation status: " + exception);
-            throw new DaoException("Error has occurred while checking enrollment reservation status: ", exception);
         }
     }
 
@@ -212,8 +192,7 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {
-            preparedStatement.setString(1, course.getActivity().getCategory());
-            preparedStatement.setString(2, course.getActivity().getType());
+            preparedStatement.setLong(1, course.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }
@@ -242,39 +221,6 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByLessonAmount(int minAmount, int maxAmount) throws DaoException {
-        List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_LESSON_AMOUNT)) {
-            preparedStatement.setLong(1, minAmount);
-            preparedStatement.setLong(2, maxAmount);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding enrollments by lesson amount: " + exception);
-            throw new DaoException("Error has occurred while finding enrollments by lesson amount: ", exception);
-        }
-        return enrollments;
-    }
-
-    @Override
-    public List<Enrollment> findEnrollmentsByReservationDatetime(Date dateTime) throws DaoException {
-        List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_RESERVATION_DATETIME)) {
-            preparedStatement.setDate(1, dateTime);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding enrollments by reservation datetime: " + exception);
-            throw new DaoException("Error has occurred while finding enrollments by reservation datetime: ", exception);
-        }
-        return enrollments;
-    }
-
-    @Override
     public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -286,6 +232,21 @@ public class EnrollmentDaoImpl implements EnrollmentDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by status: " + exception);
             throw new DaoException("Error has occurred while finding enrollments by status: ", exception);
+        }
+        return enrollments;
+    }
+
+    @Override
+    public List<Enrollment> findExpiredEnrollments() throws DaoException {
+        List<Enrollment> enrollments;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(SQL_SELECT_EXPIRED_ENROLLMENTS)) {
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding expired enrollments: " + exception);
+            throw new DaoException("Error has occurred while finding expired enrollments: ", exception);
         }
         return enrollments;
     }

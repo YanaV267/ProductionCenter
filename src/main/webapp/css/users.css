@@ -15,7 +15,7 @@ form {
 
 #rect {
     width: 1050px;
-    margin: 35px 35px 35px 125px;
+    margin: 35px 35px 35px 120px;
     padding-top: 5px;
     position: relative;
     z-index: 1;
@@ -123,7 +123,7 @@ input[type=submit]:enabled {
     height: 20px;
     width: 20px;
     left: 4px;
-    bottom: 3.5px;
+    bottom: 4px;
     background-color: white;
     transition: .4s;
 }

@@ -97,12 +97,12 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = 'upcoming' OR courses.status = 'running'";
-    private static final CourseDaoImpl instance = new CourseDaoImpl();
+    private static final CourseDao instance = new CourseDaoImpl();
 
     private CourseDaoImpl() {
     }
 
-    public static CourseDaoImpl getInstance() {
+    public static CourseDao getInstance() {
         return instance;
     }
 
