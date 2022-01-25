@@ -7,6 +7,7 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general_show.css" type="text/css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/users.css" type="text/css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/teachers.css" type="text/css"/>
 </head>
@@ -15,8 +16,30 @@
 <jsp:include page="main/header.jsp"/>
 <main>
     <div id="rect"></div>
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=change_user_role">
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=search_teachers">
         <p id="title"><fmt:message key="teachers.title"/></p>
+        <div id="search">
+            <input type="text" name="surname" placeholder="<fmt:message key="sign_up.surname.placeholder"/>"
+                   autocomplete="off" pattern="[А-ЯA-Z][а-яa-z]{1,20}"
+                   value="<c:out value="${requestScope.teacher.surname}"/>"
+                   title="<fmt:message key="sign_up.surname.title"/>"><br/>
+            <input type="text" name="name" disabled
+                   placeholder="<fmt:message key="sign_up.name.placeholder"/>" autocomplete="off"
+                   pattern="[А-ЯA-Z][а-яёa-z]{1,15}" value="<c:out value="${requestScope.teacher.name}"/>"
+                   title="<fmt:message key="sign_up.name.title"/>"><br/>
+            <div id="status">
+                <label>
+                    <input type="checkbox" name="status" value="assigned"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="teachers.assigned_on_course"/>
+                </label>
+            </div>
+            <input type="button" name="clear" value="<fmt:message key="courses.clear"/>"
+                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_teachers'">
+            <input type="submit" value="<fmt:message key="courses.search"/>">
+        </div>
+    </form>
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=change_user_role">
         <c:if test="${fn:length(users) == 0}">
             <div id="none"><fmt:message key="teachers.message"/></div>
         </c:if>
@@ -45,14 +68,20 @@
                     </div>
                 </c:forEach>
             </div>
-            <ctg:pages page="${page}" size="${fn:length(users)}" command="go_to_teachers"/>
+            <c:choose>
+                <c:when test="${not empty user}">
+                    <ctg:pages page="${page}" size="${fn:length(users)}" command="go_to_teachers"/>
+                </c:when>
+                <c:otherwise>
+                    <ctg:pages page="${page}" size="${fn:length(users)}" command="search_teachers"/>
+                </c:otherwise>
+            </c:choose>
         </c:if>
         <input type="submit" value="<fmt:message key="teachers.save"/>">
     </form>
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/teachers.js"></script>
-<script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
 <jsp:include page="main/footer.jsp"/>
 </html>

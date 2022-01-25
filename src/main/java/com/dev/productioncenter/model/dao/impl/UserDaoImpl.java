@@ -36,8 +36,21 @@ public class UserDaoImpl implements UserDao {
                     "WHERE surname = ? AND name = ? AND role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE email = ?";
+    private static final String SQL_SELECT_USERS_BY_FULL_NAME =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
+                    "WHERE surname = ? AND name = ?";
+    private static final String SQL_SELECT_USERS_BY_FULL_NAME_STATUS =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
+                    "WHERE surname = ? AND name = ? AND status = ?";
     private static final String SQL_SELECT_USERS_BY_STATUS =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE status = ?";
+    private static final String SQL_SELECT_USERS_BY_STATUS_ROLE =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
+                    "WHERE status = ? AND role = ?";
+    private static final String SQL_SELECT_TEACHERS_HOLDING_COURSES =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, users.status FROM users " +
+                    "JOIN courses ON users.id_user = courses.id_teacher " +
+                    "WHERE role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE role = ?";
     private static final UserDao instance = new UserDaoImpl();
@@ -201,6 +214,60 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public List<User> findUsersByNameStatus(User user) throws DaoException {
+        List<User> users;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME_STATUS)) {
+            preparedStatement.setString(1, user.getSurname());
+            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(3, user.getUserStatus().getStatus());
+            preparedStatement.setString(4, user.getUserRole().getRole());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                users = UserMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding users by full name & status: " + exception);
+            throw new DaoException("Error has occurred while finding users by full name & status: ", exception);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findUsersByFullName(User user) throws DaoException {
+        List<User> users;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME)) {
+            preparedStatement.setString(1, user.getSurname());
+            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(3, user.getUserRole().getRole());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                users = UserMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding users by full name: " + exception);
+            throw new DaoException("Error has occurred while finding users by full name: ", exception);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findUsersByStatus(User user) throws DaoException {
+        List<User> users;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_STATUS_ROLE)) {
+            preparedStatement.setString(1, user.getUserStatus().getStatus());
+            preparedStatement.setString(2, user.getUserRole().getRole());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                users = UserMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding users by status: " + exception);
+            throw new DaoException("Error has occurred while finding users by status: ", exception);
+        }
+        return users;
+    }
+
+    @Override
     public List<User> findUsersByStatus(UserStatus userStatus) throws DaoException {
         List<User> users;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -228,6 +295,21 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by role: " + exception);
             throw new DaoException("Error has occurred while finding users by role: ", exception);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findTeachersHoldingLessons() throws DaoException {
+        List<User> users;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_TEACHERS_HOLDING_COURSES)) {
+            users = UserMapper.getInstance().retrieve(resultSet);
+
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding holding lessons teachers: " + exception);
+            throw new DaoException("Error has occurred while finding holding lessons teachers: ", exception);
         }
         return users;
     }

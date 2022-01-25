@@ -47,7 +47,7 @@
                 </div>
                 <div id="buttons">
                     <input type="submit" value="<fmt:message key="courses.search"/>">
-                    <input type="button" value="<fmt:message key="courses.clear"/>"
+                    <input type="button" name="clear" value="<fmt:message key="courses.clear"/>"
                            onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">
                     <input type="button" value="<fmt:message key="courses.info"/>" disabled
                            onclick="location.href=

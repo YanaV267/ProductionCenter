@@ -54,6 +54,8 @@ public enum CommandType {
     ADD_COURSE(new AddCourseCommand()),
     UPDATE_COURSE(new UpdateCourseCommand()),
     SEARCH_COURSES(new SearchCoursesCommand()),
+    SEARCH_USERS(new SearchUsersCommand()),
+    SEARCH_TEACHERS(new SearchTeachersCommand()),
     DEFAULT(new DefaultCommand());
 
     private final Command command;

@@ -94,18 +94,18 @@
             <div id="status">
                 <p><fmt:message key="courses.status"/>:</p>
                 <label>
-                    <input type="radio" name="status" value="<fmt:message key="courses.status.upcoming"/>"
-                           <c:if test="${course.status eq 'UPCOMING'}">checked</c:if>><fmt:message
+                    <input type="radio" name="status" value="upcoming"
+                           <c:if test="${course.status.status eq 'upcoming'}">checked</c:if>><fmt:message
                         key="courses.status.upcoming"/>
                 </label>
                 <label>
-                    <input type="radio" name="status" value="<fmt:message key="courses.status.running"/>"
-                           <c:if test="${course.status eq 'RUNNING'}">checked</c:if>><fmt:message
+                    <input type="radio" name="status" value="running"
+                           <c:if test="${course.status.status eq 'running'}">checked</c:if>><fmt:message
                         key="courses.status.running"/>
                 </label>
                 <label>
-                    <input type="radio" name="status" value="<fmt:message key="courses.status.paused"/>"
-                           <c:if test="${course.status eq 'PAUSED'}">checked</c:if>><fmt:message
+                    <input type="radio" name="status" value="paused"
+                           <c:if test="${course.status.status eq 'paused'}">checked</c:if>><fmt:message
                         key="courses.status.paused"/>
                 </label>
             </div>

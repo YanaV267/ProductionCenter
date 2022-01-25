@@ -20,6 +20,10 @@ public interface UserService {
 
     Map<User, String> findUsers(UserRole role) throws ServiceException;
 
+    Map<User, String> findUsers(Map<String, String> userData) throws ServiceException;
+
+    Map<User, String> findTeachers(Map<String, String> teacherData) throws ServiceException;
+
     boolean isLoginAvailable(String login) throws ServiceException;
 
     boolean isEmailAvailable(String email) throws ServiceException;

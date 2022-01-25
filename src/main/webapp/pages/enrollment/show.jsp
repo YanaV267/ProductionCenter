@@ -7,7 +7,7 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/users.css" type="text/css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general_show.css" type="text/css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/enrollment/show.css" type="text/css"/>
 </head>
 

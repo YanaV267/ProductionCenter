@@ -80,6 +80,13 @@ select {
     cursor: pointer;
 }
 
+input[name=clear] {
+    color: rgb(11, 35, 78) !important;
+    border: solid 0.7px rgb(95, 108, 167) !important;
+    background-color: rgb(239, 239, 239) !important;
+    cursor: pointer;
+}
+
 input[type=button], input[type=submit] {
     width: 130px;
     height: 34px;

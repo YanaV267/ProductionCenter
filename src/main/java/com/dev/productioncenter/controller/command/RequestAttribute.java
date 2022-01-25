@@ -10,7 +10,6 @@ public final class RequestAttribute {
     public static final String PICTURE = "picture";
     public static final String COURSES = "courses";
     public static final String COURSE = "course";
-    public static final String TYPE = "activity.type";
     public static final String ACTIVITY = "activity";
     public static final String ACTIVITIES = "activities";
     public static final String CATEGORIES = "categories";

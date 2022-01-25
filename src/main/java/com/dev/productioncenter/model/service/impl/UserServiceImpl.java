@@ -21,10 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
@@ -72,7 +69,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
-            throw new ServiceException("Error has occurred while finding user by login: " , exception);
+            throw new ServiceException("Error has occurred while finding user by login: ", exception);
         }
         return Optional.empty();
     }
@@ -85,7 +82,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
-            throw new ServiceException("Error has occurred while finding user by login: " , exception);
+            throw new ServiceException("Error has occurred while finding user by login: ", exception);
         }
         return Optional.empty();
     }
@@ -101,8 +98,75 @@ public class UserServiceImpl implements UserService {
             return users;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
-            throw new ServiceException("Error has occurred while finding users: " , exception);
+            throw new ServiceException("Error has occurred while finding users: ", exception);
         }
+    }
+
+    @Override
+    public Map<User, String> findUsers(Map<String, String> userData) throws ServiceException {
+        try {
+            User user = new User();
+            user.setSurname(userData.get(SURNAME));
+            user.setName(userData.get(NAME));
+            if (userData.get(STATUS) != null) {
+                user.setUserStatus(UserStatus.valueOf(userData.get(STATUS).toUpperCase()));
+            }
+            user.setUserRole(UserRole.USER);
+            List<User> foundUsers = new ArrayList<>();
+            if (userData.get(SURNAME) != null && userData.get(NAME) != null) {
+                if (userData.get(STATUS) != null) {
+                    foundUsers = userDao.findUsersByNameStatus(user);
+                } else {
+                    foundUsers = userDao.findUsersByFullName(user);
+                }
+            } else {
+                if (userData.get(STATUS) != null) {
+                    foundUsers = userDao.findUsersByStatus(user.getUserStatus());
+                }
+            }
+            Map<User, String> users = new HashMap<>();
+            for (User foundUser : foundUsers) {
+                users.put(foundUser, PhoneNumberFormatter.format(foundUser.getPhoneNumber()));
+            }
+            return users;
+        } catch (
+                DaoException exception) {
+            LOGGER.error("Error has occurred while finding users: " + exception);
+            throw new ServiceException("Error has occurred while finding users: ", exception);
+        }
+
+    }
+
+    @Override
+    public Map<User, String> findTeachers(Map<String, String> teacherData) throws ServiceException {
+        try {
+            User teacher = new User();
+            teacher.setSurname(teacherData.get(SURNAME));
+            teacher.setName(teacherData.get(NAME));
+            teacher.setUserRole(UserRole.TEACHER);
+            List<User> foundTeachers = new ArrayList<>();
+            if (teacher.getSurname() != null && teacher.getName() != null) {
+                if (teacherData.get(STATUS) != null) {
+                    foundTeachers = userDao.findTeachersHoldingLessons();
+                } else {
+                    foundTeachers = userDao.findUsersByFullName(teacher);
+                }
+            } else {
+                if (teacherData.get(STATUS) != null) {
+                    foundTeachers = userDao.findTeachersHoldingLessons();
+                }
+            }
+            Map<User, String> users = new HashMap<>();
+            for (User foundUser : foundTeachers) {
+                users.put(foundUser, PhoneNumberFormatter.format(foundUser.getPhoneNumber()));
+            }
+            return users;
+        } catch (
+                DaoException exception) {
+            LOGGER.error("Error has occurred while finding teachers: " + exception);
+            throw new ServiceException("Error has occurred while finding teachers: ", exception);
+        }
+
     }
 
     @Override
@@ -112,7 +176,7 @@ public class UserServiceImpl implements UserService {
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking login availability: " + exception);
-            throw new ServiceException("Error has occurred while checking login availability: " , exception);
+            throw new ServiceException("Error has occurred while checking login availability: ", exception);
         }
     }
 
@@ -123,7 +187,7 @@ public class UserServiceImpl implements UserService {
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking email availability: " + exception);
-            throw new ServiceException("Error has occurred while checking email availability: " , exception);
+            throw new ServiceException("Error has occurred while checking email availability: ", exception);
         }
     }
 
@@ -154,7 +218,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while registering user: " + exception);
-            throw new ServiceException("Error has occurred while registering user: " , exception);
+            throw new ServiceException("Error has occurred while registering user: ", exception);
         }
         return false;
     }
@@ -170,7 +234,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: " , exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
         }
     }
 
@@ -185,7 +249,7 @@ public class UserServiceImpl implements UserService {
             return true;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: " , exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
         }
     }
 
@@ -228,7 +292,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
-            throw new ServiceException("Error has occurred while updating user account: " , exception);
+            throw new ServiceException("Error has occurred while updating user account: ", exception);
         }
         return false;
     }
@@ -239,7 +303,7 @@ public class UserServiceImpl implements UserService {
             return userDao.updatePicture(login, pictureStream);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account picture: " + exception);
-            throw new ServiceException("Error has occurred while updating user account picture: " , exception);
+            throw new ServiceException("Error has occurred while updating user account picture: ", exception);
         }
     }
 
@@ -256,7 +320,7 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException | IOException exception) {
             LOGGER.error("Error has occurred while loading user account picture: " + exception);
-            throw new ServiceException("Error has occurred while loading user account picture: " , exception);
+            throw new ServiceException("Error has occurred while loading user account picture: ", exception);
         }
         return Optional.empty();
     }

@@ -1,14 +1,14 @@
 form {
-    width: 990px;
+    width: 1060px;
 }
 
 #rect {
-    width: 990px;
-    margin-left: 145px;
+    width: 1060px;
+    margin-left: 110px;
 }
 
 #all {
-    grid-template-columns: 240px 190px 140px 150px 90px 100px;
+    grid-template-columns: 240px 190px 170px 150px 90px 140px;
 }
 
 #all > div:not(:nth-child(-n+7)) {
