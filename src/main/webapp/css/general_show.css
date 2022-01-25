@@ -1,0 +1,206 @@
+form {
+    width: 1050px;
+    border-radius: 5px;
+    background: rgba(214, 233, 255, 0.8);
+    margin: 50px auto;
+    color: rgb(11, 35, 78);
+    padding-top: 30px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+#rect {
+    width: 1050px;
+    margin: 35px 35px 35px 120px;
+    padding-top: 5px;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+}
+
+p#title {
+    margin: 0 auto 30px;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    width: fit-content;
+}
+
+#search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    font-size: 14px;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+#search input[type=text], #search input[type=email] {
+    border-radius: 6px;
+    border: solid 0.7px rgb(95, 108, 167);
+    padding: 5px 5px 5px 7px;
+    height: 34px;
+    width: 200px;
+    margin-right: 20px;
+}
+
+#search input[type=text]:focus, #search input[type=email]:focus {
+    outline: 0.4px solid rgba(115, 140, 224, 0.795);
+}
+
+#search #status {
+    display: flex;
+    flex-direction: column;
+    width: 170px;
+}
+
+#search #status > label :first-of-type {
+    margin-left: 20px;
+}
+
+#search #status > label {
+    cursor: pointer;
+}
+
+#search input[type=submit], #search input[type=button] {
+    margin-bottom: 25px;
+    margin-left: 25px;
+}
+
+#search input[type=button] {
+    margin-right: 0;
+    margin-left: 75px;
+}
+
+#all {
+    display: grid;
+    grid-template-columns: 190px 240px 250px 165px 120px;
+    grid-row-gap: 1vw;
+    margin-left: 40px;
+    margin-right: 40px;
+    align-items: center;
+}
+
+#all > div:nth-child(-n+7) {
+    font-size: 15px;
+    font-weight: bold;
+    cursor: default;
+}
+
+#all > div:not(:nth-child(-n+7)) {
+    font-size: 14px;
+    cursor: pointer;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    align-self: center;
+}
+
+#all > div {
+    text-align: center;
+    border-top: 1px solid rgb(11, 35, 78);
+    border-bottom: 1px solid rgb(11, 35, 78);
+    padding: 0.8em;
+}
+
+#all > div:nth-child(7n+1) {
+    border-left: 1px solid rgb(11, 35, 78);
+    border-radius: 15px 0 0 15px;
+}
+
+#all > div:nth-child(7n) {
+    border-right: 1px solid rgb(11, 35, 78);
+    border-radius: 0 15px 15px 0;
+}
+
+#none {
+    margin: 20px auto 0;
+}
+
+input[name=clear] {
+    color: rgb(11, 35, 78) !important;
+    border: solid 0.7px rgb(95, 108, 167) !important;
+    background-color: rgb(239, 239, 239) !important;
+    cursor: pointer;
+}
+
+input[type=submit], input[type=button] {
+    width: 130px;
+    height: 34px;
+    margin: 25px auto 40px;
+    padding: 5px 5px 5px 7px;
+    border: solid 0.7px rgb(146, 144, 11);
+    border-radius: 6px;
+    background-color: rgb(190, 188, 14);
+    color: white;
+}
+
+input[type=submit]:hover {
+    cursor: pointer;
+}
+
+input[type=submit]:disabled {
+    background-color: rgb(185, 184, 80);
+}
+
+input[type=submit]:enabled {
+    background-color: rgb(190, 188, 14);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(11, 35, 78, 0.3);
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #f32121;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #f32121;
+}
+
+input:checked + .slider:before {
+    transform: translateX(22px);
+    bottom: 4px;
+}
+
+.slider.round {
+    border-radius: 25px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}

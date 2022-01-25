@@ -12,7 +12,6 @@ import com.dev.productioncenter.model.service.EnrollmentService;
 import com.dev.productioncenter.model.service.impl.CourseServiceImpl;
 import com.dev.productioncenter.model.service.impl.EnrollmentServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

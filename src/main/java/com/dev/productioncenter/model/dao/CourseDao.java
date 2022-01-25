@@ -4,7 +4,6 @@ import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CourseDao extends BaseDao<Long, Course> {
     boolean updateCourseStudentAmount(long id, int studentAmount) throws DaoException;

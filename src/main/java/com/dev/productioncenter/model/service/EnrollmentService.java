@@ -3,7 +3,6 @@ package com.dev.productioncenter.model.service;
 import com.dev.productioncenter.entity.Enrollment;
 import com.dev.productioncenter.entity.EnrollmentStatus;
 import com.dev.productioncenter.entity.User;
-import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 
 import java.time.LocalDate;

@@ -6,7 +6,6 @@ import com.dev.productioncenter.entity.EnrollmentStatus;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.DaoException;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
