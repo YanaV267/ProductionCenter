@@ -1,0 +1,30 @@
+#home {
+    position: absolute;
+    left: 125px;
+    top: 220px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 15px;
+    width: 500px;
+}
+
+p:first-of-type {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+input[type=button] {
+    width: 180px;
+    height: 38px;
+    border-radius: 6px;
+    border: solid 0.7px rgb(146, 144, 11);
+    padding: 5px 5px 5px 7px;
+    margin-top: 20px;
+    background-color: rgb(190, 188, 14);
+    color: white;
+}
+
+input[type=button]:hover {
+    cursor: pointer;
+}

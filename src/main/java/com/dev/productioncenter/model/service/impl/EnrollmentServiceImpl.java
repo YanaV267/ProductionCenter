@@ -209,8 +209,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 }
             }
             return true;
-        } catch (
-                DaoException exception) {
+        } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking enrollments reservation status: " + exception);
             throw new ServiceException("Error has occurred while checking enrollments reservation status: ", exception);
         }

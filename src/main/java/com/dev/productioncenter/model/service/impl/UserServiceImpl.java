@@ -129,12 +129,10 @@ public class UserServiceImpl implements UserService {
                 users.put(foundUser, PhoneNumberFormatter.format(foundUser.getPhoneNumber()));
             }
             return users;
-        } catch (
-                DaoException exception) {
+        } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
             throw new ServiceException("Error has occurred while finding users: ", exception);
         }
-
     }
 
     @Override
@@ -161,12 +159,10 @@ public class UserServiceImpl implements UserService {
                 users.put(foundUser, PhoneNumberFormatter.format(foundUser.getPhoneNumber()));
             }
             return users;
-        } catch (
-                DaoException exception) {
+        } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding teachers: " + exception);
             throw new ServiceException("Error has occurred while finding teachers: ", exception);
         }
-
     }
 
     @Override

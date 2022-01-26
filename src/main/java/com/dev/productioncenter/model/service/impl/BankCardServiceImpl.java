@@ -26,23 +26,23 @@ public class BankCardServiceImpl implements BankCardService {
     private static final String CARD_NUMBER_REMOVING_SYMBOL_REGEX = " ";
     private static final String CARD_NUMBER_REPLACEMENT_SYMBOL_REGEX = "";
     private static final int EXPIRATION_DATE_MILLENNIUM_VALUE = 2000;
-    private static final Map<Integer, Integer> LAST_DAY_OF_MONTH = new HashMap<>();
     private static final BankCardService instance = new BankCardServiceImpl();
     private final BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
+    private final Map<Integer, Integer> lastDayOfMonth = new HashMap<>();
 
     private BankCardServiceImpl() {
-        LAST_DAY_OF_MONTH.put(1, 31);
-        LAST_DAY_OF_MONTH.put(2, 28);
-        LAST_DAY_OF_MONTH.put(3, 31);
-        LAST_DAY_OF_MONTH.put(4, 30);
-        LAST_DAY_OF_MONTH.put(5, 31);
-        LAST_DAY_OF_MONTH.put(6, 30);
-        LAST_DAY_OF_MONTH.put(7, 31);
-        LAST_DAY_OF_MONTH.put(8, 31);
-        LAST_DAY_OF_MONTH.put(9, 30);
-        LAST_DAY_OF_MONTH.put(10, 31);
-        LAST_DAY_OF_MONTH.put(11, 30);
-        LAST_DAY_OF_MONTH.put(12, 31);
+        lastDayOfMonth.put(1, 31);
+        lastDayOfMonth.put(2, 28);
+        lastDayOfMonth.put(3, 31);
+        lastDayOfMonth.put(4, 30);
+        lastDayOfMonth.put(5, 31);
+        lastDayOfMonth.put(6, 30);
+        lastDayOfMonth.put(7, 31);
+        lastDayOfMonth.put(8, 31);
+        lastDayOfMonth.put(9, 30);
+        lastDayOfMonth.put(10, 31);
+        lastDayOfMonth.put(11, 30);
+        lastDayOfMonth.put(12, 31);
     }
 
     public static BankCardService getInstance() {
@@ -61,7 +61,7 @@ public class BankCardServiceImpl implements BankCardService {
                 LocalDate localDate = LocalDate.of(EXPIRATION_DATE_MILLENNIUM_VALUE
                                 + Integer.parseInt(expirationDateParameters[1]),
                         Integer.parseInt(expirationDateParameters[0]),
-                        LAST_DAY_OF_MONTH.get(Integer.parseInt(expirationDateParameters[0])));
+                        lastDayOfMonth.get(Integer.parseInt(expirationDateParameters[0])));
                 bankCard.setExpirationDate(localDate);
                 bankCard.setCvvNumber(Integer.parseInt(bankCardData.get(CVV_NUMBER)));
                 return bankCardDao.findBankCard(bankCard);

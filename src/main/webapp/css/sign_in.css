@@ -2,7 +2,7 @@ form {
     height: 310px;
     width: 400px;
     border-radius: 10px;
-    background: rgba(214, 233, 255, 0.7);
+    background: rgba(214, 233, 255, 0.65);
     position: absolute;
     left: 280px;
     top: 170px;
@@ -18,7 +18,7 @@ form {
     position: relative;
     z-index: 1;
     border-radius: 10px;
-    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+    background: linear-gradient(to bottom right, rgba(219, 236, 255, 0.55), rgba(219, 236, 255, 0.25), rgba(219, 236, 255, 0));
 }
 
 form > * {

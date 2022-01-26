@@ -7,18 +7,15 @@ import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.mapper.impl.UserMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.ColumnName.USER_PROFILE_PICTURE;
+import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
 
 public class UserDaoImpl implements UserDao {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final String SQL_INSERT_USER =
             "INSERT INTO users(login, password, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_USER =

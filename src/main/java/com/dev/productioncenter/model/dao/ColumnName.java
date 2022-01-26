@@ -1,4 +1,4 @@
-package com.dev.productioncenter.controller.command;
+package com.dev.productioncenter.model.dao;
 
 public final class ColumnName {
     public static final String USER_ID = "id_user";

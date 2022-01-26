@@ -4,7 +4,7 @@ import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.ActivityDao;
-import com.dev.productioncenter.controller.command.ColumnName;
+import com.dev.productioncenter.model.dao.ColumnName;
 
 import java.sql.*;
 import java.util.ArrayList;

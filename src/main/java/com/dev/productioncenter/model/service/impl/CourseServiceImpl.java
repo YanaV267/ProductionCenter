@@ -163,7 +163,7 @@ public class CourseServiceImpl implements CourseService {
             LOGGER.error("Error has occurred while finding courses: " + exception);
             throw new ServiceException("Error has occurred while finding courses: ", exception);
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override

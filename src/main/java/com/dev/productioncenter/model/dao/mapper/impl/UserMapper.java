@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dev.productioncenter.controller.command.ColumnName.*;
+import static com.dev.productioncenter.model.dao.ColumnName.*;
 
 public class UserMapper implements Mapper<User> {
     private static final UserMapper instance = new UserMapper();

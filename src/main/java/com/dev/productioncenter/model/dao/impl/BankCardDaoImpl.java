@@ -3,7 +3,7 @@ package com.dev.productioncenter.model.dao.impl;
 import com.dev.productioncenter.entity.BankCard;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
-import com.dev.productioncenter.controller.command.ColumnName;
+import com.dev.productioncenter.model.dao.ColumnName;
 import com.dev.productioncenter.model.dao.BankCardDao;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.controller.command.ColumnName.*;
+import static com.dev.productioncenter.model.dao.ColumnName.*;
 
 public class BankCardDaoImpl implements BankCardDao {
     private static final String SQL_UPDATE_BANK_CARD_BALANCE =

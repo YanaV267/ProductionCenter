@@ -1,8 +1,8 @@
 form {
     height: 250px;
     width: 410px;
-    border-radius: 5px;
-    background: rgba(214, 233, 255, 0.8);
+    border-radius: 10px;
+    background: rgba(214, 233, 255, 0.65);
     margin-top: -335px;
     margin-left: 280px;
     color: rgb(11, 35, 78);
@@ -21,8 +21,8 @@ form {
     margin: 80px 80px 80px 250px;
     position: relative;
     z-index: 1;
-    border-radius: 5px;
-    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+    border-radius: 10px;
+    background: linear-gradient(to bottom right, rgba(219, 236, 255, 0.55), rgba(219, 236, 255, 0.25), rgba(219, 236, 255, 0));
 }
 
 p#title {

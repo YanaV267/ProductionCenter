@@ -2,8 +2,8 @@ form {
     min-height: 430px;
     height: auto;
     width: 450px;
-    border-radius: 5px;
-    background: rgba(214, 233, 255, 0.8);
+    border-radius: 10px;
+    background: rgba(214, 233, 255, 0.65);
     margin: 50px auto 50px 280px;
     color: rgb(11, 35, 78);
     display: flex;
@@ -22,8 +22,8 @@ form {
     margin: 40px 40px 40px 250px;
     position: relative;
     z-index: 1;
-    border-radius: 5px;
-    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+    border-radius: 10px;
+    background: linear-gradient(to bottom right, rgba(219, 236, 255, 0.55), rgba(219, 236, 255, 0.25), rgba(219, 236, 255, 0));
 }
 
 p#title {
@@ -42,7 +42,7 @@ form>div {
     border: solid 1px rgb(5, 27, 68);
     background-color: rgba(214, 233, 255, 0.5);
     border-radius: 10px;
-    padding: 10px 25px;
+    padding: 15px 25px;
     margin-top: 20px;
     width: 370px;
     display: flex;

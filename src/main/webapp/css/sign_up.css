@@ -1,6 +1,6 @@
 form {
     border-radius: 10px;
-    background: rgba(214, 233, 255, 0.8);
+    background: rgba(214, 233, 255, 0.65);
     position: absolute;
     left: 280px;
     top: 170px;
@@ -16,7 +16,7 @@ form {
     position: relative;
     z-index: 1;
     border-radius: 10px;
-    background: linear-gradient(135deg, rgba(219, 236, 255, 0.6), rgba(219, 236, 255, 0));
+    background: linear-gradient(to bottom right, rgba(219, 236, 255, 0.55), rgba(219, 236, 255, 0.25), rgba(219, 236, 255, 0));
 }
 
 form > * {
@@ -55,10 +55,10 @@ input[type=submit], input[type=button] {
     color: white;
 }
 
-#next input{
+#next input {
     margin-top: 20px;
     margin-left: 75px;
-    border-color: rgb(146, 144, 11);
+    border-color: rgb(146, 144, 11) !important;
 }
 
 input[type=submit]:hover, input[type=button]:hover {
@@ -78,11 +78,11 @@ input[type=submit]:hover, input[type=button]:hover {
     width: 33px;
 }
 
-#subm img:hover{
+#subm img:hover {
     cursor: pointer;
 }
 
-#subm input{
+#subm input {
     margin-left: 35px;
     width: 180px;
 }
@@ -93,7 +93,7 @@ form, #page1, #page2 {
 }
 
 #page2 {
-    width:300px;
+    width: 300px;
 }
 
 #reg {
@@ -112,6 +112,6 @@ form, #page1, #page2 {
 }
 
 #page2 {
-    left: 10px;
+    left: -5px;
     transform: rotateY(180deg);
 }
