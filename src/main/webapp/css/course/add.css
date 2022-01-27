@@ -1,5 +1,6 @@
 form {
-    height: 450px;
+    height: 430px;
+    min-height: 430px;
     width: 830px;
     border-radius: 10px;
     background: rgba(214, 233, 255, 0.65);

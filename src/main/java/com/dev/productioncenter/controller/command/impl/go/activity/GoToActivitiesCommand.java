@@ -38,9 +38,9 @@ public class GoToActivitiesCommand implements Command {
             List<Course> allCourses;
             if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
                     || UserRole.valueOf(role.toUpperCase()) == UserRole.TEACHER) {
-                allCourses = courseService.findCourses();
+                allCourses = courseService.findCoursesAllActivities();
             } else {
-                allCourses = courseService.findAvailableCourses();
+                allCourses = courseService.findCoursesAvailableActivities();
             }
             Map<Course, String> courses = userService.loadTeachersPictures(allCourses);
             session.setAttribute(SessionAttribute.CATEGORIES, categories);

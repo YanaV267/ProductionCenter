@@ -3,17 +3,17 @@ package com.dev.productioncenter.model.dao.impl;
 import com.dev.productioncenter.entity.BankCard;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
-import com.dev.productioncenter.model.dao.ColumnName;
 import com.dev.productioncenter.model.dao.BankCardDao;
+import com.dev.productioncenter.model.dao.ColumnName;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.model.dao.ColumnName.*;
+import static com.dev.productioncenter.model.dao.ColumnName.BANK_CARD_BALANCE;
 
-public class BankCardDaoImpl implements BankCardDao {
+public class BankCardDaoImpl extends BankCardDao {
     private static final String SQL_UPDATE_BANK_CARD_BALANCE =
             "UPDATE bank_cards SET balance = ? WHERE card_number = ?";
     private static final String SQL_SELECT_BANK_CARD =

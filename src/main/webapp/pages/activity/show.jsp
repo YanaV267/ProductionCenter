@@ -29,31 +29,35 @@
                 </div>
                 <c:forEach var="activity" items="${activities}">
                     <c:if test="${activity.category eq category}">
-                        <div>
-                            <c:set var="teacher_appointed" value="false"/>
-                            <c:forEach var="course" items="${courses}">
-                                <c:if test="${course.key.activity.category eq category && course.key.activity.type eq activity.type}">
+                        <c:set var="teacher_appointed" value="false"/>
+                        <c:forEach var="course" items="${courses}">
+                            <c:if test="${course.key.activity.category eq category && course.key.activity.type eq activity.type}">
+                                <div>
                                     <c:choose>
                                         <c:when test="${not empty course.value}">
                                             <img src="<c:out value="${course.value}"/>" alt="account">
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
+                                            <img src="${pageContext.request.contextPath}/pics/account.png"
+                                                 alt="account">
                                         </c:otherwise>
                                     </c:choose>
                                     <p>
                                         <c:out value="${course.key.teacher.surname}"/> <c:out
                                             value="${course.key.teacher.name}"/>
                                     </p>
-                                    <c:set var="teacher_appointed" value="true"/>
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${teacher_appointed eq 'false'}">
+                                    <p><c:out value="${activity.type}"/></p>
+                                </div>
+                                <c:set var="teacher_appointed" value="true"/>
+                            </c:if>
+                        </c:forEach>
+                        <c:if test="${teacher_appointed eq 'false'}">
+                            <div>
                                 <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
                                 <p><fmt:message key="activities.no_teacher"/></p>
-                            </c:if>
-                            <p><c:out value="${activity.type}"/></p>
-                        </div>
+                                <p><c:out value="${activity.type}"/></p>
+                            </div>
+                        </c:if>
                     </c:if>
                 </c:forEach>
             </div>

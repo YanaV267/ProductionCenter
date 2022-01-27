@@ -9,13 +9,16 @@ import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.mapper.impl.UserMapper;
 
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
 import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends UserDao {
     private static final String SQL_INSERT_USER =
             "INSERT INTO users(login, password, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_USER =
@@ -50,19 +53,19 @@ public class UserDaoImpl implements UserDao {
                     "WHERE role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE role = ?";
-    private static final UserDao instance = new UserDaoImpl();
 
-    private UserDaoImpl() {
+    public UserDaoImpl() {
     }
 
-    public static UserDao getInstance() {
-        return instance;
+    public UserDaoImpl(boolean isTransaction) {
+        if (!isTransaction) {
+            connection = ConnectionPool.getInstance().getConnection();
+        }
     }
 
     @Override
     public long add(User user) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getSurname());
@@ -82,8 +85,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean update(User user) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
             preparedStatement.setString(1, user.getPassword());
             preparedStatement.setString(2, user.getSurname());
             preparedStatement.setString(3, user.getName());
@@ -100,8 +102,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean updatePicture(String login, InputStream pictureStream) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE_PICTURE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_PROFILE_PICTURE)) {
             preparedStatement.setBlob(1, pictureStream);
             preparedStatement.setString(2, login);
             preparedStatement.execute();
@@ -114,8 +115,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_USER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_USER)) {
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             return true;
@@ -127,8 +127,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<InputStream> loadPicture(String login) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next() && resultSet.getBlob(USER_PROFILE_PICTURE) != null) {
@@ -145,8 +144,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS)) {
             users = UserMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
@@ -164,8 +162,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 users = UserMapper.getInstance().retrieve(resultSet);
@@ -180,8 +177,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findTeacherByName(String surname, String name) throws DaoException {
         List<User> teachers;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_BY_NAME)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_BY_NAME)) {
             preparedStatement.setString(1, surname);
             preparedStatement.setString(2, name);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -197,8 +193,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findUserByEmail(String email) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 users = UserMapper.getInstance().retrieve(resultSet);
@@ -213,8 +208,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findUsersByNameStatus(User user) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME_STATUS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME_STATUS)) {
             preparedStatement.setString(1, user.getSurname());
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getUserStatus().getStatus());
@@ -232,8 +226,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findUsersByFullName(User user) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME)) {
             preparedStatement.setString(1, user.getSurname());
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getUserRole().getRole());
@@ -250,8 +243,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findUsersByStatus(User user) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_STATUS_ROLE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_STATUS_ROLE)) {
             preparedStatement.setString(1, user.getUserStatus().getStatus());
             preparedStatement.setString(2, user.getUserRole().getRole());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -267,8 +259,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findUsersByStatus(UserStatus userStatus) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_STATUS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_STATUS)) {
             preparedStatement.setString(1, userStatus.getStatus());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 users = UserMapper.getInstance().retrieve(resultSet);
@@ -283,8 +274,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findUsersByRole(UserRole userRole) throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE)) {
             preparedStatement.setString(1, userRole.getRole());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 users = UserMapper.getInstance().retrieve(resultSet);
@@ -299,8 +289,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findTeachersHoldingLessons() throws DaoException {
         List<User> users;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_TEACHERS_HOLDING_COURSES)) {
             users = UserMapper.getInstance().retrieve(resultSet);
 
@@ -313,8 +302,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_STATUS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_STATUS)) {
             preparedStatement.setString(1, currentStatus.getStatus());
             preparedStatement.setString(2, login);
             preparedStatement.execute();
@@ -327,8 +315,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean updateUserRole(String login, UserRole currentRole) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_ROLE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_ROLE)) {
             preparedStatement.setString(1, currentRole.getRole());
             preparedStatement.setString(2, login);
             preparedStatement.execute();

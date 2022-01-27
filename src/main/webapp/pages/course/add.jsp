@@ -75,7 +75,7 @@
                     <input type="number" name="max_age" min=3 max=60 placeholder="max">
                 </div>
                 <p><fmt:message key="courses.lesson_price"/>:</p>
-                <input type="text" name="lesson_price" min="1" max="30" pattern="^((\d\d\.)?\d{1,2})$">
+                <input type="text" name="lesson_price" min="1" max="30" pattern="^((\d\d?\.)?\d{1,2})$" autocomplete="off">
                 <p><fmt:message key="courses.student_amount"/>:</p>
                 <input type="number" name="student_amount" min="1" max="30" step="1">
             </div>

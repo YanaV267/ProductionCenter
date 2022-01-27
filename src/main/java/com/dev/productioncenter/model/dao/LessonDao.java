@@ -7,12 +7,12 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 
-public interface LessonDao extends BaseDao<Long, Lesson> {
-    List<Lesson> findLessonsByCourse(long courseId) throws DaoException;
+public abstract class LessonDao extends BaseDao<Long, Lesson> {
+    abstract public List<Lesson> findLessonsByCourse(long courseId) throws DaoException;
 
-    Optional<Lesson> findLessonsByCourseWeekDay(String weekDay, long courseId) throws DaoException;
+    abstract public Optional<Lesson> findLessonsByCourseWeekDay(String weekDay, long courseId) throws DaoException;
 
-    List<Lesson> findLessonsByStartTime(Time startTime) throws DaoException;
+    abstract public List<Lesson> findLessonsByStartTime(Time startTime) throws DaoException;
 
-    List<Lesson> findLessonsByDuration(int minDuration, int maxDuration) throws DaoException;
+    abstract public List<Lesson> findLessonsByDuration(int minDuration, int maxDuration) throws DaoException;
 }

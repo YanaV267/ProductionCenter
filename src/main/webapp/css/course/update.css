@@ -1,5 +1,5 @@
 form {
-    min-height: 450px;
+    min-height: 430px;
     height: auto;
 }
 
@@ -75,4 +75,11 @@ input[type=radio] {
 
 #buttons > input:last-of-type {
     margin-left: 20px;
+}
+
+input[type=button] {
+    color: rgb(11, 35, 78) !important;
+    border: solid 0.7px rgb(95, 108, 167) !important;
+    background-color: rgb(239, 239, 239) !important;
+    cursor: pointer;
 }

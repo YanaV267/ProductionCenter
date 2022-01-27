@@ -6,11 +6,17 @@ import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.CourseDao;
 import com.dev.productioncenter.model.dao.mapper.impl.CourseMapper;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CourseDaoImpl implements CourseDao {
+import static com.dev.productioncenter.model.dao.ColumnName.*;
+
+public class CourseDaoImpl extends CourseDao {
     private static final String SQL_INSERT_COURSE =
             "INSERT INTO courses(description, id_teacher, id_activity, id_age_group, lesson_price, student_amount) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_COURSE =
@@ -97,19 +103,30 @@ public class CourseDaoImpl implements CourseDao {
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = 'upcoming' OR courses.status = 'running'";
-    private static final CourseDao instance = new CourseDaoImpl();
+    private static final String SQL_SELECT_COURSES_ALL_ACTIVITIES =
+            "SELECT courses.id_course, surname, name, category, type FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group GROUP BY surname, name, type";
+    private static final String SQL_SELECT_COURSES_AVAILABLE_ACTIVITIES =
+            "SELECT courses.id_course, surname, name, category, type FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
+                    "WHERE courses.status = 'upcoming' OR courses.status = 'running' GROUP BY surname, name, type";
 
-    private CourseDaoImpl() {
+    public CourseDaoImpl() {
     }
 
-    public static CourseDao getInstance() {
-        return instance;
+    public CourseDaoImpl(boolean isTransaction) {
+        if (!isTransaction) {
+            connection = ConnectionPool.getInstance().getConnection();
+        }
     }
 
     @Override
     public long add(Course course) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_COURSE, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_COURSE, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, course.getDescription());
             preparedStatement.setLong(2, course.getTeacher().getId());
             preparedStatement.setLong(3, course.getActivity().getId());
@@ -128,8 +145,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public boolean update(Course course) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COURSE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_COURSE)) {
             preparedStatement.setString(1, course.getDescription());
             preparedStatement.setLong(2, course.getTeacher().getId());
             preparedStatement.setLong(3, course.getAgeGroup().getId());
@@ -147,8 +163,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public boolean updateCourseStudentAmount(long id, int studentAmount) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_STUDENT_AMOUNT)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_STUDENT_AMOUNT)) {
             preparedStatement.setInt(1, studentAmount);
             preparedStatement.setLong(2, id);
             preparedStatement.execute();
@@ -161,8 +176,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_COURSE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_COURSE)) {
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             return true;
@@ -175,8 +189,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findAll() throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURSES)) {
             courses = CourseMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
@@ -188,8 +201,7 @@ public class CourseDaoImpl implements CourseDao {
 
     @Override
     public Optional<Course> findById(Long id) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSE_BY_ID)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSE_BY_ID)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Course> courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -204,8 +216,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByTeacher(User teacher) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_TEACHER)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_TEACHER)) {
             preparedStatement.setLong(1, teacher.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -219,8 +230,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByAgeGroup(AgeGroup ageGroup) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_AGE_GROUP)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_AGE_GROUP)) {
             preparedStatement.setInt(1, ageGroup.getMinAge());
             preparedStatement.setInt(2, ageGroup.getMaxAge());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -235,8 +245,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByActivity(Activity activity) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY)) {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setString(2, activity.getType());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -251,8 +260,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByActivityCategory(Activity activity) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_CATEGORY)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_CATEGORY)) {
             preparedStatement.setString(1, activity.getCategory());
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -266,8 +274,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByActivityType(Activity activity) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_TYPE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_TYPE)) {
             preparedStatement.setString(1, activity.getType());
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -281,8 +288,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByActivityWeekday(Activity activity, String weekday) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_WEEKDAY)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_WEEKDAY)) {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setString(2, activity.getType());
             preparedStatement.setString(3, weekday);
@@ -298,8 +304,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByWeekday(String weekday) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_WEEKDAY)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_WEEKDAY)) {
             preparedStatement.setString(1, weekday);
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -313,8 +318,7 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findCourseByStatus(CourseStatus courseStatus) throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_STATUS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_STATUS)) {
             preparedStatement.setString(1, courseStatus.getStatus());
             ResultSet resultSet = preparedStatement.executeQuery();
             courses = CourseMapper.getInstance().retrieve(resultSet);
@@ -328,13 +332,64 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findAvailableCourses() throws DaoException {
         List<Course> courses;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_AVAILABLE_COURSES)) {
             courses = CourseMapper.getInstance().retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new DaoException("Error has occurred while finding available courses: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> findCoursesAllActivities() throws DaoException {
+        List<Course> courses = new ArrayList<>();
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_COURSES_ALL_ACTIVITIES)) {
+            while (resultSet.next()) {
+                Course course = new Course.CourseBuilder()
+                        .setId(resultSet.getLong(COURSE_ID))
+                        .setTeacher(new User.UserBuilder()
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setName(resultSet.getString(USER_NAME))
+                                .build())
+                        .setActivity(new Activity.ActivityBuilder()
+                                .setCategory(resultSet.getString(ACTIVITY_CATEGORY))
+                                .setType(resultSet.getString(ACTIVITY_TYPE))
+                                .build())
+                        .build();
+                courses.add(course);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding all activities & appropriate teachers: " + exception);
+            throw new DaoException("Error has occurred while finding all activities & appropriate teachers: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> findCoursesAvailableActivities() throws DaoException {
+        List<Course> courses = new ArrayList<>();
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(SQL_SELECT_COURSES_AVAILABLE_ACTIVITIES)) {
+            while (resultSet.next()) {
+                Course course = new Course.CourseBuilder()
+                        .setId(resultSet.getLong(COURSE_ID))
+                        .setTeacher(new User.UserBuilder()
+                                .setSurname(resultSet.getString(USER_SURNAME))
+                                .setName(resultSet.getString(USER_NAME))
+                                .build())
+                        .setActivity(new Activity.ActivityBuilder()
+                                .setCategory(resultSet.getString(ACTIVITY_CATEGORY))
+                                .setType(resultSet.getString(ACTIVITY_TYPE))
+                                .build())
+                        .build();
+                courses.add(course);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding available activities & appropriate teachers: " + exception);
+            throw new DaoException("Error has occurred while finding available activities & appropriate teachers: ", exception);
         }
         return courses;
     }

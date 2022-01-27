@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-public class EnrollmentDaoImpl implements EnrollmentDao {
+public class EnrollmentDaoImpl extends EnrollmentDao {
     private static final String SQL_INSERT_ENROLLMENT =
             "INSERT INTO enrollments(id_user, id_course, lesson_amount) VALUES (?, ?, ?)";
     private static final String SQL_UPDATE_ENROLLMENT =

@@ -6,9 +6,13 @@ input[type=button]:enabled, input[type=submit]:enabled {
     background-color: rgb(190, 188, 14);
 }
 
+#none {
+    margin-left: 20px;
+}
+
 #all {
     display: grid;
-    grid-template-columns: 180px 220px 120px 130px;
+    grid-template-columns: 190px 220px 120px 120px;
     grid-row-gap: 1vw;
     margin-left: auto;
     margin-right: 35px;
@@ -26,6 +30,9 @@ input[type=button]:enabled, input[type=submit]:enabled {
 }
 
 #all > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     border-top: 1px solid rgb(11, 35, 78);
     border-bottom: 1px solid rgb(11, 35, 78);

@@ -5,6 +5,6 @@ import com.dev.productioncenter.exception.DaoException;
 
 import java.util.Optional;
 
-public interface AgeGroupDao extends BaseDao<Long, AgeGroup> {
-    Optional<Long> findByMinMaxAge(AgeGroup ageGroup) throws DaoException;
+public abstract class AgeGroupDao extends BaseDao<Long, AgeGroup> {
+    abstract public Optional<Long> findByMinMaxAge(AgeGroup ageGroup) throws DaoException;
 }

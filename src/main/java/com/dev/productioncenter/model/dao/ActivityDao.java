@@ -5,12 +5,12 @@ import com.dev.productioncenter.exception.DaoException;
 
 import java.util.List;
 
-public interface ActivityDao extends BaseDao<Long, Activity> {
-    boolean findActivity(Activity activity) throws DaoException;
+public abstract class ActivityDao extends BaseDao<Long, Activity> {
+    abstract public boolean findActivity(Activity activity) throws DaoException;
 
-    long findActivityId(Activity activity) throws DaoException;
+    abstract public long findActivityId(Activity activity) throws DaoException;
 
-    List<Activity> findActivitiesByCategory(String category) throws DaoException;
+    abstract public List<Activity> findActivitiesByCategory(String category) throws DaoException;
 
-    List<String> findCategories() throws DaoException;
+    abstract public List<String> findCategories() throws DaoException;
 }

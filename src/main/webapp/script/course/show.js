@@ -35,8 +35,8 @@ $('input[type=checkbox]').change(function () {
 });
 
 let heightValue = $('form').height() + 40;
-$('#rect').css('height', heightValue - 15);
-$('form').css('margin-top', heightValue - heightValue * 2);
+$('#rect').css('height', heightValue + 5);
+$('form').css('margin-top', heightValue - heightValue * 2 - 15);
 
 if ($('form').css('height') === $('form').css('min-height')) {
     $('#pages').css({

@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
     private static final String PICTURE_HEADER = "data:image/jpg;base64,";
     private static final String EMPTY_VALUE_PARAMETER = "";
     private static final UserService instance = new UserServiceImpl();
-    private final UserDao userDao = UserDaoImpl.getInstance();
 
     private UserServiceImpl() {
     }
@@ -44,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         UserValidator validator = UserValidatorImpl.getInstance();
         try {
             if (validator.checkLogin(login) && validator.checkPassword(password)) {
@@ -56,12 +56,15 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while searching for user with login \"{}\": {}", login, exception);
             throw new ServiceException("Error has occurred while searching for user with login \"" + login + "\": ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<User> findUser(String login) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<User> user = userDao.findUserByLogin(login);
             if (user.isPresent()) {
@@ -70,25 +73,31 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
             throw new ServiceException("Error has occurred while finding user by login: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return Optional.empty();
     }
 
     @Override
     public Optional<User> findUser(String surname, String name, UserRole userRole) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             if (userRole == UserRole.TEACHER) {
                 return userDao.findTeacherByName(surname, name);
             }
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding user by login: " + exception);
-            throw new ServiceException("Error has occurred while finding user by login: ", exception);
+            LOGGER.error("Error has occurred while finding user by name: " + exception);
+            throw new ServiceException("Error has occurred while finding user by name: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return Optional.empty();
     }
 
     @Override
     public Map<User, String> findUsers(UserRole role) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             List<User> allUsers = userDao.findUsersByRole(role);
             Map<User, String> users = new HashMap<>();
@@ -99,11 +108,14 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
             throw new ServiceException("Error has occurred while finding users: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public Map<User, String> findUsers(Map<String, String> userData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             User user = new User();
             user.setSurname(userData.get(SURNAME));
@@ -132,11 +144,14 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
             throw new ServiceException("Error has occurred while finding users: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public Map<User, String> findTeachers(Map<String, String> teacherData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             User teacher = new User();
             teacher.setSurname(teacherData.get(SURNAME));
@@ -162,33 +177,42 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding teachers: " + exception);
             throw new ServiceException("Error has occurred while finding teachers: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean isLoginAvailable(String login) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<User> foundUser = userDao.findUserByLogin(login);
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking login availability: " + exception);
             throw new ServiceException("Error has occurred while checking login availability: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean isEmailAvailable(String email) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<User> foundUser = userDao.findUserByEmail(email);
             return foundUser.isEmpty();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking email availability: " + exception);
             throw new ServiceException("Error has occurred while checking email availability: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean registerUser(Map<String, String> userData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             if (UserValidatorImpl.getInstance().checkUserData(userData)) {
                 if (!userData.get(PASSWORD).equals(userData.get(REPEATED_PASSWORD))) {
@@ -215,12 +239,15 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while registering user: " + exception);
             throw new ServiceException("Error has occurred while registering user: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return false;
     }
 
     @Override
     public boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             for (Map.Entry<String, UserStatus> userStatus : usersStatuses.entrySet()) {
                 if (!userDao.updateUserStatus(userStatus.getKey(), userStatus.getValue())) {
@@ -231,11 +258,14 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
             throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             for (Map.Entry<String, UserRole> userStatus : usersRoles.entrySet()) {
                 if (!userDao.updateUserRole(userStatus.getKey(), userStatus.getValue())) {
@@ -246,11 +276,14 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while changing users' statuses: " + exception);
             throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         UserValidator validator = UserValidatorImpl.getInstance();
         try {
             if (validator.checkLogin(userData.get(LOGIN)) && validator.checkUserPersonalData(userData)) {
@@ -289,22 +322,28 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
             throw new ServiceException("Error has occurred while updating user account: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return false;
     }
 
     @Override
     public boolean updatePicture(String login, InputStream pictureStream) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             return userDao.updatePicture(login, pictureStream);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while updating user account picture: " + exception);
             throw new ServiceException("Error has occurred while updating user account picture: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
     }
 
     @Override
     public Optional<String> loadPicture(String login) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<InputStream> pictureStream = userDao.loadPicture(login);
             if (pictureStream.isPresent()) {
@@ -317,6 +356,8 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException | IOException exception) {
             LOGGER.error("Error has occurred while loading user account picture: " + exception);
             throw new ServiceException("Error has occurred while loading user account picture: ", exception);
+        } finally {
+            userDao.closeConnection();
         }
         return Optional.empty();
     }

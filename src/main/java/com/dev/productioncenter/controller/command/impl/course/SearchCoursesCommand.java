@@ -21,7 +21,7 @@ import static com.dev.productioncenter.controller.command.RequestParameter.TYPE;
 
 public class SearchCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String WEEKDAYS_CHOICE_ERROR_MESSAGE_KEY = "error.invalid_weekdays_amount";
+    private static final String DEFAULT_PAGE = "1";
     private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
@@ -29,9 +29,12 @@ public class SearchCoursesCommand implements Command {
         String category = request.getParameter(CATEGORY);
         String type = request.getParameter(TYPE);
         String[] weekdays = request.getParameterValues(RequestParameter.WEEKDAYS);
+        String page = request.getParameter(RequestParameter.PAGE);
+        if (page == null) {
+            page = DEFAULT_PAGE;
+        }
         try {
-            if (weekdays != null && weekdays.length > 3) {
-                request.setAttribute(MESSAGE, WEEKDAYS_CHOICE_ERROR_MESSAGE_KEY);
+            if (weekdays == null && category == null && type == null) {
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
             }
             Activity activity = new Activity(category, type);
@@ -40,6 +43,7 @@ public class SearchCoursesCommand implements Command {
             request.setAttribute(SELECTED_CATEGORY, category);
             request.setAttribute(SELECTED_TYPE, type);
             request.setAttribute(SELECTED_WEEKDAYS, weekdays);
+            request.setAttribute(PAGE, page);
             return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while searching courses: " + exception);

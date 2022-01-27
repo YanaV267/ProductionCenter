@@ -6,28 +6,32 @@ import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.AgeGroupDao;
 import com.dev.productioncenter.model.dao.ColumnName;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-public class AgeGroupDaoImpl implements AgeGroupDao {
+public class AgeGroupDaoImpl extends AgeGroupDao {
     private static final String SQL_INSERT_AGE_GROUP =
             "INSERT INTO age_group(min_age, max_age) VALUES (?, ?)";
     private static final String SQL_SELECT_AGE_GROUP =
             "SELECT id_age_group FROM age_group WHERE min_age = ? AND max_age = ?";
-    private static final AgeGroupDao instance = new AgeGroupDaoImpl();
 
-    private AgeGroupDaoImpl() {
+    public AgeGroupDaoImpl() {
     }
 
-    public static AgeGroupDao getInstance() {
-        return instance;
+    public AgeGroupDaoImpl(boolean isTransaction) {
+        if (!isTransaction) {
+            connection = ConnectionPool.getInstance().getConnection();
+        }
     }
 
     @Override
     public long add(AgeGroup ageGroup) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_AGE_GROUP, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_AGE_GROUP,
+                Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, ageGroup.getMinAge());
             preparedStatement.setInt(2, ageGroup.getMaxAge());
             preparedStatement.execute();
@@ -42,7 +46,7 @@ public class AgeGroupDaoImpl implements AgeGroupDao {
 
     @Override
     public boolean update(AgeGroup ageGroup) throws DaoException {
-        return false;
+        throw new UnsupportedOperationException("Updating of an age group is unsupported");
     }
 
     @Override
@@ -52,7 +56,7 @@ public class AgeGroupDaoImpl implements AgeGroupDao {
 
     @Override
     public List<AgeGroup> findAll() {
-        throw new UnsupportedOperationException("Deleting of an age group is unsupported");
+        throw new UnsupportedOperationException("Finding all age groups is unsupported");
     }
 
     @Override
@@ -62,8 +66,7 @@ public class AgeGroupDaoImpl implements AgeGroupDao {
 
     @Override
     public Optional<Long> findByMinMaxAge(AgeGroup ageGroup) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_AGE_GROUP)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_AGE_GROUP)) {
             preparedStatement.setInt(1, ageGroup.getMinAge());
             preparedStatement.setInt(2, ageGroup.getMaxAge());
             ResultSet resultSet = preparedStatement.executeQuery();

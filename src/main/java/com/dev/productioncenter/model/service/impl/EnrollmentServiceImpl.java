@@ -26,7 +26,6 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final EnrollmentService instance = new EnrollmentServiceImpl();
     private final EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
-    private final LessonDao lessonDao = LessonDaoImpl.getInstance();
 
     private EnrollmentServiceImpl() {
     }
@@ -76,6 +75,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException {
+        LessonDao lessonDao = new LessonDaoImpl(true);
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user);
             for (Enrollment enrollment : allEnrollments) {

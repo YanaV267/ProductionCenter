@@ -1,5 +1,6 @@
 package com.dev.productioncenter.model.dao;
 
+import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.model.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class Transaction {//TODO: connection into dao
+public class Transaction {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Transaction instance = new Transaction();
     private Connection connection;
@@ -19,7 +20,7 @@ public class Transaction {//TODO: connection into dao
         return instance;
     }
 
-    public void begin() {
+    public void begin(BaseDao... daos) throws DaoException {
         if (connection == null) {
             connection = ConnectionPool.getInstance().getConnection();
         }
@@ -27,33 +28,39 @@ public class Transaction {//TODO: connection into dao
             connection.setAutoCommit(false);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while beginning a transaction: " + exception);
+            throw new DaoException("Error has occurred while beginning a transaction: ", exception);
         }
-        //set connection to dao
+        for (BaseDao dao : daos) {
+            dao.setConnection(connection);
+        }
     }
 
-    public void commit() {
+    public void commit() throws DaoException {
         try {
             connection.commit();
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while doing transaction commit: " + exception);
+            throw new DaoException("Error has occurred while doing transaction commit: ", exception);
         }
     }
 
-    public void rollback() {
+    public void rollback() throws DaoException {
         try {
             connection.commit();
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while doing transaction rollback: " + exception);
+            throw new DaoException("Error has occurred while doing transaction rollback: ", exception);
         }
     }
 
-    public void end() {
+    public void end() throws DaoException {
         if (connection != null) {
             try {
                 connection.close();
                 connection.setAutoCommit(true);
             } catch (SQLException exception) {
                 LOGGER.error("Error has occurred while ending transaction: " + exception);
+                throw new DaoException("Error has occurred while ending transaction: ", exception);
             }
             connection = null;
         }

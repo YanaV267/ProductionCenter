@@ -5,6 +5,7 @@ import com.dev.productioncenter.entity.Lesson;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.LessonDao;
+import com.dev.productioncenter.model.dao.Transaction;
 import com.dev.productioncenter.model.dao.impl.LessonDaoImpl;
 import com.dev.productioncenter.model.service.LessonService;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +25,6 @@ public class LessonServiceImpl implements LessonService {
     private static final String REMOVING_SYMBOLS_REGEX = "[\\[\\],]";
     private static final String REPLACEMENT_REGEX = "";
     private static final LessonService instance = new LessonServiceImpl();
-    private final LessonDao lessonDao = LessonDaoImpl.getInstance();
 
     private LessonServiceImpl() {
     }
@@ -35,10 +35,13 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
+        LessonDao lessonDao = new LessonDaoImpl(true);
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
                 .split(DELIMITER_REGEX);
+        Transaction transaction = Transaction.getInstance();
         try {
+            transaction.begin(lessonDao);
             for (String weekday : weekdays) {
                 Lesson lesson = new Lesson();
                 lesson.setCourse(new Course(courseId));
@@ -49,13 +52,19 @@ public class LessonServiceImpl implements LessonService {
             }
             return true;
         } catch (DaoException exception) {
+            try {
+                transaction.rollback();
+            } catch (DaoException daoException) {
+                LOGGER.error("Error has occurred while doing transaction rollback for adding course's lessons: " + daoException);
+            }
             LOGGER.error("Error has occurred while adding course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while adding course's lessons: " , exception);
+            throw new ServiceException("Error has occurred while adding course's lessons: ", exception);
         }
     }
 
     @Override
     public boolean updateLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
+        LessonDao lessonDao = new LessonDaoImpl(true);
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
                 .trim()
@@ -69,7 +78,9 @@ public class LessonServiceImpl implements LessonService {
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
                 .trim()
                 .split(DELIMITER_REGEX);
+        Transaction transaction = Transaction.getInstance();
         try {
+            transaction.begin(lessonDao);
             for (int i = 0; i < weekdays.length; i++) {
                 Lesson lesson = new Lesson();
                 lesson.setCourse(new Course(courseId));
@@ -95,18 +106,26 @@ public class LessonServiceImpl implements LessonService {
             }
             return true;
         } catch (DaoException exception) {
+            try {
+                transaction.rollback();
+            } catch (DaoException daoException) {
+                LOGGER.error("Error has occurred while doing transaction rollback for updating course's lessons: " + daoException);
+            }
             LOGGER.error("Error has occurred while updating course's lessons: " + exception);
-            throw new ServiceException("Error has occurred while updating course's lessons: " , exception);
+            throw new ServiceException("Error has occurred while updating course's lessons: ", exception);
         }
     }
 
     @Override
     public List<Lesson> findLessons(long courseId) throws ServiceException {
+        LessonDao lessonDao = new LessonDaoImpl(false);
         try {
             return lessonDao.findLessonsByCourse(courseId);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user's lessons: " + exception);
-            throw new ServiceException("Error has occurred while finding user's lessons: " , exception);
+            throw new ServiceException("Error has occurred while finding user's lessons: ", exception);
+        } finally {
+            lessonDao.closeConnection();
         }
     }
 }

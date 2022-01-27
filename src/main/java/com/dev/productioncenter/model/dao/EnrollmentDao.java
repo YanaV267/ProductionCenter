@@ -9,16 +9,16 @@ import com.dev.productioncenter.exception.DaoException;
 import java.util.List;
 import java.util.Optional;
 
-public interface EnrollmentDao extends BaseDao<Long, Enrollment> {
-    boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException;
+public abstract class EnrollmentDao extends BaseDao<Long, Enrollment> {
+    abstract public boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException;
 
-    List<Enrollment> findEnrollmentsByUser(User user) throws DaoException;
+    abstract public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException;
 
-    List<Enrollment> findEnrollmentsByCourse(Course course) throws DaoException;
+    abstract public List<Enrollment> findEnrollmentsByCourse(Course course) throws DaoException;
 
-    Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException;
+    abstract public Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException;
 
-    List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException;
+    abstract public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException;
 
-    List<Enrollment> findExpiredEnrollments() throws DaoException;
+    abstract public List<Enrollment> findExpiredEnrollments() throws DaoException;
 }

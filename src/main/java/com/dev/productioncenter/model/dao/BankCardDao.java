@@ -6,8 +6,8 @@ import com.dev.productioncenter.exception.DaoException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public interface BankCardDao extends BaseDao<Long, BankCard> {
-    Optional<BankCard> findBankCard(BankCard bankCard) throws DaoException;
+public abstract class BankCardDao extends BaseDao<Long, BankCard> {
+    abstract public Optional<BankCard> findBankCard(BankCard bankCard) throws DaoException;
 
-    BigDecimal findBalance(BankCard bankCard) throws DaoException;
+    abstract public BigDecimal findBalance(BankCard bankCard) throws DaoException;
 }

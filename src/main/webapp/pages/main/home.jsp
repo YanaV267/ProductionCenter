@@ -10,9 +10,9 @@
 <jsp:include page="header.jsp"/>
 <main>
     <div id="home">
-        <p>Раскрой талант с нами!</p>
-        <p>Благодаря нашему продюсерскому центру Вы сможете преодолеть страхи и реализовать свои мечты</p>
-        <input type="button" value="Узнать подробнее"
+        <p><fmt:message key="home.title" /></p>
+        <p><fmt:message key="home.subtitle" /></p>
+        <input type="button" value="<fmt:message key="home.button" />"
                onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_activities'">
     </div>
 </main>
