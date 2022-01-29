@@ -50,7 +50,7 @@ public class UpdateAccountDataCommand implements Command {
             return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
         }
         try {
-            if (!login.equals(userData.get(LOGIN)) && !userService.isLoginAvailable(userData.get(LOGIN))) {
+            if (!login.equals(userData.get(LOGIN)) && userService.isLoginOccupied(userData.get(LOGIN))) {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
@@ -59,7 +59,7 @@ public class UpdateAccountDataCommand implements Command {
             if (user.isPresent()) {
                 userData.put(PASSWORD, user.get().getPassword());
                 if (!user.get().getEmail().equals(userData.get(EMAIL))
-                        && !userService.isEmailAvailable(userData.get(EMAIL))) {
+                        && userService.isEmailOccupied(userData.get(EMAIL))) {
                     request.setAttribute(USER, userData);
                     request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
                     return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);

@@ -34,7 +34,10 @@ if ($('form:last-of-type').css('height') === $('form:last-of-type').css('min-hei
 $('input[name=surname]').change(function () {
     if ($(this).val().length !== 0)
         $('input[name=name]').prop('disabled', false);
-    else $('input[name=name]').prop('disabled', true);
+    else {
+        $('input[name=name]').prop('disabled', true);
+        $('input[name=name]').val('');
+    }
 });
 
 let heightValue = $('form:last-of-type').height() + $('form:first-of-type').height() + 55;

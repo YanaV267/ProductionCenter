@@ -164,7 +164,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findCourses(Activity activity, String[] weekdays) throws ServiceException {
+    public List<Course> findCourses(Activity activity, String[] weekdays, int page) throws ServiceException {
         CourseDao courseDao = new CourseDaoImpl(false);
         try {
             if (activity.getCategory() != null) {
@@ -204,10 +204,25 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> findAvailableCourses() throws ServiceException {
+    public List<Course> findCourses(int page) throws ServiceException {
         CourseDao courseDao = new CourseDaoImpl(false);
         try {
-            return courseDao.findAvailableCourses();
+            int startElementNumber = page * 15 - 15;
+            return courseDao.findAll(startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding all courses: " + exception);
+            throw new ServiceException("Error has occurred while finding all courses: ", exception);
+        } finally {
+            courseDao.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Course> findAvailableCourses(int page) throws ServiceException {
+        CourseDao courseDao = new CourseDaoImpl(false);
+        try {
+            int startElementNumber = page * 15 - 15;
+            return courseDao.findAvailableCourses(startElementNumber);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new ServiceException("Error has occurred while finding available courses: ", exception);

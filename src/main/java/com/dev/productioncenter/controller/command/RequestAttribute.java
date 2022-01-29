@@ -23,6 +23,7 @@ public final class RequestAttribute {
     public static final String WEEKDAYS = "weekdays";
     public static final String CARD = "card";
     public static final String PAGE = "page";
+    public static final String LAST = "last";
 
     private RequestAttribute() {
     }

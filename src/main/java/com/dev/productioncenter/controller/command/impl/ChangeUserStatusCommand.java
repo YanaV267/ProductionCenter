@@ -1,6 +1,9 @@
 package com.dev.productioncenter.controller.command.impl;
 
-import com.dev.productioncenter.controller.command.*;
+import com.dev.productioncenter.controller.command.Command;
+import com.dev.productioncenter.controller.command.PagePath;
+import com.dev.productioncenter.controller.command.RequestParameter;
+import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.entity.UserStatus;
@@ -16,12 +19,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
 public class ChangeUserStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CHANGE_STATUSES_CONFIRM_MESSAGE_KEY = "confirm.change.user_statuses";
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -41,9 +45,11 @@ public class ChangeUserStatusCommand implements Command {
                         servletContext.setAttribute(userStatus.getKey(), userStatus.getValue());
                     }
                 }
-                Map<User, String> users = userService.findUsers(UserRole.USER);
+                Map<User, String> users = userService.findUsers(UserRole.USER, DEFAULT_PAGE);
+                Map<User, String> nextUsers = userService.findUsers(UserRole.USER, DEFAULT_PAGE + 1);
                 session.setAttribute(USERS, users);
                 session.setAttribute(PAGE, DEFAULT_PAGE);
+                request.setAttribute(LAST, nextUsers.isEmpty());
                 session.setAttribute(MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.USERS, Router.RouterType.REDIRECT);
             }

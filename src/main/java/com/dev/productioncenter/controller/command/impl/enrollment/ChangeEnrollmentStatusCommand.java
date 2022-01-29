@@ -17,6 +17,7 @@ import java.util.Map;
 
 public class ChangeEnrollmentStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int DEFAULT_PAGE = 1;
     private static final String CHANGE_STATUSES_CONFIRM_MESSAGE_KEY = "confirm.enrollment.change_statuses";
     private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
@@ -31,8 +32,11 @@ public class ChangeEnrollmentStatusCommand implements Command {
         }
         try {
             if (enrollmentService.updateStatus(enrollmentsStatuses) && enrollmentService.checkEnrollmentsReservationStatus()) {
-                Map<Enrollment, LocalDate> allEnrollments = enrollmentService.findEnrollments();
+                Map<Enrollment, LocalDate> allEnrollments = enrollmentService.findEnrollments(DEFAULT_PAGE);
+                Map<Enrollment, LocalDate> nextEnrollments = enrollmentService.findEnrollments(DEFAULT_PAGE + 1);
                 session.setAttribute(SessionAttribute.ENROLLMENTS, allEnrollments);
+                session.setAttribute(SessionAttribute.PAGE, DEFAULT_PAGE);
+                session.setAttribute(SessionAttribute.LAST, nextEnrollments.isEmpty());
                 session.setAttribute(SessionAttribute.MESSAGE, CHANGE_STATUSES_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_ENROLLMENTS, Router.RouterType.REDIRECT);
             }

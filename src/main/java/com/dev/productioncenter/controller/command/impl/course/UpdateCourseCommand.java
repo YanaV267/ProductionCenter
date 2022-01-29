@@ -16,10 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
+import static com.dev.productioncenter.controller.command.SessionAttribute.LAST;
 
 public class UpdateCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int DEFAULT_PAGE = 1;
     private static final String EMPTY_STRING_REGEX = "";
     private static final String UPDATE_COURSE_ERROR_MESSAGE_KEY = "error.course.update";
     private static final String UPDATE_COURSE_CONFIRM_MESSAGE_KEY = "confirm.course.update";
@@ -46,13 +49,18 @@ public class UpdateCourseCommand implements Command {
         try {
             if (courseService.updateCourse(courseData)) {
                 List<Course> courses;
+                List<Course> nextCourses;
                 if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
                         || UserRole.valueOf(role.toUpperCase()) == UserRole.TEACHER) {
-                    courses = courseService.findCourses();
+                    courses = courseService.findCourses(DEFAULT_PAGE);
+                    nextCourses = courseService.findCourses(DEFAULT_PAGE + 1);
                 } else {
-                    courses = courseService.findAvailableCourses();
+                    courses = courseService.findAvailableCourses(DEFAULT_PAGE);
+                    nextCourses = courseService.findAvailableCourses(DEFAULT_PAGE + 1);
                 }
-                request.setAttribute(RequestAttribute.COURSES, courses);
+                session.setAttribute(RequestAttribute.COURSES, courses);
+                session.setAttribute(PAGE, DEFAULT_PAGE);
+                session.setAttribute(LAST, nextCourses.isEmpty());
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_COURSE_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {

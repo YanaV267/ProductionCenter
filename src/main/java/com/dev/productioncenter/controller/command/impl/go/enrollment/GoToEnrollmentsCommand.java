@@ -15,25 +15,28 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.ENROLLMENTS;
-import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
+import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToEnrollmentsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
-        String page = request.getParameter(RequestParameter.PAGE);
-        if (page == null) {
+        int page;
+        if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
+        } else {
+            page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
         try {
             if (enrollmentService.checkEnrollmentsReservationStatus()) {
-                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments();
+                Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(page);
+                Map<Enrollment, LocalDate> nextEnrollments = enrollmentService.findEnrollments(page + 1);
                 request.setAttribute(ENROLLMENTS, enrollments);
                 request.setAttribute(PAGE, page);
+                request.setAttribute(LAST, nextEnrollments.isEmpty());
                 return new Router(PagePath.SHOW_ENROLLMENTS, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {

@@ -21,7 +21,7 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final CourseService courseService = CourseServiceImpl.getInstance();
     private final ActivityService activityService = ActivityServiceImpl.getInstance();
     private final List<String> weekdays = Arrays.asList("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
@@ -31,9 +31,11 @@ public class GoToCoursesCommand implements Command {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute(SessionAttribute.ROLE);
         String category = request.getParameter(RequestParameter.CATEGORY);
-        String page = request.getParameter(RequestParameter.PAGE);
-        if (page == null) {
+        int page;
+        if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
+        } else {
+            page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
         try {
             if (category != null) {
@@ -42,17 +44,21 @@ public class GoToCoursesCommand implements Command {
                 session.setAttribute(SessionAttribute.ACTIVITIES, activities);
             }
             List<Course> courses;
+            List<Course> nextCourses;
             if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
                     || UserRole.valueOf(role.toUpperCase()) == UserRole.TEACHER) {
-                courses = courseService.findCourses();
+                courses = courseService.findCourses(page);
+                nextCourses = courseService.findCourses(page + 1);
             } else {
-                courses = courseService.findAvailableCourses();
+                courses = courseService.findAvailableCourses(page);
+                nextCourses = courseService.findAvailableCourses(page + 1);
             }
             List<String> categories = activityService.findCategories();
             session.setAttribute(SessionAttribute.COURSES, courses);
             session.setAttribute(SessionAttribute.CATEGORIES, categories);
             session.setAttribute(SessionAttribute.WEEKDAYS, weekdays);
             request.setAttribute(PAGE, page);
+            request.setAttribute(LAST, nextCourses.isEmpty());
             return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while redirecting to courses page: " + exception);

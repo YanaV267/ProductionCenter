@@ -16,17 +16,27 @@ public abstract class UserDao extends BaseDao<Long, User> {
 
     abstract public Optional<User> findUserByEmail(String email) throws DaoException;
 
-    abstract public List<User> findUsersByNameStatus(User user) throws DaoException;
+    abstract public List<User> findUsersByNameStatus(User user, int startElementNumber) throws DaoException;
 
-    abstract public List<User> findUsersByFullName(User user) throws DaoException;
+    abstract public List<User> findUsersBySurnameStatus(User user, int startElementNumber) throws DaoException;
 
-    abstract public List<User> findUsersByStatus(UserStatus userStatus) throws DaoException;
+    abstract public List<User> findUsersBySurname(User user, int startElementNumber) throws DaoException;
 
-    abstract public List<User> findUsersByStatus(User user) throws DaoException;
+    abstract public List<User> findUsersByFullName(User user, int startElementNumber) throws DaoException;
+
+    abstract public List<User> findUsersByStatus(User user, int startElementNumber) throws DaoException;
 
     abstract public List<User> findUsersByRole(UserRole role) throws DaoException;
 
-    abstract public List<User> findTeachersHoldingLessons() throws DaoException;
+    abstract public List<User> findUsersByRole(UserRole role, int startElementNumber) throws DaoException;
+
+    abstract public List<User> findUsersTeachers(int startElementNumber) throws DaoException;
+
+    abstract public List<User> findTeachersHoldingLessons(int startElementNumber) throws DaoException;
+
+    abstract public List<User> findTeachersHoldingLessonsBySurname(String surname, int startElementNumber) throws DaoException;
+
+    abstract public long findLastElementId() throws DaoException;
 
     abstract public boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException;
 

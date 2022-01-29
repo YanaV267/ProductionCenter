@@ -172,6 +172,23 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     }
 
     @Override
+    public List<Enrollment> findEnrollmentsByUser(User user, int startElementNumber) throws DaoException {
+        List<Enrollment> enrollments;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
+            preparedStatement.setString(1, user.getLogin());
+            preparedStatement.setInt(2, startElementNumber);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding enrollments by user: " + exception);
+            throw new DaoException("Error has occurred while finding enrollments by user: ", exception);
+        }
+        return enrollments;
+    }
+
+    @Override
     public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -188,7 +205,7 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByCourse(Course course) throws DaoException {
+    public List<Enrollment> findEnrollmentsByCourse(Course course, int startElementNumber) throws DaoException {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {

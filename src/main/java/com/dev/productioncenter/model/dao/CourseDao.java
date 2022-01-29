@@ -6,6 +6,8 @@ import com.dev.productioncenter.exception.DaoException;
 import java.util.List;
 
 public abstract class CourseDao extends BaseDao<Long, Course> {
+    abstract public List<Course> findAll(int startElementNumber) throws DaoException;
+
     abstract public boolean updateCourseStudentAmount(long id, int studentAmount) throws DaoException;
 
     abstract public List<Course> findCourseByTeacher(User teacher) throws DaoException;
@@ -24,7 +26,7 @@ public abstract class CourseDao extends BaseDao<Long, Course> {
 
     abstract public List<Course> findCourseByStatus(CourseStatus courseStatus) throws DaoException;
 
-    abstract public List<Course> findAvailableCourses() throws DaoException;
+    abstract public List<Course> findAvailableCourses(int startElementNumber) throws DaoException;
 
     abstract public List<Course> findCoursesAllActivities() throws DaoException;
 

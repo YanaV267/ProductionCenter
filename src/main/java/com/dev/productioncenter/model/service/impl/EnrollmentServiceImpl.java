@@ -74,6 +74,29 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
+    public Map<Enrollment, LocalDate> findEnrollments(User user, int page) throws ServiceException {
+        LessonDao lessonDao = new LessonDaoImpl(false);
+        try {
+            int startElementNumber = page * 15 - 15;
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user, startElementNumber);
+            for (Enrollment enrollment : allEnrollments) {
+                List<Lesson> lessons = lessonDao.findLessonsByCourse(enrollment.getCourse().getId());
+                enrollment.getCourse().setLessons(lessons);
+            }
+            Map<Enrollment, LocalDate> enrollments = new HashMap<>();
+            for (Enrollment enrollment : allEnrollments) {
+                enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());
+            }
+            return enrollments;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding user's enrollments: " + exception);
+            throw new ServiceException("Error has occurred while finding user's enrollments: ", exception);
+        } finally {
+            lessonDao.closeConnection();
+        }
+    }
+
+    @Override
     public Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException {
         LessonDao lessonDao = new LessonDaoImpl(true);
         try {
@@ -94,8 +117,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Map<Enrollment, LocalDate> findEnrollments() throws ServiceException {
+    public Map<Enrollment, LocalDate> findEnrollments(int page) throws ServiceException {
         try {
+            int startElementNumber = page * 15 - 15;
             List<Enrollment> allEnrollments = enrollmentDao.findAll();
             Map<Enrollment, LocalDate> enrollments = new HashMap<>();
             for (Enrollment enrollment : allEnrollments) {
@@ -109,9 +133,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public Map<Enrollment, LocalDate> findEnrollments(long courseId) throws ServiceException {
+    public Map<Enrollment, LocalDate> findEnrollments(long courseId, int page) throws ServiceException {
         try {
-            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByCourse(new Course(courseId));
+            int startElementNumber = page * 15 - 15;
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByCourse(new Course(courseId), startElementNumber);
             Map<Enrollment, LocalDate> enrollments = new HashMap<>();
             for (Enrollment enrollment : allEnrollments) {
                 enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());

@@ -17,10 +17,10 @@
             <type>int</type>
         </attribute>
         <attribute>
-            <name>size</name>
+            <name>last</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>int</type>
+            <type>boolean</type>
         </attribute>
         <attribute>
             <name>command</name>

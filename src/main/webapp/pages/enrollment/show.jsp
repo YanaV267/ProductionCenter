@@ -27,7 +27,7 @@
                 <div><fmt:message key="enrollment.reservation_date"/></div>
                 <div><fmt:message key="enrollment.status"/></div>
                 <div><fmt:message key="enrollment.approval"/></div>
-                <c:forEach begin="${page * 15 - 15}" end="${page * 15}" var="enrollment" items="${enrollments}">
+                <c:forEach var="enrollment" items="${enrollments}">
                     <div><c:out value="${enrollment.key.user.surname}"/> <c:out
                             value="${enrollment.key.user.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
@@ -50,7 +50,7 @@
                     </div>
                 </c:forEach>
             </div>
-            <ctg:pages page="${page}" size="${fn:length(enrollments)}" command="go_to_enrollments"/>
+            <ctg:pages page="${page}" last="${last}" command="go_to_enrollments"/>
         </c:if>
         <c:if test="${fn:length(enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.message"/></div>

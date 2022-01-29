@@ -15,9 +15,11 @@ public interface CourseService {
 
     List<Course> findCourses() throws ServiceException;
 
-    List<Course> findCourses(Activity activity, String[] weekdays) throws ServiceException;
+    List<Course> findCourses(int page) throws ServiceException;
 
-    List<Course> findAvailableCourses() throws ServiceException;
+    List<Course> findCourses(Activity activity, String[] weekdays, int page) throws ServiceException;
+
+    List<Course> findAvailableCourses(int page) throws ServiceException;
 
     List<Course> findCoursesAvailableActivities() throws ServiceException;
 
@@ -28,4 +30,5 @@ public interface CourseService {
     boolean reservePlaceAtCourse(long id) throws ServiceException;
 
     boolean releasePlaceAtCourse(long id) throws ServiceException;
+
 }

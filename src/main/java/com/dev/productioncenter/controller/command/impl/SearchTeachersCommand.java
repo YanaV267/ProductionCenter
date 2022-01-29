@@ -15,29 +15,34 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 import static com.dev.productioncenter.controller.command.RequestAttribute.USERS;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 public class SearchTeachersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
-        String page = request.getParameter(RequestParameter.PAGE);
-        if (page == null) {
+        int page;
+        if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
+        } else {
+            page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
         Map<String, String> teacherData = new HashMap<>();
         teacherData.put(SURNAME, request.getParameter(SURNAME));
         teacherData.put(NAME, request.getParameter(NAME));
         teacherData.put(STATUS, request.getParameter(STATUS));
         try {
-            Map<User, String> teachers = userService.findTeachers(teacherData);
+            Map<User, String> teachers = userService.findTeachers(teacherData, page);
+            Map<User, String> nextTeachers = userService.findTeachers(teacherData, page + 1);
             request.setAttribute(USERS, teachers);
             request.setAttribute(TEACHER, teacherData);
             request.setAttribute(PAGE, page);
+            request.setAttribute(LAST, nextTeachers.isEmpty());
             return new Router(PagePath.TEACHERS, Router.RouterType.FORWARD);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while searching teachers: " + exception);

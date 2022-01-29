@@ -78,7 +78,7 @@
                         <div><fmt:message key="courses.teacher"/></div>
                         <div><fmt:message key="courses.age_group"/></div>
                         <div><fmt:message key="courses.lesson_price"/></div>
-                        <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="course" items="${sessionScope.courses}">
+                        <c:forEach var="course" items="${courses}">
                             <div><c:out value="${course.activity.type}"/></div>
                             <input type="hidden" name="course_id" value="<c:out value="${course.id}"/>">
                             <div><c:out value="${course.teacher.surname}"/> <c:out
@@ -91,12 +91,10 @@
                     <c:choose>
                         <c:when test="${not empty requestScope.selected_category or not empty requestScope.selected_category
                         or not empty requestScope.selected_category}">
-                            <ctg:pages page="${requestScope.page}" size="${fn:length(courses)}"
-                                       command="search_courses"/>
+                            <ctg:pages page="${page}" last="${last}" command="search_courses"/>
                         </c:when>
                         <c:otherwise>
-                            <ctg:pages page="${requestScope.page}" size="${fn:length(courses)}"
-                                       command="go_to_courses"/>
+                            <ctg:pages page="${page}" last="${last}" command="go_to_courses"/>
                         </c:otherwise>
                     </c:choose>
                 </c:if>

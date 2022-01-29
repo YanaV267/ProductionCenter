@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
@@ -20,7 +19,7 @@ import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 public class ChangeUserRoleCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CHANGE_ROLES_CONFIRM_MESSAGE_KEY = "confirm.change.user_roles";
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
@@ -34,13 +33,11 @@ public class ChangeUserRoleCommand implements Command {
         }
         try {
             if (userService.updateRoles(usersRoles)) {
-                Map<User, String> users = userService.findUsers(UserRole.USER);
-                Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
-                Map<User, String> allUsers = new LinkedHashMap<>();
-                allUsers.putAll(teachers);
-                allUsers.putAll(users);
+                Map<User, String> users = userService.findUsersTeachers(DEFAULT_PAGE);
+                Map<User, String> nextUsers = userService.findUsersTeachers(DEFAULT_PAGE + 1);
+                session.setAttribute(USERS, users);
                 session.setAttribute(PAGE, DEFAULT_PAGE);
-                session.setAttribute(USERS, allUsers);
+                session.setAttribute(LAST, nextUsers.isEmpty());
                 session.setAttribute(SessionAttribute.MESSAGE, CHANGE_ROLES_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.TEACHERS, Router.RouterType.REDIRECT);
             }

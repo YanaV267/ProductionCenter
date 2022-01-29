@@ -41,7 +41,7 @@ public class GoToEnrollOnCourseCommand implements Command {
         try {
             if (UserRole.valueOf(role.toUpperCase()) == UserRole.GUEST) {
                 session.setAttribute(SessionAttribute.MESSAGE, ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY);
-                return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
+                return new Router(PagePath.SHOW_COURSES, Router.RouterType.FORWARD);
             }
             Optional<Enrollment> enrollment = enrollmentService.findEnrollment(user, chosenId);
             if (enrollment.isPresent()) {

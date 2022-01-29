@@ -30,8 +30,7 @@
                 <div><fmt:message key="enrollment.all.lesson_amount"/></div>
                 <div><fmt:message key="enrollment.reservation_date"/></div>
                 <div><fmt:message key="enrollment.status"/></div>
-                <c:forEach begin="${requestScope.page * 15 - 15}" end="${requestScope.page * 15}" var="enrollment"
-                           items="${requestScope.enrollments}">
+                <c:forEach var="enrollment" items="${requestScope.enrollments}">
                     <div><c:out value="${enrollment.key.user.surname}"/> <c:out
                             value="${enrollment.key.user.name}"/></div>
                     <div><c:out value="${enrollment.key.lessonAmount}"/></div>
@@ -39,8 +38,8 @@
                     <div><c:out value="${enrollment.key.enrollmentStatus.status}"/></div>
                 </c:forEach>
             </div>
-            <ctg:pages page="${requestScope.page}" size="${fn:length(requestScope.enrollments)}"
-                       command="go_to_course_info"/>
+            <ctg:pages page="${requestScope.page}" last="${requestScope.last}"
+                       command="go_to_enrolled_on_course"/>
         </c:if>
         <c:if test="${fn:length(requestScope.enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.course.message"/></div>

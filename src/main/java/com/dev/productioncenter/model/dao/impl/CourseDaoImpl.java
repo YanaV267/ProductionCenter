@@ -31,6 +31,12 @@ public class CourseDaoImpl extends CourseDao {
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group";
+    private static final String SQL_SELECT_COURSES =
+            "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
+                    "lesson_price, student_amount, courses.status FROM courses " +
+                    "JOIN users ON courses.id_teacher = users.id_user " +
+                    "JOIN activities ON courses.id_activity = activities.id_activity " +
+                    "JOIN age_group ON courses.id_age_group = age_group.id_age_group LIMIT ?, 15";
     private static final String SQL_SELECT_COURSE_BY_ID =
             "SELECT courses.id_course, description, login, surname, name, category, type, min_age, max_age, " +
                     "lesson_price, student_amount, courses.status FROM courses " +
@@ -102,7 +108,7 @@ public class CourseDaoImpl extends CourseDao {
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
-                    "WHERE courses.status = 'upcoming' OR courses.status = 'running'";
+                    "WHERE courses.status = 'upcoming' OR courses.status = 'running' LIMIT ?, 15";
     private static final String SQL_SELECT_COURSES_ALL_ACTIVITIES =
             "SELECT courses.id_course, surname, name, category, type FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
@@ -192,6 +198,21 @@ public class CourseDaoImpl extends CourseDao {
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURSES)) {
             courses = CourseMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding courses: " + exception);
+            throw new DaoException("Error has occurred while finding courses: ", exception);
+        }
+        return courses;
+    }
+
+    @Override
+    public List<Course> findAll(int startElementNumber) throws DaoException {
+        List<Course> courses;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES)) {
+            preparedStatement.setInt(1, startElementNumber);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                courses = CourseMapper.getInstance().retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses: " + exception);
             throw new DaoException("Error has occurred while finding courses: ", exception);
@@ -330,11 +351,13 @@ public class CourseDaoImpl extends CourseDao {
     }
 
     @Override
-    public List<Course> findAvailableCourses() throws DaoException {
+    public List<Course> findAvailableCourses(int startElementNumber) throws DaoException {
         List<Course> courses;
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQL_SELECT_AVAILABLE_COURSES)) {
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_AVAILABLE_COURSES)) {
+            preparedStatement.setInt(1, startElementNumber);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                courses = CourseMapper.getInstance().retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
             throw new DaoException("Error has occurred while finding available courses: ", exception);

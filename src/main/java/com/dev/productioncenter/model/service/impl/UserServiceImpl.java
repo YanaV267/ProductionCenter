@@ -114,7 +114,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<User, String> findUsers(Map<String, String> userData) throws ServiceException {
+    public Map<User, String> findUsers(UserRole role, int page) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
+        try {
+            int startElementNumber = page * 15 - 15;
+            List<User> allUsers = userDao.findUsersByRole(role, startElementNumber);
+            Map<User, String> users = new HashMap<>();
+            for (User user : allUsers) {
+                users.put(user, PhoneNumberFormatter.format(user.getPhoneNumber()));
+            }
+            return users;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding users: " + exception);
+            throw new ServiceException("Error has occurred while finding users: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
+    public Map<User, String> findUsers(Map<String, String> userData, int page) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
         try {
             User user = new User();
@@ -124,16 +143,25 @@ public class UserServiceImpl implements UserService {
                 user.setUserStatus(UserStatus.valueOf(userData.get(STATUS).toUpperCase()));
             }
             user.setUserRole(UserRole.USER);
+            int startElementNumber = page * 15 - 15;
             List<User> foundUsers = new ArrayList<>();
-            if (userData.get(SURNAME) != null && userData.get(NAME) != null) {
-                if (userData.get(STATUS) != null) {
-                    foundUsers = userDao.findUsersByNameStatus(user);
+            if (user.getSurname() != null && !user.getSurname().isEmpty()) {
+                if (user.getName() != null && !user.getName().isEmpty()) {
+                    if (userData.get(STATUS) != null) {
+                        foundUsers = userDao.findUsersByNameStatus(user, startElementNumber);
+                    } else {
+                        foundUsers = userDao.findUsersByFullName(user, startElementNumber);
+                    }
                 } else {
-                    foundUsers = userDao.findUsersByFullName(user);
+                    if (userData.get(STATUS) != null) {
+                        foundUsers = userDao.findUsersBySurnameStatus(user, startElementNumber);
+                    } else {
+                        foundUsers = userDao.findUsersBySurname(user, startElementNumber);
+                    }
                 }
             } else {
                 if (userData.get(STATUS) != null) {
-                    foundUsers = userDao.findUsersByStatus(user.getUserStatus());
+                    foundUsers = userDao.findUsersByStatus(user, startElementNumber);
                 }
             }
             Map<User, String> users = new HashMap<>();
@@ -150,30 +178,58 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<User, String> findTeachers(Map<String, String> teacherData) throws ServiceException {
+    public Map<User, String> findUsersTeachers(int page) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(false);
+        try {
+            int startElementNumber = page * 15 - 15;
+            List<User> allUsers = userDao.findUsersTeachers(startElementNumber);
+            Map<User, String> users = new LinkedHashMap<>();
+            for (User user : allUsers) {
+                users.put(user, PhoneNumberFormatter.format(user.getPhoneNumber()));
+            }
+            return users;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding users & teachers: " + exception);
+            throw new ServiceException("Error has occurred while finding users & teachers: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
+    public Map<User, String> findTeachers(Map<String, String> teacherData, int page) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
         try {
             User teacher = new User();
             teacher.setSurname(teacherData.get(SURNAME));
             teacher.setName(teacherData.get(NAME));
             teacher.setUserRole(UserRole.TEACHER);
+            int startElementNumber = page * 15 - 15;
             List<User> foundTeachers = new ArrayList<>();
-            if (teacher.getSurname() != null && teacher.getName() != null) {
-                if (teacherData.get(STATUS) != null) {
-                    foundTeachers = userDao.findTeachersHoldingLessons();
+            if (teacher.getSurname() != null && !teacher.getSurname().isEmpty()) {
+                if (teacher.getName() != null && !teacher.getName().isEmpty()) {
+                    if (teacherData.get(STATUS) != null) {
+                        foundTeachers = userDao.findTeachersHoldingLessons(startElementNumber);
+                    } else {
+                        foundTeachers = userDao.findUsersByFullName(teacher, startElementNumber);
+                    }
                 } else {
-                    foundTeachers = userDao.findUsersByFullName(teacher);
+                    if (teacherData.get(STATUS) != null) {
+                        foundTeachers = userDao.findTeachersHoldingLessonsBySurname(teacher.getSurname(), startElementNumber);
+                    } else {
+                        foundTeachers = userDao.findUsersBySurname(teacher, startElementNumber);
+                    }
                 }
             } else {
                 if (teacherData.get(STATUS) != null) {
-                    foundTeachers = userDao.findTeachersHoldingLessons();
+                    foundTeachers = userDao.findTeachersHoldingLessons(startElementNumber);
                 }
             }
-            Map<User, String> users = new HashMap<>();
-            for (User foundUser : foundTeachers) {
-                users.put(foundUser, PhoneNumberFormatter.format(foundUser.getPhoneNumber()));
+            Map<User, String> teachers = new HashMap<>();
+            for (User foundTeacher : foundTeachers) {
+                teachers.put(foundTeacher, PhoneNumberFormatter.format(foundTeacher.getPhoneNumber()));
             }
-            return users;
+            return teachers;
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding teachers: " + exception);
             throw new ServiceException("Error has occurred while finding teachers: ", exception);
@@ -183,11 +239,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isLoginAvailable(String login) throws ServiceException {
+    public boolean isLoginOccupied(String login) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<User> foundUser = userDao.findUserByLogin(login);
-            return foundUser.isEmpty();
+            return foundUser.isPresent();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking login availability: " + exception);
             throw new ServiceException("Error has occurred while checking login availability: ", exception);
@@ -197,11 +253,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isEmailAvailable(String email) throws ServiceException {
+    public boolean isEmailOccupied(String email) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
         try {
             Optional<User> foundUser = userDao.findUserByEmail(email);
-            return foundUser.isEmpty();
+            return foundUser.isPresent();
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while checking email availability: " + exception);
             throw new ServiceException("Error has occurred while checking email availability: ", exception);

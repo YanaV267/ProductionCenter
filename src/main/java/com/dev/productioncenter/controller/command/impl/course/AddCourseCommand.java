@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
+import static com.dev.productioncenter.controller.command.SessionAttribute.LAST;
+import static com.dev.productioncenter.controller.command.SessionAttribute.PAGE;
 
 public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final int DEFAULT_PAGE = 1;
     private static final String EMPTY_STRING_REGEX = "";
     private static final String ADD_COURSE_ERROR_MESSAGE_KEY = "error.course.add";
     private static final String ADD_COURSE_CONFIRM_MESSAGE_KEY = "confirm.course.add";
@@ -42,9 +45,12 @@ public class AddCourseCommand implements Command {
         courseData.put(DESCRIPTION, request.getParameter(DESCRIPTION));
         try {
             if (courseService.addCourse(courseData)) {
-                List<Course> courses = courseService.findCourses();
+                List<Course> courses = courseService.findCourses(DEFAULT_PAGE);
+                List<Course> nextCourses = courseService.findCourses(DEFAULT_PAGE + 1);
                 session.setAttribute(SessionAttribute.COURSES, courses);
                 session.setAttribute(SessionAttribute.MESSAGE, ADD_COURSE_CONFIRM_MESSAGE_KEY);
+                session.setAttribute(PAGE, DEFAULT_PAGE);
+                session.setAttribute(LAST, nextCourses.isEmpty());
                 return new Router(PagePath.SHOW_COURSES, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(RequestAttribute.COURSE, courseData);

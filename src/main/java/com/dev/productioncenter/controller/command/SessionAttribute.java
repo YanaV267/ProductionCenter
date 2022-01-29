@@ -18,6 +18,7 @@ public final class SessionAttribute {
     public static final String TEACHERS = "teachers";
     public static final String USERS = "users";
     public static final String PAGE = "page";
+    public static final String LAST = "last";
 
     private SessionAttribute() {
     }

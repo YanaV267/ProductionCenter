@@ -39,12 +39,12 @@ public class SignUpCommand implements Command {
         userData.put(EMAIL, request.getParameter(EMAIL));
         userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
         try {
-            if (!userService.isLoginAvailable(userData.get(LOGIN))) {
+            if (userService.isLoginOccupied(userData.get(LOGIN))) {
                 request.setAttribute(USER, userData);
                 session.setAttribute(SessionAttribute.MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
-            if (!userService.isEmailAvailable(userData.get(EMAIL))) {
+            if (userService.isEmailOccupied(userData.get(EMAIL))) {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);

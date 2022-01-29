@@ -20,13 +20,10 @@
         <p id="title"><fmt:message key="teachers.title"/></p>
         <div id="search">
             <input type="text" name="surname" placeholder="<fmt:message key="sign_up.surname.placeholder"/>"
-                   autocomplete="off" pattern="[А-ЯA-Z][а-яa-z]{1,20}"
-                   value="<c:out value="${requestScope.teacher.surname}"/>"
-                   title="<fmt:message key="sign_up.surname.title"/>"><br/>
+                   autocomplete="off" value="<c:out value="${requestScope.teacher.surname}"/>"><br/>
             <input type="text" name="name" disabled
                    placeholder="<fmt:message key="sign_up.name.placeholder"/>" autocomplete="off"
-                   pattern="[А-ЯA-Z][а-яёa-z]{1,15}" value="<c:out value="${requestScope.teacher.name}"/>"
-                   title="<fmt:message key="sign_up.name.title"/>"><br/>
+                   value="<c:out value="${requestScope.teacher.name}"/>"><br/>
             <div id="status">
                 <label>
                     <input type="checkbox" name="status" value="assigned"
@@ -52,7 +49,7 @@
                 <div><fmt:message key="teachers.email"/></div>
                 <div><fmt:message key="teachers.phone_number"/></div>
                 <div><fmt:message key="teachers.assignment"/></div>
-                <c:forEach begin="${page * 15 - 15}" end="${page * 15}" var="user" items="${users}">
+                <c:forEach var="user" items="${users}">
                     <div><c:out value="${user.key.login}"/></div>
                     <input type="hidden" name="login" value="<c:out value="${user.key.login}"/>">
                     <input type="hidden" name="role" value="<c:out value="${user.key.userRole.role}"/>">
@@ -69,11 +66,11 @@
                 </c:forEach>
             </div>
             <c:choose>
-                <c:when test="${not empty user}">
-                    <ctg:pages page="${page}" size="${fn:length(users)}" command="go_to_teachers"/>
+                <c:when test="${not empty teacher}">
+                    <ctg:pages page="${page}" last="${last}" command="search_teachers"/>
                 </c:when>
                 <c:otherwise>
-                    <ctg:pages page="${page}" size="${fn:length(users)}" command="search_teachers"/>
+                    <ctg:pages page="${page}" last="${last}" command="go_to_teachers"/>
                 </c:otherwise>
             </c:choose>
         </c:if>

@@ -23,25 +23,29 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 public class GoToEnrolledOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final String DEFAULT_PAGE = "1";
+    private static final int DEFAULT_PAGE = 1;
     private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
     private final CourseService courseService = CourseServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         long courseId = Long.parseLong(request.getParameter(RequestParameter.CHOSEN_COURSE_ID));
-        String page = request.getParameter(RequestParameter.PAGE);
-        if (page == null) {
+        int page;
+        if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
+        } else {
+            page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
         try {
             if (enrollmentService.checkEnrollmentsReservationStatus()) {
                 Optional<Course> course = courseService.findCourse(courseId);
                 if (course.isPresent()) {
-                    Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(courseId);
+                    Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(courseId, page);
+                    Map<Enrollment, LocalDate> nextEnrollments = enrollmentService.findEnrollments(courseId, page + 1);
                     request.setAttribute(ENROLLMENTS, enrollments);
                     request.setAttribute(COURSE, course.get());
                     request.setAttribute(PAGE, page);
+                    request.setAttribute(LAST, nextEnrollments.isEmpty());
                     return new Router(PagePath.SHOW_ENROLLED_ON_COURSE, Router.RouterType.FORWARD);
                 }
             }
