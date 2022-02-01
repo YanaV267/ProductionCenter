@@ -17,7 +17,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dev.productioncenter.controller.command.RequestAttribute.*;
+import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
+import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
 
 public class GoToCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -30,7 +31,6 @@ public class GoToCoursesCommand implements Command {
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute(SessionAttribute.ROLE);
-        String category = request.getParameter(RequestParameter.CATEGORY);
         int page;
         if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
@@ -38,11 +38,6 @@ public class GoToCoursesCommand implements Command {
             page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
         try {
-            if (category != null) {
-                List<Activity> activities = activityService.findActivities(category);
-                request.setAttribute(SELECTED_CATEGORY, category);
-                session.setAttribute(SessionAttribute.ACTIVITIES, activities);
-            }
             List<Course> courses;
             List<Course> nextCourses;
             if (UserRole.valueOf(role.toUpperCase()) == UserRole.ADMIN
@@ -53,8 +48,10 @@ public class GoToCoursesCommand implements Command {
                 courses = courseService.findAvailableCourses(page);
                 nextCourses = courseService.findAvailableCourses(page + 1);
             }
+            List<Activity> activities = activityService.findActivities();
             List<String> categories = activityService.findCategories();
             session.setAttribute(SessionAttribute.COURSES, courses);
+            session.setAttribute(SessionAttribute.ACTIVITIES, activities);
             session.setAttribute(SessionAttribute.CATEGORIES, categories);
             session.setAttribute(SessionAttribute.WEEKDAYS, weekdays);
             request.setAttribute(PAGE, page);

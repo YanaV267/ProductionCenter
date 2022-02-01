@@ -23,7 +23,8 @@ $('#all>div:not(:nth-child(-n+7))').on('click', function () {
         }
         if ($(`#status:eq(${row - 1})`).text() === 'expired')
             $('input[name=renew]').prop('disabled', false);
-        else $('input[type=button]:not([name=renew])').prop('disabled', false);
+        else if ($(`#status:eq(${row - 1})`).text() !== 'paid' && $(`#status:eq(${row - 1})`).text() !== 'approved')
+            $('input[type=button]:not([name=renew])').prop('disabled', false);
     } else {
         $('input[type=button]').prop('disabled', true);
     }
@@ -51,7 +52,7 @@ if ($('form').css('height') === $('form').css('min-height')) {
     $('#buttons').css({
         'position': 'absolute',
         'left': '245px',
-        'top': '375px'
+        'top': '395px'
     });
 } else {
     $('#buttons').css('position', 'relative');

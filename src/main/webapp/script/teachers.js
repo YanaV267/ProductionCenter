@@ -1,6 +1,6 @@
 $('#all>div:nth-child(7n):not(:nth-child(-n+7))').on('click', function () {
     let row = Math.trunc($(this).index() / 7);
-    if ($(`input[type=checkbox]:eq(${row - 1})`).prop('checked')) {
+    if ($(`input[type=checkbox]:eq(${row})`).prop('checked')) {
         $(`input[name=role]:eq(${row - 1})`).val('teacher');
     } else {
         $(`input[name=role]:eq(${row - 1})`).val('user');

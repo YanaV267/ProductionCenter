@@ -39,9 +39,9 @@ public class SessionAttributeFilter implements Filter {
             session.removeAttribute(CATEGORIES);
             session.removeAttribute(ACTIVITIES);
             session.removeAttribute(PICTURE);
+            session.removeAttribute(COURSES);
         }
         session.removeAttribute(ENROLLMENTS);
-        session.removeAttribute(COURSES);
         session.removeAttribute(COURSE);
         session.removeAttribute(USERS);
         session.removeAttribute(PAGE);

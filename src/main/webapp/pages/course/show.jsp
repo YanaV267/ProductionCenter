@@ -19,9 +19,7 @@
         <p id="title"><fmt:message key="courses.title"/></p>
         <div id="layout">
             <div id="search">
-                <select name="category" onchange="location.href=
-                        '${pageContext.request.contextPath}/controller?command=go_to_courses&category='
-                        + this.options[this.selectedIndex].value">
+                <select name="category">
                     <option disabled selected><fmt:message key="activities.category"/> --</option>
                     <c:forEach var="category" items="${categories}">
                         <option <c:if test="${category eq requestScope.selected_category}">selected</c:if>>
@@ -30,11 +28,16 @@
                 </select>
                 <select name="type">
                     <option disabled selected><fmt:message key="activities.type"/> --</option>
-                    <c:forEach var="activity" items="${activities}">
-                        <option <c:if test="${activity.type eq requestScope.selected_type}">selected</c:if>>
-                            <c:out value="${activity.type}"/></option>
-                    </c:forEach>
+                    <c:if test="${not empty requestScope.selected_category}">
+                        <c:forEach var="activity" items="${activities}">
+                            <c:if test="${activity.category eq requestScope.selected_category}">
+                                <option <c:if test="${activity.type eq requestScope.selected_type}">selected</c:if>>
+                                    <c:out value="${activity.type}"/></option>
+                            </c:if>
+                        </c:forEach>
+                    </c:if>
                 </select>
+                <input type="hidden" name="activities" value="${fn:replace(activities, "Activity", "")}">
                 <p><fmt:message key="courses.weekdays"/>:</p>
                 <div id="weekdays">
                     <c:forEach var="weekday" items="${sessionScope.weekdays}">

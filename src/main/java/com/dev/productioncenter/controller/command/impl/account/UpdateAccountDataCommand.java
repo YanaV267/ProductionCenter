@@ -56,21 +56,21 @@ public class UpdateAccountDataCommand implements Command {
                 return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
             }
             Optional<User> user = userService.findUser(login);
-            if (user.isPresent()) {
-                userData.put(PASSWORD, user.get().getPassword());
-                if (!user.get().getEmail().equals(userData.get(EMAIL))
-                        && userService.isEmailOccupied(userData.get(EMAIL))) {
-                    request.setAttribute(USER, userData);
-                    request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
-                    return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
-                }
+            if (user.isPresent() && !user.get().getEmail().equals(userData.get(EMAIL))
+                    && userService.isEmailOccupied(userData.get(EMAIL))) {
+                request.setAttribute(USER, userData);
+                request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.UPDATE_ACCOUNT_DATA, Router.RouterType.FORWARD);
             }
-            if (userService.updateUserAccountData(userData)) {
-                user = userService.findUser(login);
-                session.setAttribute(SessionAttribute.USER, user);
-                session.setAttribute(SessionAttribute.NUMBER, userData.get(PHONE_NUMBER));
-                session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
-                return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
+            userData.put(CURRENT_LOGIN, login);
+            if (userService.updateUserLogin(userData) && userService.updateUserAccountData(userData)) {
+                user = userService.findUser(userData.get(LOGIN));
+                if (user.isPresent()) {
+                    session.setAttribute(SessionAttribute.USER, user.get());
+                    session.setAttribute(SessionAttribute.NUMBER, userData.get(PHONE_NUMBER));
+                    session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY);
+                    return new Router(PagePath.ACCOUNT, Router.RouterType.REDIRECT);
+                }
             } else {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, UPDATE_ACCOUNT_DATA_ERROR_MESSAGE_KEY);
@@ -78,7 +78,7 @@ public class UpdateAccountDataCommand implements Command {
             }
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while updating user account: " + exception);
-            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
+        return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }
 }

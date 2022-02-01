@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cmt" uri="custom_tags" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -18,21 +19,9 @@
             <div>
                 <div><fmt:message key="timetable.${weekday}"/></div>
                 <div>
-                    <c:set var="lessons_today" value="false"/>
-                    <c:forEach var="enrollment" items="${requestScope.enrollments}">
-                        <c:forEach var="lesson" items="${enrollment.key.course.lessons}">
-                            <c:if test="${lesson.weekDay eq weekday}">
-                                <div>
-                                    <div><c:out value="${lesson.startTime}"/></div>
-                                    <div><c:out value="${enrollment.key.course.activity.type}"/></div>
-                                    <c:set var="lessons_today" value="true"/>
-                                </div>
-                            </c:if>
-                        </c:forEach>
-                    </c:forEach>
-                    <c:if test="${lessons_today eq 'false'}">
+                    <cmt:timetable weekday="${weekday}" courses="${requestScope.courses}" enrollments="${requestScope.enrollments}">
                         <fmt:message key="timetable.no_lessons"/>
-                    </c:if>
+                    </cmt:timetable>
                 </div>
             </div>
         </c:forEach>

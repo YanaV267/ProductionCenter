@@ -16,7 +16,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dev.productioncenter.model.dao.ColumnName.USER_ID;
 import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
 
 public class UserDaoImpl extends UserDao {
@@ -25,6 +24,7 @@ public class UserDaoImpl extends UserDao {
     private static final String SQL_UPDATE_USER =
             "UPDATE users SET password = ?, surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
+    private static final String SQL_UPDATE_USER_LOGIN = "UPDATE users SET login = ? WHERE login = ?";
     private static final String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ? WHERE login = ?";
     private static final String SQL_UPDATE_USER_ROLE = "UPDATE users SET role = ? WHERE login = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE login = ?";
@@ -34,7 +34,7 @@ public class UserDaoImpl extends UserDao {
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status, profile_picture FROM users WHERE login = ?";
     private static final String SQL_SELECT_TEACHERS_BY_NAME =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
-                    "WHERE surname = ? AND name = ? AND role = ?";
+                    "WHERE surname = ? AND name = ? AND role = 'teacher'";
     private static final String SQL_SELECT_USERS_BY_EMAIL =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users WHERE email = ?";
     private static final String SQL_SELECT_USERS_BY_SURNAME =
@@ -68,7 +68,6 @@ public class UserDaoImpl extends UserDao {
     private static final String SQL_SELECT_USERS_BY_ROLE =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
                     "WHERE role = ? LIMIT ?, 15";
-    private static final String SQL_SELECT_LAST_USER_ID = "SELECT id_user FROM users ORDER BY id_user DESC LIMIT 1";
     private static final String QUERY_LIKE_WILDCARD = "%";
 
     public UserDaoImpl() {
@@ -201,8 +200,8 @@ public class UserDaoImpl extends UserDao {
                 teachers = UserMapper.getInstance().retrieve(resultSet);
             }
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding users by surname: " + exception);
-            throw new DaoException("Error has occurred while finding users by surname: ", exception);
+            LOGGER.error("Error has occurred while finding teacher by full name: " + exception);
+            throw new DaoException("Error has occurred while finding teacher by full name: ", exception);
         }
         return teachers.isEmpty() ? Optional.empty() : Optional.of(teachers.get(0));
     }
@@ -389,17 +388,16 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public long findLastElementId() throws DaoException {
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQL_SELECT_LAST_USER_ID)) {
-            if (resultSet.next()) {
-                return resultSet.getLong(USER_ID);
-            }
+    public boolean updateUserLogin(String currentLogin, String newLogin) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_LOGIN)) {
+            preparedStatement.setString(1, newLogin);
+            preparedStatement.setString(2, currentLogin);
+            preparedStatement.execute();
+            return true;
         } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding last user id: " + exception);
-            throw new DaoException("Error has occurred while finding last user id: ", exception);
+            LOGGER.error("Error has occurred while updating user's login: " + exception);
+            throw new DaoException("Error has occurred while updating user's login: ", exception);
         }
-        return 0;
     }
 
     @Override

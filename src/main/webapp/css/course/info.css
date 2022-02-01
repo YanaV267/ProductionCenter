@@ -79,7 +79,7 @@ form > div > div:nth-child(4) :last-child {
 .timetable {
     display: flex;
     flex-direction: column;
-    width: 220px;
+    width: 250px;
     text-align: start;
 }
 

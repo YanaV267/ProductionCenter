@@ -14,17 +14,15 @@ public abstract class CourseDao extends BaseDao<Long, Course> {
 
     abstract public List<Course> findCourseByAgeGroup(AgeGroup ageGroup) throws DaoException;
 
-    abstract public List<Course> findCourseByActivity(Activity activity) throws DaoException;
+    abstract public List<Course> findCourseByActivity(Activity activity, int startElementNumber) throws DaoException;
 
-    abstract public List<Course> findCourseByActivityCategory(Activity activity) throws DaoException;
+    abstract public List<Course> findCourseByActivityCategory(Activity activity, int startElementNumber) throws DaoException;
 
-    abstract public List<Course> findCourseByActivityType(Activity activity) throws DaoException;
+    abstract public List<Course> findCourseByActivityType(Activity activity, int startElementNumber) throws DaoException;
 
-    abstract public List<Course> findCourseByActivityWeekday(Activity activity, String weekday) throws DaoException;
+    abstract public List<Course> findCourseByActivityWeekday(Activity activity, String weekday, int startElementNumber) throws DaoException;
 
     abstract public List<Course> findCourseByWeekday(String weekday) throws DaoException;
-
-    abstract public List<Course> findCourseByStatus(CourseStatus courseStatus) throws DaoException;
 
     abstract public List<Course> findAvailableCourses(int startElementNumber) throws DaoException;
 

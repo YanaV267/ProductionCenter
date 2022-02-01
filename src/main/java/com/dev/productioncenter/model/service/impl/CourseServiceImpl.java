@@ -167,30 +167,32 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> findCourses(Activity activity, String[] weekdays, int page) throws ServiceException {
         CourseDao courseDao = new CourseDaoImpl(false);
         try {
+            int startElementNumber = page * 15 - 15;
             if (activity.getCategory() != null) {
                 if (activity.getType() != null) {
                     if (weekdays != null) {
                         Set<Course> courses = new HashSet<>();
                         for (String weekday : weekdays) {
-                            courses.addAll(courseDao.findCourseByActivityWeekday(activity, weekday));
+                            courses.addAll(courseDao.findCourseByActivityWeekday(activity, weekday, startElementNumber));
                         }
                         return List.copyOf(courses);
                     } else {
-                        return courseDao.findCourseByActivity(activity);
+                        return courseDao.findCourseByActivity(activity, startElementNumber);
                     }
                 } else {
-                    return courseDao.findCourseByActivityCategory(activity);
+                    return courseDao.findCourseByActivityCategory(activity, startElementNumber);
                 }
             } else {
                 if (activity.getType() != null) {
-                    return courseDao.findCourseByActivityType(activity);
+                    return courseDao.findCourseByActivityType(activity, startElementNumber);
                 } else {
                     if (weekdays != null) {
                         Set<Course> courses = new HashSet<>();
                         for (String weekday : weekdays) {
                             courses.addAll(courseDao.findCourseByWeekday(weekday));
                         }
-                        return List.copyOf(courses);
+                        int endElementNumber = Math.min(startElementNumber + 15, courses.size());
+                        return List.copyOf(courses).subList(startElementNumber, endElementNumber);
                     }
                 }
             }
@@ -201,6 +203,26 @@ public class CourseServiceImpl implements CourseService {
             courseDao.closeConnection();
         }
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<Course> findCourses(User teacher) throws ServiceException {
+        CourseDao courseDao = new CourseDaoImpl(false);
+        LessonDao lessonDao = new LessonDaoImpl(false);
+        try {
+            List<Course> courses = courseDao.findCourseByTeacher(teacher);
+            for (Course course : courses) {
+                List<Lesson> lessons = lessonDao.findLessonsByCourse(course.getId());
+                course.setLessons(lessons);
+            }
+            return courses;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding courses by teacher: " + exception);
+            throw new ServiceException("Error has occurred while finding courses by teacher: ", exception);
+        } finally {
+            courseDao.closeConnection();
+            lessonDao.closeConnection();
+        }
     }
 
     @Override

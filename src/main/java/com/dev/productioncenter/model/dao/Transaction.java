@@ -46,7 +46,7 @@ public class Transaction {
 
     public void rollback() throws DaoException {
         try {
-            connection.commit();
+            connection.rollback();
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while doing transaction rollback: " + exception);
             throw new DaoException("Error has occurred while doing transaction rollback: ", exception);

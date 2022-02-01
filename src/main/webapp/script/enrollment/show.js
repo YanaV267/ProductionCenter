@@ -23,12 +23,12 @@ if ($('form').css('height') === $('form').css('min-height')) {
     $('input[type=submit]').css({
         'position': 'absolute',
         'left': '440px',
-        'top': '375px'
+        'top': '395px'
     });
     $('#pages').css({
         'position': 'absolute',
         'left': '440px',
-        'top': '315px'
+        'top': '335px'
     });
 } else {
     $('input[type=submit]').css('position', 'relative');

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <html>
@@ -17,12 +18,8 @@
         <p id="title"><fmt:message key="courses.add.title"/></p>
         <div id="courseProps">
             <div>
-                <select name="category" onchange="location.href=
-                        '${pageContext.request.contextPath}/controller?command=go_to_add_course&category='
-                        + this.options[this.selectedIndex].value">
-                    <option disabled <c:if test="${empty requestScope.selected_category}">selected</c:if>>
-                        <fmt:message key="activities.category"/> --
-                    </option>
+                <select name="category">
+                    <option disabled selected><fmt:message key="activities.category"/> --</option>
                     <c:forEach var="category" items="${categories}">
                         <option <c:if test="${category eq requestScope.selected_category}">selected</c:if>>
                             <c:out value="${category}"/></option>
@@ -30,10 +27,16 @@
                 </select>
                 <select name="type">
                     <option disabled selected><fmt:message key="activities.type"/> --</option>
-                    <c:forEach var="activity" items="${activities}">
-                        <option><c:out value="${activity.type}"/></option>
-                    </c:forEach>
+                    <c:if test="${not empty requestScope.selected_category}">
+                        <c:forEach var="activity" items="${activities}">
+                            <c:if test="${activity.category eq requestScope.selected_category}">
+                                <option <c:if test="${activity.type eq requestScope.selected_type}">selected</c:if>>
+                                    <c:out value="${activity.type}"/></option>
+                            </c:if>
+                        </c:forEach>
+                    </c:if>
                 </select>
+                <input type="hidden" name="activities" value="${fn:replace(activities, "Activity", "")}">
                 <select name="teacher">
                     <option disabled selected><fmt:message key="courses.teacher"/> --</option>
                     <c:forEach var="teacher" items="${requestScope.teachers}">

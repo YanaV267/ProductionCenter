@@ -27,4 +27,24 @@
             <required>true</required>
         </attribute>
     </tag>
+    <tag>
+        <name>timetable</name>
+        <tag-class>com.dev.productioncenter.tag.TimetableTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>weekday</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>courses</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>enrollments</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.Map</type>
+        </attribute>
+    </tag>
 </taglib>

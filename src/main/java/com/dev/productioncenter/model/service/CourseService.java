@@ -2,6 +2,7 @@ package com.dev.productioncenter.model.service;
 
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.entity.Course;
+import com.dev.productioncenter.entity.User;
 import com.dev.productioncenter.exception.ServiceException;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface CourseService {
     boolean updateCourse(Map<String, String> courseData) throws ServiceException;
 
     List<Course> findCourses() throws ServiceException;
+
+    List<Course> findCourses(User teacher) throws ServiceException;
 
     List<Course> findCourses(int page) throws ServiceException;
 

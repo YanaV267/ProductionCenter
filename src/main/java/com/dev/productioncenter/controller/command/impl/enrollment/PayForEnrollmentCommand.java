@@ -59,11 +59,13 @@ public class PayForEnrollmentCommand implements Command {
                     }
                 } else {
                     request.setAttribute(CARD, cardData);
+                    request.setAttribute(ENROLLMENT_ID, chosenEnrollmentId);
                     request.setAttribute(MESSAGE, NO_FUNDS_ERROR_MESSAGE_KEY);
                     return new Router(PagePath.PAY_FOR_ENROLLMENT, Router.RouterType.FORWARD);
                 }
             } else {
                 request.setAttribute(CARD, cardData);
+                request.setAttribute(ENROLLMENT_ID, chosenEnrollmentId);
                 request.setAttribute(MESSAGE, INCORRECT_CARD_DATA_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.PAY_FOR_ENROLLMENT, Router.RouterType.FORWARD);
             }

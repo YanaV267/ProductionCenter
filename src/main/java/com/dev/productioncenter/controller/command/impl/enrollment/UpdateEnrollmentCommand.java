@@ -43,13 +43,14 @@ public class UpdateEnrollmentCommand implements Command {
                 Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
                 session.setAttribute(SessionAttribute.ENROLLMENTS, enrollments);
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY);
+                return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
             } else {
                 session.setAttribute(SessionAttribute.MESSAGE, UPDATE_ENROLLMENT_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.FORWARD);
             }
-            return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.REDIRECT);
         } catch (ServiceException exception) {
             LOGGER.error("Error has occurred while deleting user enrollment: " + exception);
+            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
-        return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
     }
 }

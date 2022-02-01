@@ -32,7 +32,7 @@ public class ChangeUserStatusCommand implements Command {
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String[] logins = request.getParameterValues(RequestParameter.LOGIN);
-        String[] statuses = request.getParameterValues(RequestParameter.STATUS);
+        String[] statuses = request.getParameterValues(RequestParameter.CURRENT_STATUS);
         Map<String, UserStatus> usersStatuses = new HashMap<>();
         for (int i = 0; i < logins.length; i++) {
             usersStatuses.put(logins[i], UserStatus.valueOf(statuses[i].toUpperCase()));

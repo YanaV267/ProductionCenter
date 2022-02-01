@@ -98,7 +98,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(true);
+        LessonDao lessonDao = new LessonDaoImpl(false);
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user);
             for (Enrollment enrollment : allEnrollments) {
@@ -113,6 +113,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding user's enrollments: " + exception);
             throw new ServiceException("Error has occurred while finding user's enrollments: ", exception);
+        } finally {
+            lessonDao.closeConnection();
         }
     }
 
@@ -120,7 +122,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public Map<Enrollment, LocalDate> findEnrollments(int page) throws ServiceException {
         try {
             int startElementNumber = page * 15 - 15;
-            List<Enrollment> allEnrollments = enrollmentDao.findAll();
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollments(startElementNumber);
             Map<Enrollment, LocalDate> enrollments = new HashMap<>();
             for (Enrollment enrollment : allEnrollments) {
                 enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());

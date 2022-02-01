@@ -36,7 +36,7 @@ public abstract class UserDao extends BaseDao<Long, User> {
 
     abstract public List<User> findTeachersHoldingLessonsBySurname(String surname, int startElementNumber) throws DaoException;
 
-    abstract public long findLastElementId() throws DaoException;
+    abstract public boolean updateUserLogin(String currentLogin, String newLogin) throws DaoException;
 
     abstract public boolean updateUserStatus(String login, UserStatus currentStatus) throws DaoException;
 

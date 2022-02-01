@@ -12,6 +12,8 @@ import java.util.Optional;
 public abstract class EnrollmentDao extends BaseDao<Long, Enrollment> {
     abstract public boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException;
 
+    abstract public List<Enrollment> findEnrollments(int startElementNumber) throws DaoException;
+
     abstract public List<Enrollment> findEnrollmentsByUser(User user, int startElementNumber) throws DaoException;
 
     abstract public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException;

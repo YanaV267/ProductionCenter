@@ -31,8 +31,14 @@
                             value="${enrollment.key.course.teacher.name}"/></div>
                     <input type="hidden" name="enrollment_id" value="<c:out value="${enrollment.key.id}"/>">
                     <div><c:out value="${enrollment.key.course.activity.type}"/></div>
-                    <div><input type="number" name="lesson_amount"
-                                value="<c:out value="${enrollment.key.lessonAmount}"/>"></div>
+                    <div>
+                        <input type="number" name="lesson_amount"
+                               value="<c:out value="${enrollment.key.lessonAmount}"/>"
+                        <c:if test="${enrollment.key.enrollmentStatus.status eq 'expired'
+                        or enrollment.key.enrollmentStatus.status eq 'paid' or enrollment.key.enrollmentStatus.status eq 'approved'}">
+                               disabled
+                        </c:if>>
+                    </div>
                     <div><c:out value="${enrollment.key.lessonAmount * enrollment.key.course.lessonPrice}"/></div>
                     <div><c:out value="${enrollment.value}"/></div>
                     <div id="status"><c:out value="${enrollment.key.enrollmentStatus.status}"/></div>

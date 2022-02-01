@@ -6,6 +6,7 @@ import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
+import com.dev.productioncenter.model.dao.Transaction;
 import com.dev.productioncenter.model.dao.UserDao;
 import com.dev.productioncenter.model.dao.impl.UserDaoImpl;
 import com.dev.productioncenter.model.service.UserService;
@@ -320,48 +321,107 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException {
+    public boolean checkRoles(Map<String, UserRole> usersRoles) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
         try {
-            for (Map.Entry<String, UserRole> userStatus : usersRoles.entrySet()) {
-                if (!userDao.updateUserRole(userStatus.getKey(), userStatus.getValue())) {
+            for (Map.Entry<String, UserRole> userRole : usersRoles.entrySet()) {
+                Optional<User> user = userDao.findUserByLogin(userRole.getKey());
+                if (user.isPresent()) {
+                    if (user.get().getUserRole() == UserRole.TEACHER && userRole.getValue() != UserRole.TEACHER) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
             }
             return true;
         } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
+            LOGGER.error("Error has occurred while checking users' roles: " + exception);
+            throw new ServiceException("Error has occurred while changing users' roles: ", exception);
         } finally {
             userDao.closeConnection();
         }
     }
 
     @Override
-    public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
+    public boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException {
         UserDao userDao = new UserDaoImpl(false);
-        UserValidator validator = UserValidatorImpl.getInstance();
         try {
-            if (validator.checkLogin(userData.get(LOGIN)) && validator.checkUserPersonalData(userData)) {
-                Optional<User> foundUser = userDao.findUserByLogin(userData.get(LOGIN));
-                if (foundUser.isPresent() && !foundUser.get().getPassword().equals(userData.get(PASSWORD))) {
-                    userData.put(PASSWORD, INCORRECT_VALUE_PARAMETER);
+            for (Map.Entry<String, UserRole> userRole : usersRoles.entrySet()) {
+                if (!userDao.updateUserRole(userRole.getKey(), userRole.getValue())) {
                     return false;
                 }
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while changing users' roles: " + exception);
+            throw new ServiceException("Error has occurred while changing users' roles: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
+    public boolean updateUserLogin(Map<String, String> userData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(true);
+        UserValidator validator = UserValidatorImpl.getInstance();
+        Transaction transaction = Transaction.getInstance();
+        try {
+            if (validator.checkLogin(userData.get(LOGIN))) {
+                if (!userData.get(LOGIN).equals(userData.get(CURRENT_LOGIN))) {
+                    transaction.begin(userDao);
+                    Optional<User> foundUser = userDao.findUserByLogin(userData.get(CURRENT_LOGIN));
+                    Optional<String> password = PasswordEncoder.encode(userData.get(PASSWORD));
+                    if (foundUser.isPresent() && password.isPresent()) {
+                        if (foundUser.get().getPassword().equals(password.get())) {
+                            if (userDao.updateUserLogin(userData.get(CURRENT_LOGIN), userData.get(LOGIN))) {
+                                return true;
+                            }
+                        } else {
+                            userData.put(PASSWORD, INCORRECT_VALUE_PARAMETER);
+                        }
+                    }
+                    transaction.rollback();
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        } catch (DaoException exception) {
+            try {
+                transaction.rollback();
+            } catch (DaoException daoException) {
+                LOGGER.error("Error has occurred while doing transaction rollback for updating user login: " + daoException);
+            }
+            LOGGER.error("Error has occurred while updating user login: " + exception);
+            throw new ServiceException("Error has occurred while updating user login: ", exception);
+        }
+    }
+
+    @Override
+    public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
+        UserDao userDao = new UserDaoImpl(true);
+        UserValidator validator = UserValidatorImpl.getInstance();
+        Transaction transaction = Transaction.getInstance();
+        try {
+            if (validator.checkLogin(userData.get(LOGIN)) && validator.checkUserPersonalData(userData)) {
                 Optional<String> password;
                 if (!userData.get(NEW_PASSWORD).isEmpty() || !userData.get(REPEATED_PASSWORD).isEmpty()
                         && UserValidatorImpl.getInstance().checkPassword(NEW_PASSWORD)) {
                     if (!userData.get(NEW_PASSWORD).equals(userData.get(REPEATED_PASSWORD))) {
                         userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
+                        transaction.rollback();
                         return false;
                     }
                     password = PasswordEncoder.encode(userData.get(NEW_PASSWORD));
                 } else {
-                    password = Optional.of(userData.get(PASSWORD));
+                    password = PasswordEncoder.encode(userData.get(PASSWORD));
                 }
                 if (password.isPresent()) {
-                    BigInteger phoneNumber = new BigInteger(
-                            userData.get(PHONE_NUMBER).replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
+                    transaction.begin(userDao);
+                    BigInteger phoneNumber = new BigInteger(userData.get(PHONE_NUMBER)
+                            .replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
                     User user = new User.UserBuilder()
                             .setLogin(userData.get(LOGIN))
                             .setPassword(password.get())
@@ -372,16 +432,27 @@ public class UserServiceImpl implements UserService {
                             .setUserRole(UserRole.USER)
                             .build();
                     userDao.update(user);
+                    transaction.commit();
                     return true;
                 }
             }
+            transaction.rollback();
+            return false;
         } catch (DaoException exception) {
+            try {
+                transaction.rollback();
+            } catch (DaoException daoException) {
+                LOGGER.error("Error has occurred while doing transaction rollback for updating user account: " + daoException);
+            }
             LOGGER.error("Error has occurred while updating user account: " + exception);
             throw new ServiceException("Error has occurred while updating user account: ", exception);
         } finally {
-            userDao.closeConnection();
+            try {
+                transaction.end();
+            } catch (DaoException exception) {
+                LOGGER.error("Error has occurred while ending transaction for updating user account: " + exception);
+            }
         }
-        return false;
     }
 
     @Override

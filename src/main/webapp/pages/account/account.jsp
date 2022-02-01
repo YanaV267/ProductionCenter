@@ -17,8 +17,8 @@
         <div>
             <div>
                 <c:choose>
-                    <c:when test="${not empty requestScope.picture}">
-                        <img src="<c:out value="${requestScope.picture}"/>" alt="account">
+                    <c:when test="${not empty picture}">
+                        <img src="<c:out value="${picture}"/>" alt="account">
                     </c:when>
                     <c:otherwise>
                         <img src="${pageContext.request.contextPath}/pics/account.png" alt="account">
@@ -44,8 +44,10 @@
                     <div id="upload_file"><fmt:message key="account.photo"/></div>
                 </label>
             </div>
-            <input type="button" value="<fmt:message key="account.balance"/>"
-                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_replenish_balance'">
+            <c:if test="${sessionScope.role eq 'user'}">
+                <input type="button" value="<fmt:message key="account.balance"/>"
+                       onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_replenish_balance'">
+            </c:if>
             <input type="button" value="<fmt:message key="account.update"/>"
                    onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_update_account_data'">
             <input type="submit" value="<fmt:message key="account.upload_photo"/>" disabled>

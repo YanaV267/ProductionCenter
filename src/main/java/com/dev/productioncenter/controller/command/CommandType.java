@@ -48,7 +48,7 @@ public enum CommandType {
     ENROLL_ON_COURSE(new EnrollOnCourseCommand()),
     UPDATE_ENROLLMENT(new UpdateEnrollmentCommand()),
     RENEW_ENROLLMENT(new RenewEnrollmentCommand()),
-    DELETE_ENROLLMENT(new CancelEnrollmentCommand()),
+    CANCEL_ENROLLMENT(new CancelEnrollmentCommand()),
     PAY_FOR_ENROLLMENT(new PayForEnrollmentCommand()),
     ADD_ACTIVITY(new AddActivityCommand()),
     ADD_COURSE(new AddCourseCommand()),

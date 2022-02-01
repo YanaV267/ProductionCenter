@@ -35,7 +35,15 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE id_enrollment = ?";
-    private static final String SQL_SELECT_ENROLLMENTS_BY_USER =
+    private static final String SQL_SELECT_ENROLLMENTS =
+            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
+                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
+                    "JOIN users ON enrollments.id_user = users.id_user " +
+                    "JOIN courses ON enrollments.id_course = courses.id_course " +
+                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
+                    "JOIN activities ON activities.id_activity = courses.id_activity " +
+                    "LIMIT ?, 15";
+    private static final String SQL_SELECT_ALL_ENROLLMENTS_BY_USER =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
                     "JOIN users ON enrollments.id_user = users.id_user " +
@@ -43,6 +51,14 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
                     "WHERE users.login = ?";
+    private static final String SQL_SELECT_ENROLLMENTS_BY_USER =
+            "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
+                    "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
+                    "JOIN users ON enrollments.id_user = users.id_user " +
+                    "JOIN courses ON enrollments.id_course = courses.id_course " +
+                    "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
+                    "JOIN activities ON activities.id_activity = courses.id_activity " +
+                    "WHERE users.login = ? LIMIT ?, 15";
     private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -50,7 +66,7 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE enrollments.id_course = ?";
+                    "WHERE enrollments.id_course = ? LIMIT ?, 15";
     private static final String SQL_SELECT_ENROLLMENTS_BY_COURSE_USER =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -161,14 +177,32 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     public Optional<Enrollment> findById(Long id) throws DaoException {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(SQL_SELECT_ENROLLMENTS_BY_ID)) {
-            enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollment by id: " + exception);
             throw new DaoException("Error has occurred while finding enrollment by id: ", exception);
         }
         return enrollments.isEmpty() ? Optional.empty() : Optional.of(enrollments.get(0));
+    }
+
+    @Override
+    public List<Enrollment> findEnrollments(int startElementNumber) throws DaoException {
+        List<Enrollment> enrollments;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS)) {
+            preparedStatement.setInt(1, startElementNumber);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding enrollments: " + exception);
+            throw new DaoException("Error has occurred while finding enrollments: ", exception);
+        }
+        return enrollments;
     }
 
     @Override
@@ -192,7 +226,7 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException {
         List<Enrollment> enrollments;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_ENROLLMENTS_BY_USER)) {
             preparedStatement.setString(1, user.getLogin());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
@@ -210,6 +244,7 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {
             preparedStatement.setLong(1, course.getId());
+            preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
             }

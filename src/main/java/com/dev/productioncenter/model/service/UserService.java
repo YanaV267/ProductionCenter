@@ -34,9 +34,13 @@ public interface UserService {
 
     boolean registerUser(Map<String, String> userData) throws ServiceException;
 
+    boolean checkRoles(Map<String, UserRole> usersRoles) throws ServiceException;
+
     boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException;
 
     boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException;
+
+    boolean updateUserLogin(Map<String, String> userData) throws ServiceException;
 
     boolean updateUserAccountData(Map<String, String> userData) throws ServiceException;
 

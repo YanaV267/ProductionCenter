@@ -2,7 +2,6 @@ package com.dev.productioncenter.controller.command.impl.go.course;
 
 import com.dev.productioncenter.controller.command.Command;
 import com.dev.productioncenter.controller.command.PagePath;
-import com.dev.productioncenter.controller.command.RequestParameter;
 import com.dev.productioncenter.controller.command.Router;
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.entity.User;
@@ -28,15 +27,11 @@ public class GoToAddCourseCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        String category = request.getParameter(RequestParameter.CATEGORY);
         try {
-            if (category != null) {
-                List<Activity> activities = activityService.findActivities(category);
-                request.setAttribute(SELECTED_CATEGORY, category);
-                request.setAttribute(ACTIVITIES, activities);
-            }
+            List<Activity> activities = activityService.findActivities();
             List<String> categories = activityService.findCategories();
             Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
+            request.setAttribute(ACTIVITIES, activities);
             request.setAttribute(CATEGORIES, categories);
             request.setAttribute(TEACHERS, teachers);
             return new Router(PagePath.ADD_COURSE, Router.RouterType.FORWARD);

@@ -18,6 +18,7 @@ import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
 public class ChangeUserRoleCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String CHANGE_ROLES_ERROR_MESSAGE_KEY = "error.change.user_roles";
     private static final String CHANGE_ROLES_CONFIRM_MESSAGE_KEY = "confirm.change.user_roles";
     private static final int DEFAULT_PAGE = 1;
     private final UserService userService = UserServiceImpl.getInstance();
@@ -25,6 +26,12 @@ public class ChangeUserRoleCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        int page;
+        if (request.getParameter(RequestParameter.PAGE) == null) {
+            page = DEFAULT_PAGE;
+        } else {
+            page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
+        }
         String[] logins = request.getParameterValues(RequestParameter.LOGIN);
         String[] roles = request.getParameterValues(RequestParameter.ROLE);
         Map<String, UserRole> usersRoles = new HashMap<>();
@@ -32,6 +39,15 @@ public class ChangeUserRoleCommand implements Command {
             usersRoles.put(logins[i], UserRole.valueOf(roles[i].toUpperCase()));
         }
         try {
+            if (!userService.checkRoles(usersRoles)) {
+                Map<User, String> users = userService.findUsersTeachers(page);
+                Map<User, String> nextUsers = userService.findUsersTeachers(page + 1);
+                request.setAttribute(USERS, users);
+                request.setAttribute(PAGE, page);
+                request.setAttribute(LAST, nextUsers.isEmpty());
+                request.setAttribute(SessionAttribute.MESSAGE, CHANGE_ROLES_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.TEACHERS, Router.RouterType.FORWARD);
+            }
             if (userService.updateRoles(usersRoles)) {
                 Map<User, String> users = userService.findUsersTeachers(DEFAULT_PAGE);
                 Map<User, String> nextUsers = userService.findUsersTeachers(DEFAULT_PAGE + 1);

@@ -1,14 +1,14 @@
 $('#all>div:nth-child(7n):not(:nth-child(-n+7))').on('click', function () {
     let row = Math.trunc($(this).index() / 7);
-    if ($(`input[type=checkbox]:eq(${row - 1})`).prop('checked')) {
-        $(`input[name=status]:eq(${row - 1})`).val('blocked');
+    if ($(`input[type=checkbox]:eq(${row + 1})`).prop('checked')) {
+        $(`input[name=current_status]:eq(${row - 1})`).val('blocked');
     } else {
-        $(`input[name=status]:eq(${row - 1})`).val('active');
+        $(`input[name=current_status]:eq(${row - 1})`).val('active');
     }
 });
 
-$('form:first-of-type input[type=checkbox]').change(function () {
-    if ($('form:first-of-type  input[type=checkbox]:checked').length === 2) {
+$('form:first-of-type input[name=status]').change(function () {
+    if ($('form:first-of-type input[name=status]:checked').length === 2) {
         $('form:first-of-type input[type=submit]').prop('disabled', true);
     } else {
         $('form:first-of-type input[type=submit]').prop('disabled', false);
