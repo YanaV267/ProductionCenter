@@ -1,12 +1,8 @@
 package test.dev.productioncenter.model.service;
 
-import com.dev.productioncenter.entity.Enrollment;
-import com.dev.productioncenter.entity.EnrollmentStatus;
-import com.dev.productioncenter.entity.Lesson;
-import com.dev.productioncenter.entity.User;
+import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.dao.EnrollmentDao;
 import com.dev.productioncenter.model.dao.LessonDao;
@@ -27,7 +23,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -74,7 +69,7 @@ public class EnrollmentServiceTest {
         enrollmentValidator.when(EnrollmentValidatorImpl::getInstance).thenReturn(validator);
 
         when(validator.checkLessonAmount(anyString())).thenReturn(true);
-        when(enrollmentDao.add(any())).thenReturn(Long.valueOf(5));
+        when(enrollmentDao.add(any(Enrollment.class))).thenReturn(Long.valueOf(5));
 
         long courseId = 7;
         String lessonAmount = "20";
@@ -97,7 +92,7 @@ public class EnrollmentServiceTest {
     public void findEnrollmentByCourse() throws ServiceException, DaoException {
         enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
 
-        when(enrollmentDao.findEnrollmentsByCourseUser(any(), any())).thenReturn(Optional.of(new Enrollment()));
+        when(enrollmentDao.findEnrollmentsByCourseUser(any(User.class), any(Course.class))).thenReturn(Optional.of(new Enrollment()));
 
         long courseId = 8;
         Optional<Enrollment> actual = enrollmentService.findEnrollment(new User(), courseId);
@@ -110,7 +105,7 @@ public class EnrollmentServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getLessonDao(false)).thenReturn(lessonDao);
 
-        when(enrollmentDao.findEnrollmentsByUser(any())).thenReturn(List.of(
+        when(enrollmentDao.findEnrollmentsByUser(any(User.class))).thenReturn(List.of(
                 new Enrollment.EnrollmentBuilder()
                         .setReservationDateTime(LocalDateTime.now())
                         .build()));
@@ -136,7 +131,7 @@ public class EnrollmentServiceTest {
     public void findEnrollmentsByCourse() throws ServiceException, DaoException {
         enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
 
-        when(enrollmentDao.findEnrollmentsByCourse(any(), anyInt())).thenReturn(List.of(
+        when(enrollmentDao.findEnrollmentsByCourse(any(Course.class), anyInt())).thenReturn(List.of(
                 new Enrollment.EnrollmentBuilder()
                         .setReservationDateTime(LocalDateTime.now())
                         .build()));
@@ -151,7 +146,7 @@ public class EnrollmentServiceTest {
     public void updateStatus(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException, DaoException {
         enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
 
-        when(enrollmentDao.updateEnrollmentStatus(any())).thenReturn(false);
+        when(enrollmentDao.updateEnrollmentStatus(any(Enrollment.class))).thenReturn(false);
 
         boolean actual = enrollmentService.updateStatus(enrollmentStatuses);
         Assert.assertFalse(actual);
@@ -161,7 +156,7 @@ public class EnrollmentServiceTest {
     public void updateStatus() throws ServiceException, DaoException {
         enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
 
-        when(enrollmentDao.updateEnrollmentStatus(any())).thenReturn(true);
+        when(enrollmentDao.updateEnrollmentStatus(any(Enrollment.class))).thenReturn(true);
 
         long enrollmentId = 6;
         boolean actual = enrollmentService.updateStatus(enrollmentId, EnrollmentStatus.PAID);
@@ -174,7 +169,7 @@ public class EnrollmentServiceTest {
         enrollmentValidator.when(EnrollmentValidatorImpl::getInstance).thenReturn(validator);
 
         when(validator.checkLessonAmount(anyMap())).thenReturn(true);
-        when(enrollmentDao.update(any())).thenReturn(true);
+        when(enrollmentDao.update(any(Enrollment.class))).thenReturn(true);
 
         Map<String, String> enrollmentsLessonAmount = Map.of("4", "14", "9", "8");
         boolean actual = enrollmentService.updateLessonAmounts(enrollmentsLessonAmount);
@@ -201,7 +196,7 @@ public class EnrollmentServiceTest {
         when(validator.checkLessonAmount(anyString())).thenReturn(true);
         when(enrollmentDao.findExpiredEnrollments()).thenReturn(List.of());
         when(enrollmentDao.delete(anyLong())).thenReturn(true);
-        when(enrollmentDao.updateEnrollmentStatus(any())).thenReturn(true);
+        when(enrollmentDao.updateEnrollmentStatus(any(Enrollment.class))).thenReturn(true);
         when(courseService.releasePlaceAtCourse(anyLong())).thenReturn(true);
 
         boolean actual = enrollmentService.checkEnrollmentsReservationStatus();

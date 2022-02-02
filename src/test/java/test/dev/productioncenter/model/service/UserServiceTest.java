@@ -115,7 +115,7 @@ public class UserServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getUserDao(false)).thenReturn(userDao);
 
-        when(userDao.findUsersByRole(any())).thenReturn(List.of(new User()));
+        when(userDao.findUsersByRole(any(UserRole.class))).thenReturn(List.of(new User()));
         doNothing().when(userDao).closeConnection();
 
         int page = 1;
@@ -129,11 +129,11 @@ public class UserServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getUserDao(false)).thenReturn(userDao);
 
-        when(userDao.findUsersByFullNameStatus(any(), anyInt())).thenReturn(List.of(new User()));
-        when(userDao.findUsersByFullName(any(), anyInt())).thenReturn(List.of());
-        when(userDao.findUsersBySurnameStatus(any(), anyInt())).thenReturn(List.of(new User()));
-        when(userDao.findUsersByStatus(any(), anyInt())).thenReturn(List.of());
-        when(userDao.findUsersBySurname(any(), anyInt())).thenReturn(List.of());
+        when(userDao.findUsersByFullNameStatus(any(User.class), anyInt())).thenReturn(List.of(new User()));
+        when(userDao.findUsersByFullName(any(User.class), anyInt())).thenReturn(List.of());
+        when(userDao.findUsersBySurnameStatus(any(User.class), anyInt())).thenReturn(List.of(new User()));
+        when(userDao.findUsersByStatus(any(User.class), anyInt())).thenReturn(List.of());
+        when(userDao.findUsersBySurname(any(User.class), anyInt())).thenReturn(List.of());
         doNothing().when(userDao).closeConnection();
 
         Map<User, String> expected = Map.of(new User(), "+375(44)278-5513");
@@ -163,11 +163,11 @@ public class UserServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getUserDao(false)).thenReturn(userDao);
 
-        when(userDao.findTeachersHoldingLessonsByFullName(any(), anyInt())).thenReturn(List.of(new User()));
+        when(userDao.findTeachersHoldingLessonsByFullName(any(User.class), anyInt())).thenReturn(List.of(new User()));
         when(userDao.findTeachersHoldingLessonsBySurname(anyString(), anyInt())).thenReturn(List.of());
         when(userDao.findTeachersHoldingLessons(anyInt())).thenReturn(List.of(new User()));
-        when(userDao.findUsersByFullName(any(), anyInt())).thenReturn(List.of());
-        when(userDao.findUsersBySurname(any(), anyInt())).thenReturn(List.of());
+        when(userDao.findUsersByFullName(any(User.class), anyInt())).thenReturn(List.of());
+        when(userDao.findUsersBySurname(any(User.class), anyInt())).thenReturn(List.of());
         doNothing().when(userDao).closeConnection();
 
         Map<User, String> expected = Map.of(new User(), "+375(44)278-5513");
@@ -210,7 +210,7 @@ public class UserServiceTest {
         when(daoProvider.getUserDao(true)).thenReturn(userDao);
 
         when(validator.checkUserData(anyMap())).thenReturn(true);
-        when(userDao.add(any())).thenReturn(Long.valueOf(1));
+        when(userDao.add(any(User.class))).thenReturn(Long.valueOf(1));
         when(userDao.updateUserPassword(anyString(), anyString())).thenReturn(true);
         doNothing().when(transaction).begin(userDao);
         doNothing().when(transaction).commit();
@@ -238,7 +238,7 @@ public class UserServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getUserDao(false)).thenReturn(userDao);
 
-        when(userDao.updateUserRole(anyString(), any())).thenReturn(true);
+        when(userDao.updateUserRole(anyString(), any(UserRole.class))).thenReturn(true);
         doNothing().when(userDao).closeConnection();
 
         Map<String, UserStatus> usersStatuses = Map.of("login1", UserStatus.ACTIVE, "login2", UserStatus.ACTIVE);
@@ -251,7 +251,7 @@ public class UserServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getUserDao(false)).thenReturn(userDao);
 
-        when(userDao.updateUserRole(anyString(), any())).thenReturn(true);
+        when(userDao.updateUserRole(anyString(), any(UserRole.class))).thenReturn(true);
         doNothing().when(userDao).closeConnection();
 
         Map<String, UserRole> usersRoles = Map.of("login1", UserRole.USER, "login2", UserRole.TEACHER);
@@ -285,7 +285,7 @@ public class UserServiceTest {
 
         when(validator.checkLogin(anyString())).thenReturn(true);
         when(validator.checkUserPersonalData(anyMap())).thenReturn(true);
-        when(userDao.update(any())).thenReturn(true);
+        when(userDao.update(any(User.class))).thenReturn(true);
         when(userDao.updateUserPassword(anyString(), anyString())).thenReturn(true);
         doNothing().when(transaction).begin(userDao);
         doNothing().when(transaction).commit();

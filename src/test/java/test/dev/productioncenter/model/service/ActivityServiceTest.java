@@ -3,7 +3,6 @@ package test.dev.productioncenter.model.service;
 import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.dao.impl.ActivityDaoImpl;
 import com.dev.productioncenter.model.service.ActivityService;
@@ -20,7 +19,6 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
@@ -60,8 +58,8 @@ public class ActivityServiceTest {
         when(daoProvider.getActivityDao(false)).thenReturn(activityDao);
 
         when(validator.checkActivity(anyMap())).thenReturn(true);
-        when(activityDao.findActivity(any())).thenReturn(false);
-        when(activityDao.add(any())).thenReturn(Long.valueOf(1));
+        when(activityDao.findActivity(any(Activity.class))).thenReturn(false);
+        when(activityDao.add(any(Activity.class))).thenReturn(Long.valueOf(1));
         doNothing().when(activityDao).closeConnection();
 
         boolean actual = activityService.addActivity(activityData);

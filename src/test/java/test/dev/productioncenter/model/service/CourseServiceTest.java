@@ -1,9 +1,6 @@
 package test.dev.productioncenter.model.service;
 
-import com.dev.productioncenter.entity.Activity;
-import com.dev.productioncenter.entity.Course;
-import com.dev.productioncenter.entity.Lesson;
-import com.dev.productioncenter.entity.User;
+import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.*;
@@ -82,11 +79,11 @@ public class CourseServiceTest {
 
         when(validator.checkCourse(anyMap())).thenReturn(true);
         when(validator.checkActivity(anyMap())).thenReturn(true);
-        when(ageGroupDao.findByMinMaxAge(any())).thenReturn(Optional.empty());
-        when(ageGroupDao.add(any())).thenReturn(Long.valueOf(1));
-        when(activityDao.findActivityId(any())).thenReturn(Long.valueOf(4));
+        when(ageGroupDao.findByMinMaxAge(any(AgeGroup.class))).thenReturn(Optional.empty());
+        when(ageGroupDao.add(any(AgeGroup.class))).thenReturn(Long.valueOf(1));
+        when(activityDao.findActivityId(any(Activity.class))).thenReturn(Long.valueOf(4));
         when(userDao.findTeacherByName(anyString(), anyString())).thenReturn(Optional.of(new User()));
-        when(courseDao.add(any())).thenReturn(Long.valueOf(9));
+        when(courseDao.add(any(Course.class))).thenReturn(Long.valueOf(9));
         when(lessonService.addLessons(anyMap(), anyLong())).thenReturn(true);
         doNothing().when(transaction).begin(ageGroupDao, userDao, courseDao);
         doNothing().when(transaction).commit();
@@ -108,10 +105,10 @@ public class CourseServiceTest {
         when(daoProvider.getUserDao(true)).thenReturn(userDao);
 
         when(validator.checkCourse(anyMap())).thenReturn(true);
-        when(ageGroupDao.findByMinMaxAge(any())).thenReturn(Optional.empty());
-        when(ageGroupDao.add(any())).thenReturn(Long.valueOf(1));
+        when(ageGroupDao.findByMinMaxAge(any(AgeGroup.class))).thenReturn(Optional.empty());
+        when(ageGroupDao.add(any(AgeGroup.class))).thenReturn(Long.valueOf(1));
         when(userDao.findTeacherByName(anyString(), anyString())).thenReturn(Optional.of(new User()));
-        when(courseDao.update(any())).thenReturn(true);
+        when(courseDao.update(any(Course.class))).thenReturn(true);
         when(lessonService.updateLessons(anyMap(), anyLong())).thenReturn(true);
         doNothing().when(transaction).begin(ageGroupDao, userDao, courseDao);
         doNothing().when(transaction).commit();
@@ -128,7 +125,7 @@ public class CourseServiceTest {
         when(daoProvider.getCourseDao(false)).thenReturn(courseDao);
         when(daoProvider.getLessonDao(false)).thenReturn(lessonDao);
 
-        when(courseDao.findCourseByTeacher(any())).thenReturn(List.of(new Course()));
+        when(courseDao.findCourseByTeacher(any(User.class))).thenReturn(List.of(new Course()));
         when(lessonDao.findLessonsByCourse(anyLong())).thenReturn(List.of(new Lesson()));
         doNothing().when(courseDao).closeConnection();
 
@@ -154,11 +151,11 @@ public class CourseServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getCourseDao(false)).thenReturn(courseDao);
 
-        when(courseDao.findCourseByActivityWeekday(any(), anyString(), anyInt())).thenReturn(List.of(new Course()));
-        when(courseDao.findCourseByActivity(any(), anyInt())).thenReturn(List.of());
-        when(courseDao.findCourseByActivityCategory(any(), anyInt())).thenReturn(List.of());
-        when(courseDao.findCourseByActivityType(any(), anyInt())).thenReturn(List.of());
-        when(courseDao.findCourseByWeekday(any())).thenReturn(List.of(new Course()));
+        when(courseDao.findCourseByActivityWeekday(any(Activity.class), anyString(), anyInt())).thenReturn(List.of(new Course()));
+        when(courseDao.findCourseByActivity(any(Activity.class), anyInt())).thenReturn(List.of());
+        when(courseDao.findCourseByActivityCategory(any(Activity.class), anyInt())).thenReturn(List.of());
+        when(courseDao.findCourseByActivityType(any(Activity.class), anyInt())).thenReturn(List.of());
+        when(courseDao.findCourseByWeekday(anyString())).thenReturn(List.of(new Course()));
         doNothing().when(courseDao).closeConnection();
 
         int page = 1;

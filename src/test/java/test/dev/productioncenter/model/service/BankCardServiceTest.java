@@ -5,7 +5,6 @@ import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.Enrollment;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
-import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.BankCardDao;
 import com.dev.productioncenter.model.dao.impl.BankCardDaoImpl;
 import com.dev.productioncenter.model.service.BankCardService;
@@ -25,7 +24,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,7 +62,7 @@ public class BankCardServiceTest {
         bankCardValidator.when(BankCardValidatorImpl::getInstance).thenReturn(validator);
 
         when(validator.checkCardData(anyMap())).thenReturn(true);
-        when(bankCardDao.findBankCard(any())).thenReturn(Optional.of(new BankCard()));
+        when(bankCardDao.findBankCard(any(BankCard.class))).thenReturn(Optional.of(new BankCard()));
 
         Optional<BankCard> actual = bankCardService.findCard(bankCardData);
         Assert.assertTrue(actual.isPresent());
@@ -76,8 +74,8 @@ public class BankCardServiceTest {
         bankCardValidator.when(BankCardValidatorImpl::getInstance).thenReturn(validator);
 
         when(validator.checkBalance(anyString())).thenReturn(true);
-        when(bankCardDao.findBalance(any())).thenReturn(new BigDecimal("15"));
-        when(bankCardDao.update(any())).thenReturn(false);
+        when(bankCardDao.findBalance(any(BankCard.class))).thenReturn(new BigDecimal("15"));
+        when(bankCardDao.update(any(BankCard.class))).thenReturn(false);
 
         BankCard bankCard = new BankCard();
         String replenishmentValue = "100";
@@ -97,7 +95,7 @@ public class BankCardServiceTest {
                                 .build())
                         .setLessonAmount(5)
                         .build()));
-        when(bankCardDao.update(any())).thenReturn(true);
+        when(bankCardDao.update(any(BankCard.class))).thenReturn(true);
 
         BankCard bankCard = new BankCard();
         bankCard.setBalance(BigDecimal.valueOf(100));

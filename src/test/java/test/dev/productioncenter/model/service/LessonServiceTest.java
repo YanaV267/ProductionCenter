@@ -59,7 +59,7 @@ public class LessonServiceTest {
         daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
         when(daoProvider.getLessonDao(true)).thenReturn(lessonDao);
 
-        when(lessonDao.add(any())).thenReturn(Long.valueOf(1));
+        when(lessonDao.add(any(Lesson.class))).thenReturn(Long.valueOf(1));
         doNothing().when(transaction).begin(lessonDao);
 
         Map<String, String> lessonData = Map.of(WEEKDAYS, "пн, ср, чт", TIME, "15:30", DURATION, "45");
@@ -75,8 +75,8 @@ public class LessonServiceTest {
         when(daoProvider.getLessonDao(true)).thenReturn(lessonDao);
 
         when(lessonDao.findLessonsByCourseWeekDay(anyString(), anyLong())).thenReturn(Optional.empty());
-        when(lessonDao.add(any())).thenReturn(Long.valueOf(1));
-        when(lessonDao.update(any())).thenReturn(true);
+        when(lessonDao.add(any(Lesson.class))).thenReturn(Long.valueOf(1));
+        when(lessonDao.update(any(Lesson.class))).thenReturn(true);
         doNothing().when(transaction).begin(lessonDao);
 
         long courseId = 2;
