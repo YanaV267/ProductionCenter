@@ -103,7 +103,8 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
 
     @Override
     public long add(Enrollment enrollment) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_ENROLLMENT, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, enrollment.getUser().getId());
             preparedStatement.setLong(2, enrollment.getCourse().getId());
@@ -120,7 +121,8 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
 
     @Override
     public boolean update(Enrollment enrollment) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT)) {
             preparedStatement.setInt(1, enrollment.getLessonAmount());
             preparedStatement.setLong(2, enrollment.getId());
@@ -134,7 +136,8 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
 
     @Override
     public boolean updateEnrollmentStatus(Enrollment enrollment) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_ENROLLMENT_STATUS)) {
             preparedStatement.setString(1, enrollment.getEnrollmentStatus().getStatus());
             preparedStatement.setLong(2, enrollment.getId());
@@ -148,7 +151,8 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
 
     @Override
     public boolean delete(Long id) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE_ENROLLMENT)) {
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
@@ -162,10 +166,12 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findAll() throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_ENROLLMENTS)) {
-            enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+            EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+            enrollments = enrollmentMapper.retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments: " + exception);
             throw new DaoException("Error has occurred while finding enrollments: ", exception);
@@ -176,11 +182,13 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public Optional<Enrollment> findById(Long id) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_ID)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollment by id: " + exception);
@@ -192,11 +200,13 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollments(int startElementNumber) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS)) {
             preparedStatement.setInt(1, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments: " + exception);
@@ -208,12 +218,14 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByUser(User user, int startElementNumber) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_USER)) {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by user: " + exception);
@@ -225,11 +237,13 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByUser(User user) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_ENROLLMENTS_BY_USER)) {
             preparedStatement.setString(1, user.getLogin());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by user: " + exception);
@@ -241,12 +255,14 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByCourse(Course course, int startElementNumber) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE)) {
             preparedStatement.setLong(1, course.getId());
             preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by course: " + exception);
@@ -258,12 +274,14 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public Optional<Enrollment> findEnrollmentsByCourseUser(User user, Course course) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_COURSE_USER)) {
             preparedStatement.setLong(1, user.getId());
             preparedStatement.setLong(2, course.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by course & user: " + exception);
@@ -275,11 +293,13 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_STATUS)) {
             preparedStatement.setString(1, status.getStatus());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding enrollments by status: " + exception);
@@ -291,10 +311,12 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     @Override
     public List<Enrollment> findExpiredEnrollments() throws DaoException {
         List<Enrollment> enrollments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              Statement statement = connection.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(SQL_SELECT_EXPIRED_ENROLLMENTS)) {
-                enrollments = EnrollmentMapper.getInstance().retrieve(resultSet);
+                EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
+                enrollments = enrollmentMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding expired enrollments: " + exception);

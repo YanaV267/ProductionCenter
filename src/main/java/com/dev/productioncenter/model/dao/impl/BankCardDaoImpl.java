@@ -37,7 +37,8 @@ public class BankCardDaoImpl extends BankCardDao {
 
     @Override
     public boolean update(BankCard bankCard) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_BANK_CARD_BALANCE)) {
             preparedStatement.setBigDecimal(1, bankCard.getBalance());
             preparedStatement.setLong(2, bankCard.getCardNumber());
@@ -66,7 +67,8 @@ public class BankCardDaoImpl extends BankCardDao {
 
     @Override
     public Optional<BankCard> findBankCard(BankCard bankCard) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD)) {
             preparedStatement.setLong(1, bankCard.getCardNumber());
             preparedStatement.setDate(2, Date.valueOf(bankCard.getExpirationDate()));
@@ -88,7 +90,8 @@ public class BankCardDaoImpl extends BankCardDao {
     @Override
     public BigDecimal findBalance(BankCard bankCard) throws DaoException {
         BigDecimal balance;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BANK_CARD_BALANCE)) {
             preparedStatement.setLong(1, bankCard.getCardNumber());
             preparedStatement.setDate(2, Date.valueOf(bankCard.getExpirationDate()));

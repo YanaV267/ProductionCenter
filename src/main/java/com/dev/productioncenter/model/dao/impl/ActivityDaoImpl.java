@@ -6,10 +6,7 @@ import com.dev.productioncenter.model.connection.ConnectionPool;
 import com.dev.productioncenter.model.dao.ActivityDao;
 import com.dev.productioncenter.model.dao.ColumnName;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +18,6 @@ public class ActivityDaoImpl extends ActivityDao {
             "SELECT id_activity, category, type FROM activities";
     private static final String SQL_SELECT_ACTIVITY =
             "SELECT id_activity, category, type FROM activities WHERE category = ? AND type = ?";
-    private static final String SQL_SELECT_ACTIVITY_BY_CATEGORY =
-            "SELECT id_activity, category, type FROM activities WHERE category = ?";
     private static final String SQL_SELECT_ALL_CATEGORIES =
             "SELECT category FROM activities GROUP BY category";
 
@@ -88,7 +83,7 @@ public class ActivityDaoImpl extends ActivityDao {
 
     @Override
     public boolean findActivity(Activity activity) throws DaoException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ACTIVITY, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ACTIVITY)) {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setString(2, activity.getType());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -102,7 +97,7 @@ public class ActivityDaoImpl extends ActivityDao {
 
     @Override
     public long findActivityId(Activity activity) throws DaoException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ACTIVITY, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ACTIVITY)) {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setString(2, activity.getType());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {

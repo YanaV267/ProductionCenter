@@ -180,7 +180,8 @@ public class UserDaoImpl extends UserDao {
         List<User> users;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_USERS)) {
-            users = UserMapper.getInstance().retrieve(resultSet);
+            UserMapper userMapper = UserMapper.getInstance();
+            users = userMapper.retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users: " + exception);
             throw new DaoException("Error has occurred while finding users: ", exception);
@@ -199,7 +200,8 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding user by login: " + exception);
@@ -231,7 +233,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(1, surname);
             preparedStatement.setString(2, name);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                teachers = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                teachers = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding teacher by full name: " + exception);
@@ -246,7 +249,8 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding user by email: " + exception);
@@ -265,7 +269,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(4, user.getUserRole().getRole());
             preparedStatement.setInt(5, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by full name & status: " + exception);
@@ -283,7 +288,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(3, user.getUserRole().getRole());
             preparedStatement.setInt(4, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by full name & status: " + exception);
@@ -300,7 +306,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(2, user.getUserRole().getRole());
             preparedStatement.setInt(3, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by surname: " + exception);
@@ -318,7 +325,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(3, user.getUserRole().getRole());
             preparedStatement.setInt(4, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by full name: " + exception);
@@ -335,7 +343,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(2, user.getUserRole().getRole());
             preparedStatement.setInt(3, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by status: " + exception);
@@ -350,7 +359,8 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_USERS_BY_ROLE)) {
             preparedStatement.setString(1, userRole.getRole());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by role: " + exception);
@@ -366,7 +376,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(1, userRole.getRole());
             preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users by role: " + exception);
@@ -381,7 +392,8 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_AND_TEACHERS)) {
             preparedStatement.setInt(1, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding users & teachers: " + exception);
@@ -396,7 +408,8 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_HOLDING_COURSES)) {
             preparedStatement.setInt(1, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding holding lessons teachers: " + exception);
@@ -412,7 +425,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(1, QUERY_LIKE_WILDCARD + surname + QUERY_LIKE_WILDCARD);
             preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding holding lessons teachers by surname: " + exception);
@@ -429,7 +443,8 @@ public class UserDaoImpl extends UserDao {
             preparedStatement.setString(2, QUERY_LIKE_WILDCARD + teacher.getName() + QUERY_LIKE_WILDCARD);
             preparedStatement.setInt(3, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                users = UserMapper.getInstance().retrieve(resultSet);
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding holding lessons teachers by surname: " + exception);

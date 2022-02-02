@@ -45,7 +45,7 @@ public class AgeGroupDaoImpl extends AgeGroupDao {
     }
 
     @Override
-    public boolean update(AgeGroup ageGroup) throws DaoException {
+    public boolean update(AgeGroup ageGroup) {
         throw new UnsupportedOperationException("Updating of an age group is unsupported");
     }
 

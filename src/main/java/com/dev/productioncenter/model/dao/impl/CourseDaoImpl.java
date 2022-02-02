@@ -193,7 +193,8 @@ public class CourseDaoImpl extends CourseDao {
         List<Course> courses;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SQL_SELECT_ALL_COURSES)) {
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            CourseMapper courseMapper = CourseMapper.getInstance();
+            courses = courseMapper.retrieve(resultSet);
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses: " + exception);
             throw new DaoException("Error has occurred while finding courses: ", exception);
@@ -207,7 +208,8 @@ public class CourseDaoImpl extends CourseDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES)) {
             preparedStatement.setInt(1, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                courses = CourseMapper.getInstance().retrieve(resultSet);
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses: " + exception);
@@ -218,16 +220,18 @@ public class CourseDaoImpl extends CourseDao {
 
     @Override
     public Optional<Course> findById(Long id) throws DaoException {
+        List<Course> courses;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSE_BY_ID)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                List<Course> courses = CourseMapper.getInstance().retrieve(resultSet);
-                return courses.isEmpty() ? Optional.empty() : Optional.of(courses.get(0));
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding course by id: " + exception);
             throw new DaoException("Error has occurred while finding course by id: ", exception);
         }
+        return courses.isEmpty() ? Optional.empty() : Optional.of(courses.get(0));
     }
 
     @Override
@@ -235,8 +239,10 @@ public class CourseDaoImpl extends CourseDao {
         List<Course> courses;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_TEACHER)) {
             preparedStatement.setLong(1, teacher.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by teacher: " + exception);
             throw new DaoException("Error has occurred while finding courses by teacher: ", exception);
@@ -250,8 +256,10 @@ public class CourseDaoImpl extends CourseDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_AGE_GROUP)) {
             preparedStatement.setInt(1, ageGroup.getMinAge());
             preparedStatement.setInt(2, ageGroup.getMaxAge());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by age group: " + exception);
             throw new DaoException("Error has occurred while finding courses by age group: ", exception);
@@ -266,8 +274,10 @@ public class CourseDaoImpl extends CourseDao {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setString(2, activity.getType());
             preparedStatement.setInt(3, startElementNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by activity: " + exception);
             throw new DaoException("Error has occurred while finding courses by activity: ", exception);
@@ -281,8 +291,10 @@ public class CourseDaoImpl extends CourseDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_CATEGORY)) {
             preparedStatement.setString(1, activity.getCategory());
             preparedStatement.setInt(2, startElementNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by activity category: " + exception);
             throw new DaoException("Error has occurred while finding courses by activity category: ", exception);
@@ -296,8 +308,10 @@ public class CourseDaoImpl extends CourseDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_ACTIVITY_TYPE)) {
             preparedStatement.setString(1, activity.getType());
             preparedStatement.setInt(2, startElementNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by activity type: " + exception);
             throw new DaoException("Error has occurred while finding courses by activity type: ", exception);
@@ -313,8 +327,10 @@ public class CourseDaoImpl extends CourseDao {
             preparedStatement.setString(2, activity.getType());
             preparedStatement.setString(3, weekday);
             preparedStatement.setInt(4, startElementNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by activity & weekday: " + exception);
             throw new DaoException("Error has occurred while finding courses by activity & weekday: ", exception);
@@ -327,8 +343,10 @@ public class CourseDaoImpl extends CourseDao {
         List<Course> courses;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_COURSES_BY_WEEKDAY)) {
             preparedStatement.setString(1, weekday);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            courses = CourseMapper.getInstance().retrieve(resultSet);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
+            }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding courses by weekday: " + exception);
             throw new DaoException("Error has occurred while finding courses by weekday: ", exception);
@@ -342,7 +360,8 @@ public class CourseDaoImpl extends CourseDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_AVAILABLE_COURSES)) {
             preparedStatement.setInt(1, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                courses = CourseMapper.getInstance().retrieve(resultSet);
+                CourseMapper courseMapper = CourseMapper.getInstance();
+                courses = courseMapper.retrieve(resultSet);
             }
         } catch (SQLException exception) {
             LOGGER.error("Error has occurred while finding available courses: " + exception);
