@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 public class User extends AbstractEntity {
     private String login;
-    private String password;
     private String surname;
     private String name;
     private String email;
@@ -13,7 +12,6 @@ public class User extends AbstractEntity {
     private UserStatus userStatus;
 
     public User() {
-
     }
 
     public String getLogin() {
@@ -22,14 +20,6 @@ public class User extends AbstractEntity {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getSurname() {
@@ -93,9 +83,6 @@ public class User extends AbstractEntity {
         if (login != null ? !login.equals(user.login) : user.login != null) {
             return false;
         }
-        if (password != null ? !password.equals(user.password) : user.password != null) {
-            return false;
-        }
         if (surname != null ? !surname.equals(user.surname) : user.surname != null) {
             return false;
         }
@@ -118,7 +105,6 @@ public class User extends AbstractEntity {
     public int hashCode() {
         int result = super.hashCode();
         result = result * 31 + (login != null ? login.hashCode() : 0);
-        result = result * 31 + (password != null ? password.hashCode() : 0);
         result = result * 31 + (surname != null ? surname.hashCode() : 0);
         result = result * 31 + (name != null ? name.hashCode() : 0);
         result = result * 31 + (email != null ? email.hashCode() : 0);
@@ -132,7 +118,6 @@ public class User extends AbstractEntity {
     public String toString() {
         StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("{");
         sb.append("login='").append(login);
-        sb.append("', password='").append(password);
         sb.append("', surname='").append(surname);
         sb.append("', name='").append(name);
         sb.append("', email='").append(email);
@@ -156,11 +141,6 @@ public class User extends AbstractEntity {
 
         public UserBuilder setLogin(String login) {
             user.login = login;
-            return this;
-        }
-
-        public UserBuilder setPassword(String password) {
-            user.password = password;
             return this;
         }
 

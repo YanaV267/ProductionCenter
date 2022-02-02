@@ -4,7 +4,6 @@ import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.*;
-import com.dev.productioncenter.model.dao.impl.*;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.LessonService;
 import com.dev.productioncenter.validator.CourseValidator;
@@ -33,12 +32,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean addCourse(Map<String, String> courseData) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
         CourseValidator validator = CourseValidatorImpl.getInstance();
         LessonService lessonService = LessonServiceImpl.getInstance();
-        AgeGroupDao ageGroupDao = new AgeGroupDaoImpl(true);
-        ActivityDao activityDao = new ActivityDaoImpl(true);
-        UserDao userDao = new UserDaoImpl(true);
-        CourseDao courseDao = new CourseDaoImpl(true);
+        AgeGroupDao ageGroupDao = daoProvider.getAgeGroupDao(true);
+        ActivityDao activityDao = daoProvider.getActivityDao(true);
+        UserDao userDao = daoProvider.getUserDao(true);
+        CourseDao courseDao = daoProvider.getCourseDao(true);
         Transaction transaction = Transaction.getInstance();
         try {
             if (validator.checkCourse(courseData) && validator.checkActivity(courseData)) {
@@ -96,12 +96,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean updateCourse(Map<String, String> courseData) throws ServiceException {
         LessonService lessonService = LessonServiceImpl.getInstance();
-        AgeGroupDao ageGroupDao = new AgeGroupDaoImpl(true);
-        UserDao userDao = new UserDaoImpl(true);
-        CourseDao courseDao = new CourseDaoImpl(true);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        AgeGroupDao ageGroupDao = daoProvider.getAgeGroupDao(true);
+        UserDao userDao = daoProvider.getUserDao(true);
+        CourseDao courseDao = daoProvider.getCourseDao(true);
+        CourseValidator validator = CourseValidatorImpl.getInstance();
         Transaction transaction = Transaction.getInstance();
         try {
-            if (CourseValidatorImpl.getInstance().checkCourse(courseData)) {
+            if (validator.checkCourse(courseData)) {
                 transaction.begin(ageGroupDao, userDao, courseDao);
                 AgeGroup ageGroup = new AgeGroup(Integer.parseInt(courseData.get(MIN_AGE)),
                         Integer.parseInt(courseData.get(MAX_AGE)));
@@ -152,7 +154,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCourses() throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             return courseDao.findAll();
         } catch (DaoException exception) {
@@ -165,7 +168,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCourses(Activity activity, String[] weekdays, int page) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             int startElementNumber = page * 15 - 15;
             if (activity.getCategory() != null) {
@@ -207,8 +211,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCourses(User teacher) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
-        LessonDao lessonDao = new LessonDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
+        LessonDao lessonDao = daoProvider.getLessonDao(false);
         try {
             List<Course> courses = courseDao.findCourseByTeacher(teacher);
             for (Course course : courses) {
@@ -227,7 +232,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCourses(int page) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             int startElementNumber = page * 15 - 15;
             return courseDao.findAll(startElementNumber);
@@ -241,7 +247,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findAvailableCourses(int page) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             int startElementNumber = page * 15 - 15;
             return courseDao.findAvailableCourses(startElementNumber);
@@ -255,7 +262,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCoursesAvailableActivities() throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             return courseDao.findCoursesAvailableActivities();
         } catch (DaoException exception) {
@@ -268,7 +276,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> findCoursesAllActivities() throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             return courseDao.findCoursesAllActivities();
         } catch (DaoException exception) {
@@ -282,7 +291,8 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<Course> findCourse(long id) throws ServiceException {
         LessonService lessonService = LessonServiceImpl.getInstance();
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             Optional<Course> course = courseDao.findById(id);
             if (course.isPresent()) {
@@ -301,7 +311,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean reservePlaceAtCourse(long id) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             Optional<Course> course = courseDao.findById(id);
             if (course.isPresent() && course.get().getStudentAmount() != 0) {
@@ -318,7 +329,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean releasePlaceAtCourse(long id) throws ServiceException {
-        CourseDao courseDao = new CourseDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        CourseDao courseDao = daoProvider.getCourseDao(false);
         try {
             Optional<Course> course = courseDao.findById(id);
             if (course.isPresent()) {

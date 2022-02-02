@@ -16,13 +16,15 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dev.productioncenter.model.dao.ColumnName.USER_PASSWORD;
 import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
 
 public class UserDaoImpl extends UserDao {
     private static final String SQL_INSERT_USER =
-            "INSERT INTO users(login, password, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO users(login, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_USER =
-            "UPDATE users SET password = ?, surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
+            "UPDATE users SET surname = ?, name = ?, email = ?, phone_number = ? WHERE login = ?";
+    private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE login = ?";
     private static final String SQL_UPDATE_PROFILE_PICTURE = "UPDATE users SET profile_picture = ? WHERE login = ?";
     private static final String SQL_UPDATE_USER_LOGIN = "UPDATE users SET login = ? WHERE login = ?";
     private static final String SQL_UPDATE_USER_STATUS = "UPDATE users SET status = ? WHERE login = ?";
@@ -32,6 +34,7 @@ public class UserDaoImpl extends UserDao {
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users";
     private static final String SQL_SELECT_USERS_BY_LOGIN =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status, profile_picture FROM users WHERE login = ?";
+    private static final String SQL_SELECT_USER_PASSWORD = "SELECT password FROM users WHERE login = ?";
     private static final String SQL_SELECT_TEACHERS_BY_NAME =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
                     "WHERE surname = ? AND name = ? AND role = 'teacher'";
@@ -55,6 +58,10 @@ public class UserDaoImpl extends UserDao {
     private static final String SQL_SELECT_USERS_AND_TEACHERS =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, status FROM users " +
                     "WHERE role = 'teacher' OR role = 'user' ORDER BY role LIMIT ?, 15";
+    private static final String SQL_SELECT_TEACHERS_HOLDING_COURSES_BY_FULL_NAME =
+            "SELECT id_user, login, password, surname, name, email, phone_number, role, users.status FROM users " +
+                    "JOIN courses ON users.id_user = courses.id_teacher " +
+                    "WHERE role = 'teacher' AND surname LIKE ? AND name LIKE ? LIMIT ?, 15";
     private static final String SQL_SELECT_TEACHERS_HOLDING_COURSES_BY_SURNAME =
             "SELECT id_user, login, password, surname, name, email, phone_number, role, users.status FROM users " +
                     "JOIN courses ON users.id_user = courses.id_teacher " +
@@ -83,12 +90,11 @@ public class UserDaoImpl extends UserDao {
     public long add(User user) throws DaoException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getSurname());
-            preparedStatement.setString(4, user.getName());
-            preparedStatement.setString(5, user.getEmail());
-            preparedStatement.setLong(6, user.getPhoneNumber().longValue());
-            preparedStatement.setString(7, user.getUserRole().getRole());
+            preparedStatement.setString(2, user.getSurname());
+            preparedStatement.setString(3, user.getName());
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setLong(5, user.getPhoneNumber().longValue());
+            preparedStatement.setString(6, user.getUserRole().getRole());
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             resultSet.next();
@@ -100,14 +106,26 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
+    public boolean updateUserPassword(String password, String login) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PASSWORD)) {
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, login);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user password: " + exception);
+            throw new DaoException("Error has occurred while updating user password: ", exception);
+        }
+    }
+
+    @Override
     public boolean update(User user) throws DaoException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER)) {
-            preparedStatement.setString(1, user.getPassword());
-            preparedStatement.setString(2, user.getSurname());
-            preparedStatement.setString(3, user.getName());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setLong(5, user.getPhoneNumber().longValue());
-            preparedStatement.setString(6, user.getLogin());
+            preparedStatement.setString(1, user.getSurname());
+            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setLong(4, user.getPhoneNumber().longValue());
+            preparedStatement.setString(5, user.getLogin());
             preparedStatement.execute();
             return true;
         } catch (SQLException exception) {
@@ -191,6 +209,22 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
+    public Optional<String> findUserPassword(String login) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_PASSWORD)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(resultSet.getString(USER_PASSWORD));
+                }
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user pasword: " + exception);
+            throw new DaoException("Error has occurred while finding user pasword: ", exception);
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<User> findTeacherByName(String surname, String name) throws DaoException {
         List<User> teachers;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_BY_NAME)) {
@@ -222,7 +256,7 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public List<User> findUsersByNameStatus(User user, int startElementNumber) throws DaoException {
+    public List<User> findUsersByFullNameStatus(User user, int startElementNumber) throws DaoException {
         List<User> users;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_FULL_NAME_STATUS)) {
             preparedStatement.setString(1, QUERY_LIKE_WILDCARD + user.getSurname() + QUERY_LIKE_WILDCARD);
@@ -377,6 +411,23 @@ public class UserDaoImpl extends UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_HOLDING_COURSES_BY_SURNAME)) {
             preparedStatement.setString(1, QUERY_LIKE_WILDCARD + surname + QUERY_LIKE_WILDCARD);
             preparedStatement.setInt(2, startElementNumber);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                users = UserMapper.getInstance().retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding holding lessons teachers by surname: " + exception);
+            throw new DaoException("Error has occurred while finding holding lessons teachers by surname: ", exception);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findTeachersHoldingLessonsByFullName(User teacher, int startElementNumber) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_TEACHERS_HOLDING_COURSES_BY_FULL_NAME)) {
+            preparedStatement.setString(1, QUERY_LIKE_WILDCARD + teacher.getSurname() + QUERY_LIKE_WILDCARD);
+            preparedStatement.setString(2, QUERY_LIKE_WILDCARD + teacher.getName() + QUERY_LIKE_WILDCARD);
+            preparedStatement.setInt(3, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 users = UserMapper.getInstance().retrieve(resultSet);
             }

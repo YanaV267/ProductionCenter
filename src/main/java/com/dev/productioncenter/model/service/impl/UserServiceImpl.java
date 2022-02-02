@@ -6,9 +6,9 @@ import com.dev.productioncenter.entity.UserRole;
 import com.dev.productioncenter.entity.UserStatus;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
+import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.dao.Transaction;
 import com.dev.productioncenter.model.dao.UserDao;
-import com.dev.productioncenter.model.dao.impl.UserDaoImpl;
 import com.dev.productioncenter.model.service.UserService;
 import com.dev.productioncenter.util.PasswordEncoder;
 import com.dev.productioncenter.util.PhoneNumberFormatter;
@@ -44,13 +44,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String login, String password) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         UserValidator validator = UserValidatorImpl.getInstance();
         try {
             if (validator.checkLogin(login) && validator.checkPassword(password)) {
                 Optional<User> user = userDao.findUserByLogin(login);
+                Optional<String> userPassword = userDao.findUserPassword(login);
                 Optional<String> encodedPassword = PasswordEncoder.encode(password);
-                if (user.isPresent() && encodedPassword.isPresent() && user.get().getPassword().equals(encodedPassword.get())) {
+                if (user.isPresent() && userPassword.isPresent()
+                        && encodedPassword.isPresent() && userPassword.get().equals(encodedPassword.get())) {
                     return user;
                 }
             }
@@ -65,7 +68,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String login) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             Optional<User> user = userDao.findUserByLogin(login);
             if (user.isPresent()) {
@@ -82,7 +86,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findUser(String surname, String name, UserRole userRole) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             if (userRole == UserRole.TEACHER) {
                 return userDao.findTeacherByName(surname, name);
@@ -98,7 +103,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<User, String> findUsers(UserRole role) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             List<User> allUsers = userDao.findUsersByRole(role);
             Map<User, String> users = new HashMap<>();
@@ -116,7 +122,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<User, String> findUsers(UserRole role, int page) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             int startElementNumber = page * 15 - 15;
             List<User> allUsers = userDao.findUsersByRole(role, startElementNumber);
@@ -135,7 +142,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<User, String> findUsers(Map<String, String> userData, int page) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             User user = new User();
             user.setSurname(userData.get(SURNAME));
@@ -149,7 +157,7 @@ public class UserServiceImpl implements UserService {
             if (user.getSurname() != null && !user.getSurname().isEmpty()) {
                 if (user.getName() != null && !user.getName().isEmpty()) {
                     if (userData.get(STATUS) != null) {
-                        foundUsers = userDao.findUsersByNameStatus(user, startElementNumber);
+                        foundUsers = userDao.findUsersByFullNameStatus(user, startElementNumber);
                     } else {
                         foundUsers = userDao.findUsersByFullName(user, startElementNumber);
                     }
@@ -180,7 +188,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<User, String> findUsersTeachers(int page) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             int startElementNumber = page * 15 - 15;
             List<User> allUsers = userDao.findUsersTeachers(startElementNumber);
@@ -199,7 +208,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<User, String> findTeachers(Map<String, String> teacherData, int page) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             User teacher = new User();
             teacher.setSurname(teacherData.get(SURNAME));
@@ -210,7 +220,7 @@ public class UserServiceImpl implements UserService {
             if (teacher.getSurname() != null && !teacher.getSurname().isEmpty()) {
                 if (teacher.getName() != null && !teacher.getName().isEmpty()) {
                     if (teacherData.get(STATUS) != null) {
-                        foundTeachers = userDao.findTeachersHoldingLessons(startElementNumber);
+                        foundTeachers = userDao.findTeachersHoldingLessonsByFullName(teacher, startElementNumber);
                     } else {
                         foundTeachers = userDao.findUsersByFullName(teacher, startElementNumber);
                     }
@@ -241,7 +251,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isLoginOccupied(String login) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             Optional<User> foundUser = userDao.findUserByLogin(login);
             return foundUser.isPresent();
@@ -255,7 +266,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isEmailOccupied(String email) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             Optional<User> foundUser = userDao.findUserByEmail(email);
             return foundUser.isPresent();
@@ -269,20 +281,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean registerUser(Map<String, String> userData) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(true);
+        UserValidator validator = UserValidatorImpl.getInstance();
+        Transaction transaction = Transaction.getInstance();
         try {
-            if (UserValidatorImpl.getInstance().checkUserData(userData)) {
+            if (validator.checkUserData(userData)) {
                 if (!userData.get(PASSWORD).equals(userData.get(REPEATED_PASSWORD))) {
                     userData.put(REPEATED_PASSWORD, INCORRECT_VALUE_PARAMETER);
                     return false;
                 }
                 Optional<String> password = PasswordEncoder.encode(userData.get(PASSWORD));
                 if (password.isPresent()) {
+                    transaction.begin(userDao);
                     BigInteger phoneNumber = new BigInteger(
                             userData.get(PHONE_NUMBER).replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
                     User user = new User.UserBuilder()
                             .setLogin(userData.get(LOGIN))
-                            .setPassword(password.get())
                             .setSurname(userData.get(SURNAME))
                             .setName(userData.get(NAME))
                             .setEmail(userData.get(EMAIL))
@@ -290,39 +305,33 @@ public class UserServiceImpl implements UserService {
                             .setUserRole(UserRole.USER)
                             .build();
                     userDao.add(user);
+                    userDao.updateUserPassword(userData.get(PASSWORD), userData.get(LOGIN));
+                    transaction.commit();
                     return true;
                 }
             }
+            return false;
         } catch (DaoException exception) {
+            try {
+                transaction.rollback();
+            } catch (DaoException daoException) {
+                LOGGER.error("Error has occurred while doing transaction rollback for registering user: " + daoException);
+            }
             LOGGER.error("Error has occurred while registering user: " + exception);
             throw new ServiceException("Error has occurred while registering user: ", exception);
         } finally {
-            userDao.closeConnection();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
-        try {
-            for (Map.Entry<String, UserStatus> userStatus : usersStatuses.entrySet()) {
-                if (!userDao.updateUserStatus(userStatus.getKey(), userStatus.getValue())) {
-                    return false;
-                }
+            try {
+                transaction.end();
+            } catch (DaoException exception) {
+                LOGGER.error("Error has occurred while ending transaction for registering user: " + exception);
             }
-            return true;
-        } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while changing users' statuses: " + exception);
-            throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
-        } finally {
-            userDao.closeConnection();
         }
     }
 
     @Override
     public boolean checkRoles(Map<String, UserRole> usersRoles) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             for (Map.Entry<String, UserRole> userRole : usersRoles.entrySet()) {
                 Optional<User> user = userDao.findUserByLogin(userRole.getKey());
@@ -344,8 +353,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean updateStatuses(Map<String, UserStatus> usersStatuses) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            for (Map.Entry<String, UserStatus> userStatus : usersStatuses.entrySet()) {
+                if (!userDao.updateUserStatus(userStatus.getKey(), userStatus.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while changing users' statuses: " + exception);
+            throw new ServiceException("Error has occurred while changing users' statuses: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
     public boolean updateRoles(Map<String, UserRole> usersRoles) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             for (Map.Entry<String, UserRole> userRole : usersRoles.entrySet()) {
                 if (!userDao.updateUserRole(userRole.getKey(), userRole.getValue())) {
@@ -363,17 +392,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserLogin(Map<String, String> userData) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(true);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(true);
         UserValidator validator = UserValidatorImpl.getInstance();
         Transaction transaction = Transaction.getInstance();
         try {
             if (validator.checkLogin(userData.get(LOGIN))) {
                 if (!userData.get(LOGIN).equals(userData.get(CURRENT_LOGIN))) {
                     transaction.begin(userDao);
-                    Optional<User> foundUser = userDao.findUserByLogin(userData.get(CURRENT_LOGIN));
+                    Optional<String> foundPassword = userDao.findUserPassword(userData.get(CURRENT_LOGIN));
                     Optional<String> password = PasswordEncoder.encode(userData.get(PASSWORD));
-                    if (foundUser.isPresent() && password.isPresent()) {
-                        if (foundUser.get().getPassword().equals(password.get())) {
+                    if (foundPassword.isPresent() && password.isPresent()) {
+                        if (foundPassword.get().equals(password.get())) {
                             if (userDao.updateUserLogin(userData.get(CURRENT_LOGIN), userData.get(LOGIN))) {
                                 return true;
                             }
@@ -401,7 +431,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserAccountData(Map<String, String> userData) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(true);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(true);
         UserValidator validator = UserValidatorImpl.getInstance();
         Transaction transaction = Transaction.getInstance();
         try {
@@ -424,7 +455,6 @@ public class UserServiceImpl implements UserService {
                             .replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
                     User user = new User.UserBuilder()
                             .setLogin(userData.get(LOGIN))
-                            .setPassword(password.get())
                             .setSurname(userData.get(SURNAME))
                             .setName(userData.get(NAME))
                             .setEmail(userData.get(EMAIL))
@@ -432,6 +462,7 @@ public class UserServiceImpl implements UserService {
                             .setUserRole(UserRole.USER)
                             .build();
                     userDao.update(user);
+                    userDao.updateUserPassword(userData.get(PASSWORD), userData.get(LOGIN));
                     transaction.commit();
                     return true;
                 }
@@ -457,7 +488,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updatePicture(String login, InputStream pictureStream) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             return userDao.updatePicture(login, pictureStream);
         } catch (DaoException exception) {
@@ -470,7 +502,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<String> loadPicture(String login) throws ServiceException {
-        UserDao userDao = new UserDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
         try {
             Optional<InputStream> pictureStream = userDao.loadPicture(login);
             if (pictureStream.isPresent()) {
@@ -494,7 +527,7 @@ public class UserServiceImpl implements UserService {
         Map<Course, String> teachersPictures = new HashMap<>();
         for (Course course : courses) {
             String login = course.getTeacher().getLogin();
-            Optional<String> picture = loadPicture(login);
+            Optional<String> picture = this.loadPicture(login);
             if (picture.isPresent()) {
                 teachersPictures.put(course, picture.get());
             } else {

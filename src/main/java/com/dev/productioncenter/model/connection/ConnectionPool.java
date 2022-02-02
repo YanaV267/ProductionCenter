@@ -87,13 +87,15 @@ public class ConnectionPool {
             return false;
         }
         try {
-            takenConnections.remove(connection);
-            freeConnections.put((ProxyConnection) connection);
+            if (takenConnections.remove(connection)) {
+                freeConnections.put((ProxyConnection) connection);
+                return true;
+            }
         } catch (InterruptedException exception) {
             LOGGER.error("Error has occurred while releasing connection: " + exception.getMessage());
             Thread.currentThread().interrupt();
         }
-        return true;
+        return false;
     }
 
     public void destroyPool() {

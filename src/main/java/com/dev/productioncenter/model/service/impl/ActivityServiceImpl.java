@@ -4,8 +4,9 @@ import com.dev.productioncenter.entity.Activity;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
 import com.dev.productioncenter.model.dao.ActivityDao;
-import com.dev.productioncenter.model.dao.impl.ActivityDaoImpl;
+import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.service.ActivityService;
+import com.dev.productioncenter.validator.CourseValidator;
 import com.dev.productioncenter.validator.impl.CourseValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,7 +14,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Map;
 
-import static com.dev.productioncenter.controller.command.RequestParameter.*;
+import static com.dev.productioncenter.controller.command.RequestParameter.CATEGORY;
+import static com.dev.productioncenter.controller.command.RequestParameter.TYPE;
 
 public class ActivityServiceImpl implements ActivityService {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -28,9 +30,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public boolean addActivity(Map<String, String> activityData) throws ServiceException {
-        ActivityDao activityDao = new ActivityDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        ActivityDao activityDao = daoProvider.getActivityDao(false);
+        CourseValidator validator = CourseValidatorImpl.getInstance();
         try {
-            if (CourseValidatorImpl.getInstance().checkActivity(activityData)) {
+            if (validator.checkActivity(activityData)) {
                 Activity activity = new Activity(activityData.get(CATEGORY), activityData.get(TYPE));
                 if (!activityDao.findActivity(activity)) {
                     activityDao.add(activity);
@@ -48,7 +52,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> findActivities() throws ServiceException {
-        ActivityDao activityDao = new ActivityDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        ActivityDao activityDao = daoProvider.getActivityDao(false);
         try {
             return activityDao.findAll();
         } catch (DaoException exception) {
@@ -60,21 +65,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> findActivities(String category) throws ServiceException {
-        ActivityDao activityDao = new ActivityDaoImpl(false);
-        try {
-            return activityDao.findActivitiesByCategory(category);
-        } catch (DaoException exception) {
-            LOGGER.error("Error has occurred while finding activities by category: " + exception);
-            throw new ServiceException("Error has occurred while finding activities by category: ", exception);
-        } finally {
-            activityDao.closeConnection();
-        }
-    }
-
-    @Override
     public List<String> findCategories() throws ServiceException {
-        ActivityDao activityDao = new ActivityDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        ActivityDao activityDao = daoProvider.getActivityDao(false);
         try {
             return activityDao.findCategories();
         } catch (DaoException exception) {

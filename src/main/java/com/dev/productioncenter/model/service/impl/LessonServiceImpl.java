@@ -4,9 +4,9 @@ import com.dev.productioncenter.entity.Course;
 import com.dev.productioncenter.entity.Lesson;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
+import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.dao.LessonDao;
 import com.dev.productioncenter.model.dao.Transaction;
-import com.dev.productioncenter.model.dao.impl.LessonDaoImpl;
 import com.dev.productioncenter.model.service.LessonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,8 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public boolean addLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(true);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        LessonDao lessonDao = daoProvider.getLessonDao(true);
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
                 .split(DELIMITER_REGEX);
@@ -64,7 +65,8 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public boolean updateLessons(Map<String, String> lessonData, long courseId) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(true);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        LessonDao lessonDao = daoProvider.getLessonDao(true);
         String[] weekdays = lessonData.get(WEEKDAYS)
                 .replaceAll(REMOVING_SYMBOLS_REGEX, REPLACEMENT_REGEX)
                 .trim()
@@ -118,7 +120,8 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public List<Lesson> findLessons(long courseId) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        LessonDao lessonDao = daoProvider.getLessonDao(false);
         try {
             return lessonDao.findLessonsByCourse(courseId);
         } catch (DaoException exception) {

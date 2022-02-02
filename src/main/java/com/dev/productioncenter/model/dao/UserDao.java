@@ -10,13 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class UserDao extends BaseDao<Long, User> {
+    abstract public boolean updateUserPassword(String password, String login) throws DaoException;
+
     abstract public Optional<User> findUserByLogin(String login) throws DaoException;
+
+    abstract public Optional<String> findUserPassword(String login) throws DaoException;
 
     abstract public Optional<User> findTeacherByName(String surname, String name) throws DaoException;
 
     abstract public Optional<User> findUserByEmail(String email) throws DaoException;
 
-    abstract public List<User> findUsersByNameStatus(User user, int startElementNumber) throws DaoException;
+    abstract public List<User> findUsersByFullNameStatus(User user, int startElementNumber) throws DaoException;
 
     abstract public List<User> findUsersBySurnameStatus(User user, int startElementNumber) throws DaoException;
 
@@ -35,6 +39,8 @@ public abstract class UserDao extends BaseDao<Long, User> {
     abstract public List<User> findTeachersHoldingLessons(int startElementNumber) throws DaoException;
 
     abstract public List<User> findTeachersHoldingLessonsBySurname(String surname, int startElementNumber) throws DaoException;
+
+    abstract public List<User> findTeachersHoldingLessonsByFullName(User teacher, int startElementNumber) throws DaoException;
 
     abstract public boolean updateUserLogin(String currentLogin, String newLogin) throws DaoException;
 

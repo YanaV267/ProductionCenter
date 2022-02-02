@@ -8,6 +8,7 @@ import com.dev.productioncenter.model.dao.BankCardDao;
 import com.dev.productioncenter.model.dao.impl.BankCardDaoImpl;
 import com.dev.productioncenter.model.service.BankCardService;
 import com.dev.productioncenter.model.service.EnrollmentService;
+import com.dev.productioncenter.validator.BankCardValidator;
 import com.dev.productioncenter.validator.impl.BankCardValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +28,6 @@ public class BankCardServiceImpl implements BankCardService {
     private static final String CARD_NUMBER_REPLACEMENT_SYMBOL_REGEX = "";
     private static final int EXPIRATION_DATE_MILLENNIUM_VALUE = 2000;
     private static final BankCardService instance = new BankCardServiceImpl();
-    private final BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
     private final Map<Integer, Integer> lastDayOfMonth = new HashMap<>();
 
     private BankCardServiceImpl() {
@@ -51,8 +51,10 @@ public class BankCardServiceImpl implements BankCardService {
 
     @Override
     public Optional<BankCard> findCard(Map<String, String> bankCardData) throws ServiceException {
+        BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
+        BankCardValidator validator = BankCardValidatorImpl.getInstance();
         try {
-            if (BankCardValidatorImpl.getInstance().checkCardData(bankCardData)) {
+            if (validator.checkCardData(bankCardData)) {
                 BankCard bankCard = new BankCard();
                 bankCard.setCardNumber(Long.parseLong(bankCardData.get(CARD_NUMBER)
                         .replaceAll(CARD_NUMBER_REMOVING_SYMBOL_REGEX, CARD_NUMBER_REPLACEMENT_SYMBOL_REGEX)));
@@ -68,15 +70,17 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding bank card: " + exception);
-            throw new ServiceException("Error has occurred while finding bank card: " , exception);
+            throw new ServiceException("Error has occurred while finding bank card: ", exception);
         }
         return Optional.empty();
     }
 
     @Override
     public boolean replenishBalance(BankCard bankCard, String replenishmentValue) throws ServiceException {
+        BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
+        BankCardValidator validator = BankCardValidatorImpl.getInstance();
         try {
-            if (BankCardValidatorImpl.getInstance().checkBalance(replenishmentValue)) {
+            if (validator.checkBalance(replenishmentValue)) {
                 BigDecimal currentBalance = bankCardDao.findBalance(bankCard);
                 BigDecimal newBalance = currentBalance.add(BigDecimal.valueOf(Double.parseDouble(replenishmentValue)));
                 bankCard.setBalance(newBalance);
@@ -84,13 +88,14 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while replenishing bank card balance: " + exception);
-            throw new ServiceException("Error has occurred while replenishing bank card balance: " , exception);
+            throw new ServiceException("Error has occurred while replenishing bank card balance: ", exception);
         }
         return false;
     }
 
     @Override
     public boolean withdrawMoneyForEnrollment(BankCard bankCard, long enrollmentId) throws ServiceException {
+        BankCardDao bankCardDao = BankCardDaoImpl.getInstance();
         EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();
         Optional<Enrollment> enrollment = enrollmentService.findEnrollment(enrollmentId);
         try {
@@ -106,7 +111,7 @@ public class BankCardServiceImpl implements BankCardService {
             }
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while withdrawing money from bank card: " + exception);
-            throw new ServiceException("Error has occurred while withdrawing money from bank card: " , exception);
+            throw new ServiceException("Error has occurred while withdrawing money from bank card: ", exception);
         }
         return false;
     }

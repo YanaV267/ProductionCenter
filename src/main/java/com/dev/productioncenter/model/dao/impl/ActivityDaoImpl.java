@@ -116,28 +116,6 @@ public class ActivityDaoImpl extends ActivityDao {
     }
 
     @Override
-    public List<Activity> findActivitiesByCategory(String category) throws DaoException {
-        List<Activity> activities = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ACTIVITY_BY_CATEGORY)) {
-            preparedStatement.setString(1, category);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    Activity activity = new Activity.ActivityBuilder()
-                            .setId(resultSet.getLong(ColumnName.ACTIVITY_ID))
-                            .setCategory(resultSet.getString(ColumnName.ACTIVITY_CATEGORY))
-                            .setType(resultSet.getString(ColumnName.ACTIVITY_TYPE))
-                            .build();
-                    activities.add(activity);
-                }
-            }
-        } catch (SQLException exception) {
-            LOGGER.error("Error has occurred while finding activity by category: " + exception);
-            throw new DaoException("Error has occurred while finding activity by category: ", exception);
-        }
-        return activities;
-    }
-
-    @Override
     public List<String> findCategories() throws DaoException {
         List<String> categories = new ArrayList<>();
         try (Statement statement = connection.createStatement();

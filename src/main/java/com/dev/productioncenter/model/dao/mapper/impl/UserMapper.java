@@ -30,7 +30,6 @@ public class UserMapper implements Mapper<User> {
             User user = new User.UserBuilder()
                     .setId(resultSet.getLong(USER_ID))
                     .setLogin(resultSet.getString(USER_LOGIN))
-                    .setPassword(resultSet.getString(USER_PASSWORD))
                     .setSurname(resultSet.getString(USER_SURNAME))
                     .setName(resultSet.getString(USER_NAME))
                     .setEmail(resultSet.getString(USER_EMAIL))

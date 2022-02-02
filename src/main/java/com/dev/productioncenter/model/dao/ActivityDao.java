@@ -10,7 +10,5 @@ public abstract class ActivityDao extends BaseDao<Long, Activity> {
 
     abstract public long findActivityId(Activity activity) throws DaoException;
 
-    abstract public List<Activity> findActivitiesByCategory(String category) throws DaoException;
-
     abstract public List<String> findCategories() throws DaoException;
 }

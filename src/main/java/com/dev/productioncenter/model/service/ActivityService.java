@@ -11,7 +11,5 @@ public interface ActivityService {
 
     List<Activity> findActivities() throws ServiceException;
 
-    List<Activity> findActivities(String category) throws ServiceException;
-
     List<String> findCategories() throws ServiceException;
 }

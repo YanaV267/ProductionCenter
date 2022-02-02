@@ -3,12 +3,13 @@ package com.dev.productioncenter.model.service.impl;
 import com.dev.productioncenter.entity.*;
 import com.dev.productioncenter.exception.DaoException;
 import com.dev.productioncenter.exception.ServiceException;
+import com.dev.productioncenter.model.dao.DaoProvider;
 import com.dev.productioncenter.model.dao.EnrollmentDao;
 import com.dev.productioncenter.model.dao.LessonDao;
 import com.dev.productioncenter.model.dao.impl.EnrollmentDaoImpl;
-import com.dev.productioncenter.model.dao.impl.LessonDaoImpl;
 import com.dev.productioncenter.model.service.CourseService;
 import com.dev.productioncenter.model.service.EnrollmentService;
+import com.dev.productioncenter.validator.EnrollmentValidator;
 import com.dev.productioncenter.validator.impl.EnrollmentValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,6 @@ import static com.dev.productioncenter.entity.EnrollmentStatus.*;
 public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final EnrollmentService instance = new EnrollmentServiceImpl();
-    private final EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
 
     private EnrollmentServiceImpl() {
     }
@@ -36,8 +36,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean enrollOnCourse(User user, long chosenCourseId, String lessonAmount) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
+        EnrollmentValidator validator = EnrollmentValidatorImpl.getInstance();
         try {
-            if (EnrollmentValidatorImpl.getInstance().checkLessonAmount(lessonAmount)) {
+            if (validator.checkLessonAmount(lessonAmount)) {
                 Enrollment enrollment = new Enrollment.EnrollmentBuilder()
                         .setCourse(new Course(chosenCourseId))
                         .setUser(user)
@@ -55,6 +57,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Optional<Enrollment> findEnrollment(long enrollmentId) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             return enrollmentDao.findById(enrollmentId);
         } catch (DaoException exception) {
@@ -65,6 +68,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Optional<Enrollment> findEnrollment(User user, long chosenCourseId) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             return enrollmentDao.findEnrollmentsByCourseUser(user, new Course(chosenCourseId));
         } catch (DaoException exception) {
@@ -75,7 +79,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(User user, int page) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        LessonDao lessonDao = daoProvider.getLessonDao(false);
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             int startElementNumber = page * 15 - 15;
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user, startElementNumber);
@@ -98,7 +104,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(User user) throws ServiceException {
-        LessonDao lessonDao = new LessonDaoImpl(false);
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        LessonDao lessonDao = daoProvider.getLessonDao(false);
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByUser(user);
             for (Enrollment enrollment : allEnrollments) {
@@ -120,6 +128,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(int page) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             int startElementNumber = page * 15 - 15;
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollments(startElementNumber);
@@ -136,6 +145,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public Map<Enrollment, LocalDate> findEnrollments(long courseId, int page) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             int startElementNumber = page * 15 - 15;
             List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByCourse(new Course(courseId), startElementNumber);
@@ -152,6 +162,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean updateStatus(Map<String, EnrollmentStatus> enrollmentStatuses) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             for (Map.Entry<String, EnrollmentStatus> enrollmentStatus : enrollmentStatuses.entrySet()) {
                 Enrollment enrollment = new Enrollment();
@@ -170,6 +181,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean updateStatus(long enrollmentId, EnrollmentStatus status) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             Enrollment enrollment = new Enrollment();
             enrollment.setId(enrollmentId);
@@ -183,8 +195,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean updateLessonAmounts(Map<String, String> enrollmentsLessonAmount) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
+        EnrollmentValidator validator = EnrollmentValidatorImpl.getInstance();
         try {
-            if (EnrollmentValidatorImpl.getInstance().checkLessonAmount(enrollmentsLessonAmount)) {
+            if (validator.checkLessonAmount(enrollmentsLessonAmount)) {
                 for (Map.Entry<String, String> enrollmentLessonAmount : enrollmentsLessonAmount.entrySet()) {
                     Enrollment enrollment = new Enrollment();
                     enrollment.setLessonAmount(Integer.parseInt(enrollmentLessonAmount.getValue()));
@@ -204,6 +218,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean cancelEnrollment(long enrollmentId) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         try {
             return enrollmentDao.delete(enrollmentId);
         } catch (DaoException exception) {
@@ -214,6 +229,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public boolean checkEnrollmentsReservationStatus() throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
         CourseService courseService = CourseServiceImpl.getInstance();
         try {
             List<Enrollment> expiredEnrollments = enrollmentDao.findExpiredEnrollments();
