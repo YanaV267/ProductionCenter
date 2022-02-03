@@ -22,6 +22,11 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Change user status command.
+ */
 public class ChangeUserStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CHANGE_STATUSES_CONFIRM_MESSAGE_KEY = "confirm.change.user_statuses";

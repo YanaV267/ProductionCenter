@@ -19,6 +19,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Course dao.
+ */
 public class CourseDaoImpl extends CourseDao {
     private static final String SQL_INSERT_COURSE =
             "INSERT INTO courses(description, id_teacher, id_activity, id_age_group, lesson_price, student_amount) VALUES (?, ?, ?, ?, ?, ?)";
@@ -117,9 +122,17 @@ public class CourseDaoImpl extends CourseDao {
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = 'upcoming' OR courses.status = 'running' GROUP BY surname, name, type";
 
+    /**
+     * Instantiates a new Course dao.
+     */
     public CourseDaoImpl() {
     }
 
+    /**
+     * Instantiates a new Course dao.
+     *
+     * @param isTransaction the is transaction
+     */
     public CourseDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();

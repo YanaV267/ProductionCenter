@@ -14,6 +14,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Timetable tag.
+ */
 public class TimetableTag extends BodyTagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
     private String weekday;
@@ -21,14 +26,29 @@ public class TimetableTag extends BodyTagSupport {
     private List<Course> courses;
     private StringBuilder pageTag;
 
+    /**
+     * Sets weekday.
+     *
+     * @param weekday the weekday
+     */
     public void setWeekday(String weekday) {
         this.weekday = weekday;
     }
 
+    /**
+     * Sets enrollments.
+     *
+     * @param enrollments the enrollments
+     */
     public void setEnrollments(Map<Enrollment, LocalDate> enrollments) {
         this.enrollments = enrollments;
     }
 
+    /**
+     * Sets courses.
+     *
+     * @param courses the courses
+     */
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }

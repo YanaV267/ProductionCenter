@@ -2,44 +2,92 @@ package com.dev.productioncenter.entity;
 
 import java.time.LocalTime;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Lesson.
+ */
 public class Lesson extends AbstractEntity {
     private Course course;
     private String weekDay;
     private LocalTime startTime;
     private int duration;
 
+    /**
+     * Instantiates a new Lesson.
+     */
     public Lesson() {
 
     }
 
+    /**
+     * Gets course.
+     *
+     * @return the course
+     */
     public Course getCourse() {
         return course;
     }
 
+    /**
+     * Sets course.
+     *
+     * @param course the course
+     */
     public void setCourse(Course course) {
         this.course = course;
     }
 
+    /**
+     * Gets week day.
+     *
+     * @return the week day
+     */
     public String getWeekDay() {
         return weekDay;
     }
 
+    /**
+     * Sets week day.
+     *
+     * @param weekDay the week day
+     */
     public void setWeekDay(String weekDay) {
         this.weekDay = weekDay;
     }
 
+    /**
+     * Gets start time.
+     *
+     * @return the start time
+     */
     public LocalTime getStartTime() {
         return startTime;
     }
 
+    /**
+     * Sets start time.
+     *
+     * @param startTime the start time
+     */
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
+    /**
+     * Gets duration.
+     *
+     * @return the duration
+     */
     public int getDuration() {
         return duration;
     }
 
+    /**
+     * Sets duration.
+     *
+     * @param duration the duration
+     */
     public void setDuration(int duration) {
         this.duration = duration;
     }

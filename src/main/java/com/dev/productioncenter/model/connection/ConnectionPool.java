@@ -13,6 +13,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Connection pool.
+ */
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String POOL_PROPERTY_FILE = "pool";
@@ -56,6 +61,11 @@ public class ConnectionPool {
         LOGGER.info("{} connections were created", freeConnections.size());
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ConnectionPool getInstance() {
         if (!isCreated.get()) {
             try {
@@ -70,6 +80,11 @@ public class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
     public Connection getConnection() {
         ProxyConnection connection = null;
         try {
@@ -82,6 +97,12 @@ public class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Release connection boolean.
+     *
+     * @param connection the connection
+     * @return the boolean
+     */
     public boolean releaseConnection(Connection connection) {
         if (!(connection instanceof ProxyConnection)) {
             return false;
@@ -98,6 +119,9 @@ public class ConnectionPool {
         return false;
     }
 
+    /**
+     * Destroy pool.
+     */
     public void destroyPool() {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {

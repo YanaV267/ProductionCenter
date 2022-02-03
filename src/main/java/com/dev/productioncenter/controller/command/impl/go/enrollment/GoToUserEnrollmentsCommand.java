@@ -20,6 +20,11 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestAttribute.ENROLLMENTS;
 import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to user enrollments command.
+ */
 public class GoToUserEnrollmentsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final EnrollmentService enrollmentService = EnrollmentServiceImpl.getInstance();

@@ -10,12 +10,22 @@ import java.util.List;
 
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Enrollment mapper.
+ */
 public class EnrollmentMapper implements Mapper<Enrollment> {
     private static final EnrollmentMapper instance = new EnrollmentMapper();
 
     private EnrollmentMapper() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrollmentMapper getInstance() {
         return instance;
     }

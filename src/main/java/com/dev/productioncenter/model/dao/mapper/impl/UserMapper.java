@@ -13,12 +13,22 @@ import java.util.List;
 
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type User mapper.
+ */
 public class UserMapper implements Mapper<User> {
     private static final UserMapper instance = new UserMapper();
 
     private UserMapper() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static UserMapper getInstance() {
         return instance;
     }

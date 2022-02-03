@@ -22,6 +22,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.COURS
 import static com.dev.productioncenter.controller.command.RequestAttribute.NUMBER;
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to course info command.
+ */
 public class GoToCourseInfoCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final CourseService courseService = CourseServiceImpl.getInstance();

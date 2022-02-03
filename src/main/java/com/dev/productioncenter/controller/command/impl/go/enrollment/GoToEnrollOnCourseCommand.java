@@ -24,6 +24,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.COURS
 import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to enroll on course command.
+ */
 public class GoToEnrollOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ENROLLMENT_ROLE_PERMISSION_ERROR_MESSAGE_KEY = "error.enrollment.role_permission";

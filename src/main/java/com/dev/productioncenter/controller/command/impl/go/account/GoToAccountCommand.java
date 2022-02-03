@@ -17,6 +17,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.PICTURE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to account command.
+ */
 public class GoToAccountCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final UserService userService = UserServiceImpl.getInstance();

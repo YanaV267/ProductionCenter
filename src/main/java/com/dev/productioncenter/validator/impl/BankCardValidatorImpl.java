@@ -6,6 +6,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Bank card validator.
+ */
 public class BankCardValidatorImpl implements BankCardValidator {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String CARD_NUMBER_REGEX = "\\d{4} \\d{4} \\d{4} \\d{4}";
@@ -19,6 +24,11 @@ public class BankCardValidatorImpl implements BankCardValidator {
 
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static BankCardValidator getInstance() {
         return instance;
     }

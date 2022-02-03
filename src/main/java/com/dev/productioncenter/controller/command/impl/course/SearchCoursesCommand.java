@@ -19,6 +19,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.CATEGORY;
 import static com.dev.productioncenter.controller.command.RequestParameter.TYPE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Search courses command.
+ */
 public class SearchCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

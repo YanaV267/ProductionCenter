@@ -19,6 +19,11 @@ import java.util.Optional;
 import static com.dev.productioncenter.controller.command.CommandType.*;
 import static com.dev.productioncenter.entity.UserRole.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Security access rights filter.
+ */
 @WebFilter(urlPatterns = "/controller")
 public class SecurityAccessRightsFilter implements Filter {
     private static final String DEFAULT_COMMAND = "go_to_home";

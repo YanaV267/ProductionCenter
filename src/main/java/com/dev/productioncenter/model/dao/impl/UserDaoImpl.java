@@ -19,6 +19,11 @@ import java.util.Optional;
 import static com.dev.productioncenter.model.dao.ColumnName.USER_PASSWORD;
 import static com.dev.productioncenter.model.dao.ColumnName.USER_PROFILE_PICTURE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type User dao.
+ */
 public class UserDaoImpl extends UserDao {
     private static final String SQL_INSERT_USER =
             "INSERT INTO users(login, surname, name, email, phone_number, role) VALUES (?, ?, ?, ?, ?, ?)";
@@ -77,9 +82,17 @@ public class UserDaoImpl extends UserDao {
                     "WHERE role = ? LIMIT ?, 15";
     private static final String QUERY_LIKE_WILDCARD = "%";
 
+    /**
+     * Instantiates a new User dao.
+     */
     public UserDaoImpl() {
     }
 
+    /**
+     * Instantiates a new User dao.
+     *
+     * @param isTransaction the is transaction
+     */
     public UserDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();

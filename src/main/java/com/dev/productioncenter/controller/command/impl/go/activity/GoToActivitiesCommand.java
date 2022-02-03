@@ -22,6 +22,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to activities command.
+ */
 public class GoToActivitiesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ActivityService activityService = ActivityServiceImpl.getInstance();

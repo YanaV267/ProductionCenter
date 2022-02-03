@@ -10,6 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Controller.
+ */
 @WebServlet("/controller")
 @MultipartConfig(maxRequestSize = 1024 * 1024 * 10)
 public class Controller extends HttpServlet {

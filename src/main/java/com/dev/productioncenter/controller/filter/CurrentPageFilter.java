@@ -11,6 +11,11 @@ import java.io.IOException;
 
 import static com.dev.productioncenter.controller.command.SessionAttribute.CURRENT_PAGE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Current page filter.
+ */
 @WebFilter(urlPatterns = {"/controller", "/pages/*"})
 public class CurrentPageFilter implements Filter {
     private static final String COMMAND_DELIMITER = "?";

@@ -11,6 +11,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to add activity command.
+ */
 public class GoToAddActivityCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ActivityService activityService = ActivityServiceImpl.getInstance();

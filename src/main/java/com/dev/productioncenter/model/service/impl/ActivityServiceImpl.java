@@ -17,6 +17,11 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestParameter.CATEGORY;
 import static com.dev.productioncenter.controller.command.RequestParameter.TYPE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Activity service.
+ */
 public class ActivityServiceImpl implements ActivityService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ActivityService instance = new ActivityServiceImpl();
@@ -24,6 +29,11 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityServiceImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ActivityService getInstance() {
         return instance;
     }

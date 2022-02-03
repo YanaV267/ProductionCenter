@@ -16,6 +16,11 @@ import java.util.*;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Course service.
+ */
 public class CourseServiceImpl implements CourseService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SPACE_DELIMITER_REGEX = " ";
@@ -26,6 +31,11 @@ public class CourseServiceImpl implements CourseService {
     private CourseServiceImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CourseService getInstance() {
         return instance;
     }

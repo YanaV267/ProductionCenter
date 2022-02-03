@@ -13,6 +13,11 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Enrollment dao.
+ */
 public class EnrollmentDaoImpl extends EnrollmentDao {
     private static final String SQL_INSERT_ENROLLMENT =
             "INSERT INTO enrollments(id_user, id_course, lesson_amount) VALUES (?, ?, ?)";
@@ -97,6 +102,11 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     private EnrollmentDaoImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrollmentDao getInstance() {
         return instance;
     }

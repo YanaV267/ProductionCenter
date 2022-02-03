@@ -23,6 +23,11 @@ import static com.dev.productioncenter.controller.command.RequestParameter.CHOSE
 import static com.dev.productioncenter.controller.command.SessionAttribute.COURSE;
 import static com.dev.productioncenter.controller.command.SessionAttribute.TEACHERS;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to update course command.
+ */
 public class GoToUpdateCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final CourseService courseService = CourseServiceImpl.getInstance();

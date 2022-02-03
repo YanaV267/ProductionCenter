@@ -21,6 +21,11 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestParameter.ENROLLMENT_ID;
 import static com.dev.productioncenter.controller.command.RequestParameter.LESSON_AMOUNT;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Update enrollment command.
+ */
 public class UpdateEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String UPDATE_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.update";

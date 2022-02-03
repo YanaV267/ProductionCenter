@@ -13,15 +13,28 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Age group dao.
+ */
 public class AgeGroupDaoImpl extends AgeGroupDao {
     private static final String SQL_INSERT_AGE_GROUP =
             "INSERT INTO age_group(min_age, max_age) VALUES (?, ?)";
     private static final String SQL_SELECT_AGE_GROUP =
             "SELECT id_age_group FROM age_group WHERE min_age = ? AND max_age = ?";
 
+    /**
+     * Instantiates a new Age group dao.
+     */
     public AgeGroupDaoImpl() {
     }
 
+    /**
+     * Instantiates a new Age group dao.
+     *
+     * @param isTransaction the is transaction
+     */
     public AgeGroupDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();

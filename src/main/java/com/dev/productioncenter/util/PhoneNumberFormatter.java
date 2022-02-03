@@ -2,6 +2,11 @@ package com.dev.productioncenter.util;
 
 import java.math.BigInteger;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Phone number formatter.
+ */
 public class PhoneNumberFormatter {
     private static final String NUMBER_PLUS_SYMBOL = "+";
     private static final String NUMBER_OPENING_PARENTHESIS_SYMBOL = "(";
@@ -11,6 +16,12 @@ public class PhoneNumberFormatter {
     private PhoneNumberFormatter() {
     }
 
+    /**
+     * Format string.
+     *
+     * @param phoneNumber the phone number
+     * @return the string
+     */
     public static String format(BigInteger phoneNumber) {
         String number = String.valueOf(phoneNumber);
         number = NUMBER_PLUS_SYMBOL + number.substring(0, 3) + NUMBER_OPENING_PARENTHESIS_SYMBOL + number.substring(3, 5)

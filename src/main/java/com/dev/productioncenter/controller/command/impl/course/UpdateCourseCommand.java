@@ -20,6 +20,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 import static com.dev.productioncenter.controller.command.SessionAttribute.LAST;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Update course command.
+ */
 public class UpdateCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

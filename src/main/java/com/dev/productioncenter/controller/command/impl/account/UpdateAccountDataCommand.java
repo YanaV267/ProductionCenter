@@ -21,6 +21,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.MESSA
 import static com.dev.productioncenter.controller.command.RequestAttribute.USER;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Update account data command.
+ */
 public class UpdateAccountDataCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String UPDATE_ACCOUNT_DATA_CONFIRM_MESSAGE_KEY = "confirm.update_account_data";

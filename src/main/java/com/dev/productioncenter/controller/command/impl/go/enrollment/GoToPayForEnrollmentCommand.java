@@ -3,6 +3,11 @@ package com.dev.productioncenter.controller.command.impl.go.enrollment;
 import com.dev.productioncenter.controller.command.*;
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to pay for enrollment command.
+ */
 public class GoToPayForEnrollmentCommand implements Command {
 
     @Override

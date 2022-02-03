@@ -1,21 +1,44 @@
 package com.dev.productioncenter.entity;
 
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Abstract entity.
+ */
 public abstract class AbstractEntity {
     private long id;
 
+    /**
+     * Instantiates a new Abstract entity.
+     */
     protected AbstractEntity() {
 
     }
 
+    /**
+     * Instantiates a new Abstract entity.
+     *
+     * @param id the id
+     */
     protected AbstractEntity(long id) {
         this.id = id;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public long getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(long id) {
         this.id = id;
     }

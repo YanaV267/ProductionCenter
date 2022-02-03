@@ -8,20 +8,40 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Pages tag.
+ */
 public class PagesTag extends TagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
     private int page;
     private String command;
     private boolean isLast;
 
+    /**
+     * Sets page.
+     *
+     * @param page the page
+     */
     public void setPage(int page) {
         this.page = page;
     }
 
+    /**
+     * Sets command.
+     *
+     * @param command the command
+     */
     public void setCommand(String command) {
         this.command = command;
     }
 
+    /**
+     * Sets last.
+     *
+     * @param last the last
+     */
     public void setLast(boolean last) {
         isLast = last;
     }

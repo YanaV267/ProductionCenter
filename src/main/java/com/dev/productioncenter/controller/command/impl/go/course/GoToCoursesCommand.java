@@ -20,6 +20,11 @@ import java.util.List;
 import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 import static com.dev.productioncenter.controller.command.RequestAttribute.PAGE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to courses command.
+ */
 public class GoToCoursesCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

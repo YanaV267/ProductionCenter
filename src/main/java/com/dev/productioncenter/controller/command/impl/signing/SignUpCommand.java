@@ -19,6 +19,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.MESSA
 import static com.dev.productioncenter.controller.command.RequestAttribute.USER;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Sign up command.
+ */
 public class SignUpCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SIGN_UP_CONFIRM_MESSAGE_KEY = "confirm.sign_up";

@@ -20,6 +20,11 @@ import java.util.Optional;
 import static com.dev.productioncenter.controller.command.CommandType.*;
 import static com.dev.productioncenter.controller.command.PagePath.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Security access status filter.
+ */
 @WebFilter(urlPatterns = {"/controller", "/pages/*"})
 public class SecurityAccessStatusFilter implements Filter {
     private static final String ERROR_PAGE_PATH = "/pages/error";

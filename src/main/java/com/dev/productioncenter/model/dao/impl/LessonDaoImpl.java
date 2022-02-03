@@ -13,6 +13,11 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Lesson dao.
+ */
 public class LessonDaoImpl extends LessonDao {
     private static final String SQL_INSERT_LESSON =
             "INSERT INTO lessons(id_course, week_day, start_time, duration) VALUES (?, ?, ?, ?)";
@@ -25,9 +30,17 @@ public class LessonDaoImpl extends LessonDao {
     private static final String SQL_SELECT_LESSON_BY_COURSE_WEEK_DAY =
             "SELECT id_lesson, week_day, start_time, duration FROM lessons WHERE week_day = ? AND id_course = ?";
 
+    /**
+     * Instantiates a new Lesson dao.
+     */
     public LessonDaoImpl() {
     }
 
+    /**
+     * Instantiates a new Lesson dao.
+     *
+     * @param isTransaction the is transaction
+     */
     public LessonDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();

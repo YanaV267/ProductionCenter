@@ -16,6 +16,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Add activity command.
+ */
 public class AddActivityCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ADD_ACTIVITY_ERROR_MESSAGE_KEY = "error.activity.add";

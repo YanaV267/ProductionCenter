@@ -9,6 +9,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Password encoder.
+ */
 public class PasswordEncoder {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ENCODING_TYPE = "SHA-1";
@@ -18,6 +23,12 @@ public class PasswordEncoder {
     private PasswordEncoder() {
     }
 
+    /**
+     * Encode optional.
+     *
+     * @param password the password
+     * @return the optional
+     */
     public static Optional<String> encode(String password) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ENCODING_TYPE);

@@ -27,6 +27,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.CARD;
 import static com.dev.productioncenter.controller.command.RequestAttribute.MESSAGE;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Pay for enrollment command.
+ */
 public class PayForEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String PAYING_FOR_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.pay";

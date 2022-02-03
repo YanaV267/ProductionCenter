@@ -7,6 +7,11 @@ import jakarta.servlet.annotation.*;
 
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Http session listener.
+ */
 @WebListener
 public class HttpSessionListenerImpl implements HttpSessionListener {
     private static final String DEFAULT_LOCALE = "en_US";

@@ -19,6 +19,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Lesson service.
+ */
 public class LessonServiceImpl implements LessonService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DELIMITER_REGEX = " ";
@@ -29,6 +34,11 @@ public class LessonServiceImpl implements LessonService {
     private LessonServiceImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static LessonService getInstance() {
         return instance;
     }

@@ -8,6 +8,11 @@ import jakarta.servlet.http.HttpSession;
 
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Change locale command.
+ */
 public class ChangeLocaleCommand implements Command {
     private static final String LANGUAGE_ENGLISH = "EN";
     private static final String LANGUAGE_RUSSIAN = "RU";

@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Activity dao.
+ */
 public class ActivityDaoImpl extends ActivityDao {
     private static final String SQL_INSERT_ACTIVITY =
             "INSERT INTO activities(category, type) VALUES (?, ?)";
@@ -21,9 +26,17 @@ public class ActivityDaoImpl extends ActivityDao {
     private static final String SQL_SELECT_ALL_CATEGORIES =
             "SELECT category FROM activities GROUP BY category";
 
+    /**
+     * Instantiates a new Activity dao.
+     */
     public ActivityDaoImpl() {
     }
 
+    /**
+     * Instantiates a new Activity dao.
+     *
+     * @param isTransaction the is transaction
+     */
     public ActivityDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();

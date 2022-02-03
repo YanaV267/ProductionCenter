@@ -13,6 +13,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.model.dao.ColumnName.BANK_CARD_BALANCE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Bank card dao.
+ */
 public class BankCardDaoImpl extends BankCardDao {
     private static final String SQL_UPDATE_BANK_CARD_BALANCE =
             "UPDATE bank_cards SET balance = ? WHERE card_number = ?";
@@ -26,6 +31,11 @@ public class BankCardDaoImpl extends BankCardDao {
     private BankCardDaoImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static BankCardDao getInstance() {
         return instance;
     }

@@ -19,6 +19,11 @@ import static com.dev.productioncenter.controller.command.RequestParameter.*;
 import static com.dev.productioncenter.controller.command.SessionAttribute.LAST;
 import static com.dev.productioncenter.controller.command.SessionAttribute.PAGE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Add course command.
+ */
 public class AddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

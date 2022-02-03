@@ -6,6 +6,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type User validator.
+ */
 public class UserValidatorImpl implements UserValidator {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String LOGIN_REGEX = "[\\p{Alpha}][\\p{Alpha}\\d]{4,29}";
@@ -19,6 +24,11 @@ public class UserValidatorImpl implements UserValidator {
     private UserValidatorImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static UserValidator getInstance() {
         return instance;
     }

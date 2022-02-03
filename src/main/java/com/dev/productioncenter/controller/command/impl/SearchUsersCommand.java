@@ -15,6 +15,11 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Search users command.
+ */
 public class SearchUsersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

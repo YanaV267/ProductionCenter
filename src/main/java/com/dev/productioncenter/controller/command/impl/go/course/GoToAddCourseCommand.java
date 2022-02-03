@@ -20,6 +20,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to add course command.
+ */
 public class GoToAddCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ActivityService activityService = ActivityServiceImpl.getInstance();

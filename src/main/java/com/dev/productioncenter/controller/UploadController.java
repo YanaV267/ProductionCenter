@@ -8,6 +8,11 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Upload controller.
+ */
 @WebServlet("/uploadController")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 16, maxFileSize = 1024 * 1024 * 16, maxRequestSize = 1024 * 1024 * 10 * 10)
 public class UploadController extends HttpServlet {

@@ -16,6 +16,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Change user role command.
+ */
 public class ChangeUserRoleCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String CHANGE_ROLES_ERROR_MESSAGE_KEY = "error.change.user_roles";

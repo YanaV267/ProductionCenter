@@ -23,6 +23,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_ENROLLMENT_ID;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Renew enrollment command.
+ */
 public class RenewEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String RENEW_ENROLLMENT_ERROR_MESSAGE_KEY = "error.enrollment.no_places";

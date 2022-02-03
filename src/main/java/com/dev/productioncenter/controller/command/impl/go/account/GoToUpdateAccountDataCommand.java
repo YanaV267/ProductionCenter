@@ -5,6 +5,11 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to update account data command.
+ */
 public class GoToUpdateAccountDataCommand implements Command {
 
     @Override

@@ -21,6 +21,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.UPLOADED_PICTURE;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Upload profile picture command.
+ */
 public class UploadProfilePictureCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String UPLOAD_PROFILE_PICTURE_CONFIRM_KEY = "confirm.upload_profile_picture";

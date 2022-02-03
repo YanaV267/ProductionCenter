@@ -20,6 +20,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to contacts command.
+ */
 public class GoToContactsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final UserService userService = UserServiceImpl.getInstance();

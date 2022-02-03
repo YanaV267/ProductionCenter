@@ -9,6 +9,11 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Sign out command.
+ */
 public class SignOutCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {

@@ -26,6 +26,11 @@ import java.util.*;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type User service.
+ */
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
@@ -38,6 +43,11 @@ public class UserServiceImpl implements UserService {
     private UserServiceImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static UserService getInstance() {
         return instance;
     }

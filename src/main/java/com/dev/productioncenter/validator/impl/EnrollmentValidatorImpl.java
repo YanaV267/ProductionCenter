@@ -4,6 +4,11 @@ import com.dev.productioncenter.validator.EnrollmentValidator;
 
 import java.util.Map;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Enrollment validator.
+ */
 public class EnrollmentValidatorImpl implements EnrollmentValidator {
     private static final String LESSON_AMOUNT_REGEX = "([1-9]|1[0-9]|20)";
     private static final EnrollmentValidator instance = new EnrollmentValidatorImpl();
@@ -12,6 +17,11 @@ public class EnrollmentValidatorImpl implements EnrollmentValidator {
 
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrollmentValidator getInstance() {
         return instance;
     }

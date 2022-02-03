@@ -6,6 +6,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Course validator.
+ */
 public class CourseValidatorImpl implements CourseValidator {
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String CATEGORY_REGEX = "[А-Я].[а-я]{3,20}";
@@ -24,6 +29,11 @@ public class CourseValidatorImpl implements CourseValidator {
     private CourseValidatorImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static CourseValidator getInstance() {
         return instance;
     }

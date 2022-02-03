@@ -17,6 +17,11 @@ import java.util.Optional;
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Sign in command.
+ */
 public class SignInCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SIGN_IN_ERROR_MESSAGE_KEY = "error.sign_in";

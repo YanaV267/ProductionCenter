@@ -10,12 +10,22 @@ import java.util.List;
 
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Lesson mapper.
+ */
 public class LessonMapper implements Mapper<Lesson> {
     private static final LessonMapper instance = new LessonMapper();
 
     private LessonMapper() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static LessonMapper getInstance() {
         return instance;
     }

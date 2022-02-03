@@ -23,6 +23,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.entity.EnrollmentStatus.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Enrollment service.
+ */
 public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final EnrollmentService instance = new EnrollmentServiceImpl();
@@ -30,6 +35,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private EnrollmentServiceImpl() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EnrollmentService getInstance() {
         return instance;
     }

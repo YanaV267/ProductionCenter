@@ -20,6 +20,11 @@ import java.util.Optional;
 import static com.dev.productioncenter.controller.command.RequestAttribute.CARD;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Replenish balance command.
+ */
 public class ReplenishBalanceCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String REPLENISH_BALANCE_CONFIRM_MESSAGE_KEY = "confirm.balance.replenish";

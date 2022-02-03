@@ -23,6 +23,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_ENROLLMENT_ID;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Cancel enrollment command.
+ */
 public class CancelEnrollmentCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DELETE_ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrollment.delete";

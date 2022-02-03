@@ -23,6 +23,11 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.MESSA
 import static com.dev.productioncenter.controller.command.RequestParameter.CHOSEN_COURSE_ID;
 import static com.dev.productioncenter.controller.command.RequestParameter.LESSON_AMOUNT;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Enroll on course command.
+ */
 public class EnrollOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ENROLLMENT_CONFIRM_MESSAGE_KEY = "confirm.enrolling_on_course";

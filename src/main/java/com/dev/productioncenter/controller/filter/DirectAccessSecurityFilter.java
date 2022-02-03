@@ -14,6 +14,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.PagePath.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Direct access security filter.
+ */
 @WebFilter(urlPatterns = "/pages/*")
 public class DirectAccessSecurityFilter implements Filter {
     private static final String ERROR_PAGE_PATH = "/pages/error";

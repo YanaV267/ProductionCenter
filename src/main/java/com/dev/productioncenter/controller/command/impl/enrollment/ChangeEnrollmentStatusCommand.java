@@ -15,6 +15,11 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Change enrollment status command.
+ */
 public class ChangeEnrollmentStatusCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

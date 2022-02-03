@@ -13,6 +13,11 @@ import java.util.EnumSet;
 import static com.dev.productioncenter.controller.command.CommandType.*;
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Session attribute filter.
+ */
 @WebFilter(urlPatterns = {"/controller"})
 public class SessionAttributeFilter implements Filter {
     private static final String DEFAULT_COMMAND = "go_to_home";

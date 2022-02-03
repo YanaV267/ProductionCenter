@@ -21,6 +21,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Bank card service.
+ */
 public class BankCardServiceImpl implements BankCardService {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String DATE_DELIMITER_REGEX = "/";
@@ -45,6 +50,11 @@ public class BankCardServiceImpl implements BankCardService {
         lastDayOfMonth.put(12, 31);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static BankCardService getInstance() {
         return instance;
     }

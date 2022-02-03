@@ -21,6 +21,11 @@ import java.util.Optional;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to enrolled on course command.
+ */
 public class GoToEnrolledOnCourseCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;

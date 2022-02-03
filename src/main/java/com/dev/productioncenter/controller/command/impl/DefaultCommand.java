@@ -5,6 +5,11 @@ import com.dev.productioncenter.controller.command.PagePath;
 import com.dev.productioncenter.controller.command.Router;
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Default command.
+ */
 public class DefaultCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {

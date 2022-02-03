@@ -16,6 +16,11 @@ import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
+/**
+ * @project Production Center
+ * @author YanaV
+ * The type Go to teachers command.
+ */
 public class GoToTeachersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final int DEFAULT_PAGE = 1;
