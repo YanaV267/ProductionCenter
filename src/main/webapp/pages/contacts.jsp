@@ -38,12 +38,16 @@
                 <p class="subtitle"><fmt:message key="header.teachers"/></p>
                 <c:forEach var="teacher" items="${requestScope.teachers}">
                     <div id="data">
-                        <div><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/>
-                            <c:forEach var="course" items="${requestScope.courses}">
-                                <c:if test="${course.teacher.surname eq teacher.key.surname
-                                && course.teacher.name eq teacher.key.name}"> - <c:out value="${course.activity.type}"/>
-                                </c:if>
-                            </c:forEach>
+                        <div>
+                            <div><c:out value="${teacher.key.surname}"/> <c:out value="${teacher.key.name}"/></div>
+                            <div>
+                                <c:forEach var="course" items="${requestScope.courses}">
+                                    <c:if test="${course.teacher.surname eq teacher.key.surname
+                                && course.teacher.name eq teacher.key.name}">
+                                        <div>- <c:out value="${course.activity.type}"/></div>
+                                    </c:if>
+                                </c:forEach>
+                            </div>
                         </div>
                         <div>
                             <div class="icons">

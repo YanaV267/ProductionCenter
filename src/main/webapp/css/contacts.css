@@ -63,6 +63,16 @@ form > div {
 #data > div:first-child {
     margin-top: 30px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    vertical-align: center;
+}
+
+#data > div:first-child > div:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 10px;
 }
 
 #data > div:last-child {

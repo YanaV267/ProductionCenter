@@ -1,11 +1,11 @@
 package com.dev.productioncenter.entity;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Activity.
+ * @project Production Center
  */
-public class Activity extends AbstractEntity {
+public class Activity extends AbstractEntity implements Cloneable {
     private String category;
     private String type;
 
@@ -93,6 +93,11 @@ public class Activity extends AbstractEntity {
         sb.append("category='").append(category);
         sb.append("', type='").append(type).append("'}");
         return sb.toString();
+    }
+
+    @Override
+    public Activity clone() throws CloneNotSupportedException {
+        return (Activity) super.clone();
     }
 
     /**

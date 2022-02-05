@@ -17,9 +17,9 @@ import java.util.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Course service.
+ * @project Production Center
  */
 public class CourseServiceImpl implements CourseService {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -83,8 +83,8 @@ public class CourseServiceImpl implements CourseService {
                         return true;
                     }
                 }
+                transaction.rollback();
             }
-            transaction.rollback();
             return false;
         } catch (DaoException exception) {
             try {
@@ -142,8 +142,8 @@ public class CourseServiceImpl implements CourseService {
                         return true;
                     }
                 }
+                transaction.rollback();
             }
-            transaction.rollback();
             return false;
         } catch (DaoException exception) {
             try {
@@ -189,7 +189,11 @@ public class CourseServiceImpl implements CourseService {
                         for (String weekday : weekdays) {
                             courses.addAll(courseDao.findCourseByActivityWeekday(activity, weekday, startElementNumber));
                         }
-                        return List.copyOf(courses);
+                        int endElementNumber = Math.min(startElementNumber + 15, courses.size());
+                        if (startElementNumber > endElementNumber) {
+                            return List.of();
+                        }
+                        return List.copyOf(courses).subList(startElementNumber, endElementNumber);
                     } else {
                         return courseDao.findCourseByActivity(activity, startElementNumber);
                     }
@@ -206,6 +210,9 @@ public class CourseServiceImpl implements CourseService {
                             courses.addAll(courseDao.findCourseByWeekday(weekday));
                         }
                         int endElementNumber = Math.min(startElementNumber + 15, courses.size());
+                        if (startElementNumber > endElementNumber) {
+                            return List.of();
+                        }
                         return List.copyOf(courses).subList(startElementNumber, endElementNumber);
                     }
                 }

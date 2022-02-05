@@ -21,9 +21,9 @@ import java.util.Map;
 import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Go to contacts command.
+ * @project Production Center
  */
 public class GoToContactsCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -33,7 +33,7 @@ public class GoToContactsCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         try {
-            List<Course> courses = courseService.findCourses();
+            List<Course> courses = courseService.findCoursesAvailableActivities();
             Map<User, String> employers = userService.findUsers(UserRole.ADMIN);
             Map<User, String> teachers = userService.findUsers(UserRole.TEACHER);
             request.setAttribute(COURSES, courses);

@@ -27,9 +27,9 @@ import java.util.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type User service.
+ * @project Production Center
  */
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -164,6 +164,10 @@ public class UserServiceImpl implements UserService {
             user.setUserRole(UserRole.USER);
             int startElementNumber = page * 15 - 15;
             List<User> foundUsers = new ArrayList<>();
+            if ((user.getSurname() == null || user.getSurname().isEmpty()) &&
+                    (user.getName() == null || user.getName().isEmpty()) && userData.get(STATUS) == null) {
+                foundUsers = userDao.findUsersByRole(UserRole.USER, page);
+            }
             if (user.getSurname() != null && !user.getSurname().isEmpty()) {
                 if (user.getName() != null && !user.getName().isEmpty()) {
                     if (userData.get(STATUS) != null) {
@@ -227,6 +231,10 @@ public class UserServiceImpl implements UserService {
             teacher.setUserRole(UserRole.TEACHER);
             int startElementNumber = page * 15 - 15;
             List<User> foundTeachers = new ArrayList<>();
+            if ((teacher.getSurname() == null || teacher.getSurname().isEmpty()) &&
+                    (teacher.getName() == null || teacher.getName().isEmpty()) && teacherData.get(STATUS) == null) {
+                foundTeachers = userDao.findUsersTeachers(startElementNumber);
+            }
             if (teacher.getSurname() != null && !teacher.getSurname().isEmpty()) {
                 if (teacher.getName() != null && !teacher.getName().isEmpty()) {
                     if (teacherData.get(STATUS) != null) {
@@ -315,7 +323,7 @@ public class UserServiceImpl implements UserService {
                             .setUserRole(UserRole.USER)
                             .build();
                     userDao.add(user);
-                    userDao.updateUserPassword(userData.get(PASSWORD), userData.get(LOGIN));
+                    userDao.updateUserPassword(password.get(), userData.get(LOGIN));
                     transaction.commit();
                     return true;
                 }
@@ -472,7 +480,7 @@ public class UserServiceImpl implements UserService {
                             .setUserRole(UserRole.USER)
                             .build();
                     userDao.update(user);
-                    userDao.updateUserPassword(userData.get(PASSWORD), userData.get(LOGIN));
+                    userDao.updateUserPassword(password.get(), userData.get(LOGIN));
                     transaction.commit();
                     return true;
                 }
@@ -537,7 +545,7 @@ public class UserServiceImpl implements UserService {
         Map<Course, String> teachersPictures = new HashMap<>();
         for (Course course : courses) {
             String login = course.getTeacher().getLogin();
-            Optional<String> picture = this.loadPicture(login);
+            Optional<String> picture = loadPicture(login);
             if (picture.isPresent()) {
                 teachersPictures.put(course, picture.get());
             } else {

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Course.
+ * @project Production Center
  */
-public class Course extends AbstractEntity {
+public class Course extends AbstractEntity implements Cloneable {
     private String description;
     private Activity activity;
     private AgeGroup ageGroup;
@@ -244,6 +244,20 @@ public class Course extends AbstractEntity {
         sb.append("', studentAmount=").append(studentAmount);
         sb.append("', courseStatus=").append(status);
         return sb.toString();
+    }
+
+    @Override
+    public Course clone() throws CloneNotSupportedException {
+        Course course = (Course) super.clone();
+        course.setDescription(description);
+        course.setActivity(activity.clone());
+        course.setAgeGroup(ageGroup.clone());
+        course.setTeacher(teacher.clone());
+        course.setLessons(List.copyOf(lessons));
+        course.setLessonPrice(lessonPrice);
+        course.setStudentAmount(studentAmount);
+        course.setStatus(status);
+        return course;
     }
 
     /**

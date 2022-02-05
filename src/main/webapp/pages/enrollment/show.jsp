@@ -15,8 +15,42 @@
 <jsp:include page="../main/header.jsp"/>
 <main>
     <div id="rect"></div>
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=change_enrollment_status">
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=search_enrollments">
         <p id="title"><fmt:message key="enrollment.all.title"/></p>
+        <div id="search">
+            <div id="enr_status">
+                <label>
+                    <input type="radio" name="status" value="reserved"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="enrollment.status.reserved"/>
+                </label>
+                <label>
+                    <input type="radio" name="status" value="expired"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="enrollment.status.expired"/>
+                </label>
+                <label>
+                    <input type="radio" name="status" value="renewed"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="enrollment.status.renewed"/>
+                </label>
+                <label>
+                    <input type="radio" name="status" value="paid"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="enrollment.status.paid"/>
+                </label>
+                <label>
+                    <input type="radio" name="status" value="approved"
+                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                    <fmt:message key="enrollment.status.approved"/>
+                </label>
+            </div>
+            <input type="button" name="clear" value="<fmt:message key="courses.clear"/>"
+                   onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_enrollments'">
+            <input type="submit" value="<fmt:message key="courses.search"/>">
+        </div>
+    </form>
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=change_enrollment_status">
         <c:if test="${fn:length(enrollments) > 0}">
             <div id="all">
                 <div><fmt:message key="enrollment.name"/></div>
@@ -50,7 +84,14 @@
                     </div>
                 </c:forEach>
             </div>
-            <ctg:pages page="${page}" last="${last}" command="go_to_enrollments"/>
+            <c:choose>
+                <c:when test="${not empty requestScope.selected_status}">
+                    <ctg:pages page="${page}" last="${last}" command="search_enrollments"/>
+                </c:when>
+                <c:otherwise>
+                    <ctg:pages page="${page}" last="${last}" command="go_to_enrollments"/>
+                </c:otherwise>
+            </c:choose>
         </c:if>
         <c:if test="${fn:length(enrollments) == 0}">
             <div id="none"><fmt:message key="enrollment.message"/></div>
@@ -60,7 +101,6 @@
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/enrollment/show.js"></script>
-<script src="${pageContext.request.contextPath}/script/height.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

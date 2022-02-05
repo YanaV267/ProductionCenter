@@ -14,9 +14,9 @@ import static com.dev.productioncenter.controller.command.CommandType.*;
 import static com.dev.productioncenter.controller.command.SessionAttribute.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Session attribute filter.
+ * @project Production Center
  */
 @WebFilter(urlPatterns = {"/controller"})
 public class SessionAttributeFilter implements Filter {

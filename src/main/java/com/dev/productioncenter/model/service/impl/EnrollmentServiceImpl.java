@@ -24,9 +24,9 @@ import java.util.Optional;
 import static com.dev.productioncenter.entity.EnrollmentStatus.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Enrollment service.
+ * @project Production Center
  */
 public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -133,6 +133,27 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new ServiceException("Error has occurred while finding user's enrollments: ", exception);
         } finally {
             lessonDao.closeConnection();
+        }
+    }
+
+    @Override
+    public Map<Enrollment, LocalDate> findEnrollments(String status, int page) throws ServiceException {
+        EnrollmentDao enrollmentDao = EnrollmentDaoImpl.getInstance();
+        try {
+            if (status == null) {
+                return findEnrollments(page);
+            }
+            int startElementNumber = page * 15 - 15;
+            EnrollmentStatus enrollmentStatus = EnrollmentStatus.valueOf(status.toUpperCase());
+            List<Enrollment> allEnrollments = enrollmentDao.findEnrollmentsByStatus(enrollmentStatus, startElementNumber);
+            Map<Enrollment, LocalDate> enrollments = new HashMap<>();
+            for (Enrollment enrollment : allEnrollments) {
+                enrollments.put(enrollment, enrollment.getReservationDateTime().toLocalDate());
+            }
+            return enrollments;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding enrollments by status: " + exception);
+            throw new ServiceException("Error has occurred while finding enrollments by status: ", exception);
         }
     }
 

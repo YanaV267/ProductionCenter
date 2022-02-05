@@ -48,3 +48,7 @@
     transition: all 0.6s;
     transform: scale(0.85);
 }
+
+.closeHide:after {
+    display: none;
+}

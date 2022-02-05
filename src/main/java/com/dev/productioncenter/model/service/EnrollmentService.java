@@ -67,12 +67,21 @@ public interface EnrollmentService {
     /**
      * Find enrollments map.
      *
+     * @param status the status
+     * @param page the page
+     * @return the map
+     * @throws ServiceException the service exception
+     */
+    Map<Enrollment, LocalDate> findEnrollments(String status, int page) throws ServiceException;
+
+    /**
+     * Find enrollments map.
+     *
      * @param page the page
      * @return the map
      * @throws ServiceException the service exception
      */
     Map<Enrollment, LocalDate> findEnrollments(int page) throws ServiceException;
-
     /**
      * Find enrollments map.
      *

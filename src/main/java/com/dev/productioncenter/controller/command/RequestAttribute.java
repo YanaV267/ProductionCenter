@@ -67,6 +67,10 @@ public final class RequestAttribute {
      */
     public static final String SELECTED_WEEKDAYS = "selected_weekdays";
     /**
+     * The constant SELECTED_STATUS.
+     */
+    public static final String SELECTED_STATUS = "selected_status";
+    /**
      * The constant TEACHERS.
      */
     public static final String TEACHERS = "teachers";

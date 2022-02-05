@@ -18,19 +18,23 @@ $('#all>div:nth-child(8n):not(:nth-child(-n+8))').on('click', function () {
     }
 });
 
-
-if ($('form').css('height') === $('form').css('min-height')) {
-    $('input[type=submit]').css({
+if ($('form:last-of-type').css('height') === $('form:last-of-type').css('min-height')) {
+    $('form:last-of-type input[type=submit]').css({
         'position': 'absolute',
         'left': '440px',
-        'top': '395px'
+        'top': '345px'
     });
     $('#pages').css({
         'position': 'absolute',
         'left': '440px',
-        'top': '335px'
+        'top': '285px'
     });
 } else {
-    $('input[type=submit]').css('position', 'relative');
+    $('form:last-of-type input[type=submit]').css('position', 'relative');
     $('#pages').css('position', 'relative');
 }
+
+let heightValue = $('form:last-of-type').height() + $('form:first-of-type').height() + 55;
+$('#rect').css('height', heightValue);
+$('form:last-of-type').css('margin-top', -50);
+$('form:first-of-type').css('margin-top', heightValue - heightValue * 2 - 10);

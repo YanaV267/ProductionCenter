@@ -3,11 +3,11 @@ package com.dev.productioncenter.entity;
 import java.math.BigInteger;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type User.
+ * @project Production Center
  */
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Cloneable {
     private String login;
     private String surname;
     private String name;
@@ -203,6 +203,11 @@ public class User extends AbstractEntity {
         sb.append(", userRole=").append(userRole);
         sb.append(", userStatus=").append(userStatus).append("}");
         return sb.toString();
+    }
+
+    @Override
+    public User clone() throws CloneNotSupportedException {
+        return (User) super.clone();
     }
 
     /**

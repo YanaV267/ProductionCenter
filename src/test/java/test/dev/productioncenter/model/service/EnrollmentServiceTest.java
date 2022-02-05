@@ -117,6 +117,23 @@ public class EnrollmentServiceTest {
     }
 
     @Test
+    public void findEnrollmentsByStatus() throws ServiceException, DaoException {
+        enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
+        daoProviderHolder.when(DaoProvider::getInstance).thenReturn(daoProvider);
+        when(daoProvider.getLessonDao(false)).thenReturn(lessonDao);
+
+        when(enrollmentDao.findEnrollmentsByStatus(any(EnrollmentStatus.class), anyInt())).thenReturn(List.of(
+                new Enrollment.EnrollmentBuilder()
+                        .setReservationDateTime(LocalDateTime.now())
+                        .build()));
+
+        String status = "paid";
+        int startElementNumber = 15;
+        Map<Enrollment, LocalDate> actual = enrollmentService.findEnrollments(status, startElementNumber);
+        Assert.assertFalse(actual.isEmpty());
+    }
+
+    @Test
     public void findEnrollments() throws ServiceException, DaoException {
         enrollmentDaoImpl.when(EnrollmentDaoImpl::getInstance).thenReturn(enrollmentDao);
 

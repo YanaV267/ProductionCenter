@@ -76,10 +76,11 @@ public abstract class EnrollmentDao extends BaseDao<Long, Enrollment> {
      * Find enrollments by status list.
      *
      * @param status the status
+     * @param startElementNumber the start element number
      * @return the list
      * @throws DaoException the dao exception
      */
-    abstract public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException;
+    abstract public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status, int startElementNumber) throws DaoException;
 
     /**
      * Find expired enrollments list.

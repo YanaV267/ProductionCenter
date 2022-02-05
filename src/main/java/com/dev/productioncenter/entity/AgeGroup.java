@@ -1,11 +1,11 @@
 package com.dev.productioncenter.entity;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Age group.
+ * @project Production Center
  */
-public class AgeGroup extends AbstractEntity {
+public class AgeGroup extends AbstractEntity implements Cloneable {
     private int minAge;
     private int maxAge;
 
@@ -90,6 +90,11 @@ public class AgeGroup extends AbstractEntity {
         sb.append("minAge=").append(minAge);
         sb.append(", maxAge=").append(maxAge).append("}");
         return sb.toString();
+    }
+
+    @Override
+    public AgeGroup clone() throws CloneNotSupportedException {
+        return (AgeGroup) super.clone();
     }
 
     /**

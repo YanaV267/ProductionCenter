@@ -58,11 +58,21 @@ p#title {
     width: 170px;
 }
 
+#search #enr_status {
+    display: flex;
+    flex-direction: row;
+    width: 620px;
+}
+
 #search #status > label :first-of-type {
     margin-left: 20px;
 }
 
-#search #status > label {
+#search #enr_status > label {
+    margin-right: 20px;
+}
+
+#search #status > label, #search #enr_status > label {
     cursor: pointer;
 }
 

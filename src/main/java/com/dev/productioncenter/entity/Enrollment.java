@@ -3,11 +3,11 @@ package com.dev.productioncenter.entity;
 import java.time.LocalDateTime;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Enrollment.
+ * @project Production Center
  */
-public class Enrollment extends AbstractEntity {
+public class Enrollment extends AbstractEntity implements Cloneable {
     private User user;
     private Course course;
     private int lessonAmount;
@@ -157,6 +157,17 @@ public class Enrollment extends AbstractEntity {
         sb.append(", reservationDateTime=").append(reservationDateTime);
         sb.append(", enrollmentStatus=").append(enrollmentStatus);
         return sb.toString();
+    }
+
+    @Override
+    public Enrollment clone() throws CloneNotSupportedException {
+        Enrollment enrollment = (Enrollment) super.clone();
+        enrollment.setUser(user.clone());
+        enrollment.setCourse(course.clone());
+        enrollment.setLessonAmount(lessonAmount);
+        enrollment.setReservationDateTime(reservationDateTime);
+        enrollment.setEnrollmentStatus(enrollmentStatus);
+        return enrollment;
     }
 
     /**

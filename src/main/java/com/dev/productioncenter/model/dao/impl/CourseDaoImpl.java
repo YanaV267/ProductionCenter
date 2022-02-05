@@ -20,9 +20,9 @@ import java.util.Optional;
 import static com.dev.productioncenter.model.dao.ColumnName.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Course dao.
+ * @project Production Center
  */
 public class CourseDaoImpl extends CourseDao {
     private static final String SQL_INSERT_COURSE =
@@ -111,12 +111,12 @@ public class CourseDaoImpl extends CourseDao {
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
                     "WHERE courses.status = 'upcoming' OR courses.status = 'running' LIMIT ?, 15";
     private static final String SQL_SELECT_COURSES_ALL_ACTIVITIES =
-            "SELECT courses.id_course, surname, name, category, type FROM courses " +
+            "SELECT courses.id_course, login, surname, name, category, type FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group GROUP BY surname, name, type";
     private static final String SQL_SELECT_COURSES_AVAILABLE_ACTIVITIES =
-            "SELECT courses.id_course, surname, name, category, type FROM courses " +
+            "SELECT courses.id_course, login, surname, name, category, type FROM courses " +
                     "JOIN users ON courses.id_teacher = users.id_user " +
                     "JOIN activities ON courses.id_activity = activities.id_activity " +
                     "JOIN age_group ON courses.id_age_group = age_group.id_age_group " +
@@ -392,6 +392,7 @@ public class CourseDaoImpl extends CourseDao {
                 Course course = new Course.CourseBuilder()
                         .setId(resultSet.getLong(COURSE_ID))
                         .setTeacher(new User.UserBuilder()
+                                .setLogin(resultSet.getString(USER_LOGIN))
                                 .setSurname(resultSet.getString(USER_SURNAME))
                                 .setName(resultSet.getString(USER_NAME))
                                 .build())
@@ -418,6 +419,7 @@ public class CourseDaoImpl extends CourseDao {
                 Course course = new Course.CourseBuilder()
                         .setId(resultSet.getLong(COURSE_ID))
                         .setTeacher(new User.UserBuilder()
+                                .setLogin(resultSet.getString(USER_LOGIN))
                                 .setSurname(resultSet.getString(USER_SURNAME))
                                 .setName(resultSet.getString(USER_NAME))
                                 .build())

@@ -191,7 +191,8 @@ public class EnrollmentDaoTest {
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(mapper.retrieve(any())).thenReturn(List.of());
 
-        List<Enrollment> actual = enrollmentDao.findEnrollmentsByStatus(EnrollmentStatus.APPROVED);
+        int startElementNumber = 15;
+        List<Enrollment> actual = enrollmentDao.findEnrollmentsByStatus(EnrollmentStatus.APPROVED, startElementNumber);
         Assert.assertTrue(actual.isEmpty());
     }
 

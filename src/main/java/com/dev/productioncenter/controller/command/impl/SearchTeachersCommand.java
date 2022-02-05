@@ -20,9 +20,9 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.USERS
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Search teachers command.
+ * @project Production Center
  */
 public class SearchTeachersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();

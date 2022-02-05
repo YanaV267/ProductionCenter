@@ -7,7 +7,7 @@ import java.time.LocalTime;
  * @author YanaV
  * The type Lesson.
  */
-public class Lesson extends AbstractEntity {
+public class Lesson extends AbstractEntity implements Cloneable{
     private Course course;
     private String weekDay;
     private LocalTime startTime;
@@ -132,5 +132,10 @@ public class Lesson extends AbstractEntity {
                 ", startTime=" + startTime +
                 ", duration=" + duration +
                 '}';
+    }
+
+    @Override
+    public Lesson clone() throws CloneNotSupportedException {
+        return (Lesson) super.clone();
     }
 }

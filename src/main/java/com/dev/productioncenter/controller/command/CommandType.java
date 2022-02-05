@@ -152,6 +152,10 @@ public enum CommandType {
      */
     UPDATE_ENROLLMENT(new UpdateEnrollmentCommand()),
     /**
+     * The Search enrollments.
+     */
+    SEARCH_ENROLLMENTS(new SearchEnrollmentsCommand()),
+    /**
      * The Renew enrollment.
      */
     RENEW_ENROLLMENT(new RenewEnrollmentCommand()),

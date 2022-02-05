@@ -16,9 +16,9 @@ import static com.dev.productioncenter.controller.command.RequestAttribute.*;
 import static com.dev.productioncenter.controller.command.RequestParameter.*;
 
 /**
- * @project Production Center
  * @author YanaV
  * The type Search users command.
+ * @project Production Center
  */
 public class SearchUsersCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();

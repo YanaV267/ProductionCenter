@@ -87,7 +87,7 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
                     "JOIN courses ON enrollments.id_course = courses.id_course " +
                     "JOIN users teacher ON courses.id_teacher = teacher.id_user " +
                     "JOIN activities ON activities.id_activity = courses.id_activity " +
-                    "WHERE enrollments.status = ?";
+                    "WHERE enrollments.status = ? LIMIT ?, 15";
     private static final String SQL_SELECT_EXPIRED_ENROLLMENTS =
             "SELECT id_enrollment, users.surname, users.name, enrollments.id_course, category, type, teacher.surname, " +
                     "teacher.name, lesson_amount, lesson_price, reservation_datetime, enrollments.status FROM enrollments " +
@@ -301,12 +301,13 @@ public class EnrollmentDaoImpl extends EnrollmentDao {
     }
 
     @Override
-    public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status) throws DaoException {
+    public List<Enrollment> findEnrollmentsByStatus(EnrollmentStatus status, int startElementNumber) throws DaoException {
         List<Enrollment> enrollments;
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ENROLLMENTS_BY_STATUS)) {
             preparedStatement.setString(1, status.getStatus());
+            preparedStatement.setInt(2, startElementNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 EnrollmentMapper enrollmentMapper = EnrollmentMapper.getInstance();
                 enrollments = enrollmentMapper.retrieve(resultSet);
