@@ -32,6 +32,7 @@
         <div>
             <p><a href="${pageContext.request.contextPath}/controller?command=change_locale&language=EN">EN</a></p>
             <p><a href="${pageContext.request.contextPath}/controller?command=change_locale&language=RU">RU</a></p>
+            <p><a href="${pageContext.request.contextPath}/controller?command=change_locale&language=DE">DE</a></p>
         </div>
     </div>
 </header>
