@@ -14,7 +14,8 @@
 <main>
     <div id="rect"></div>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course">
-        <p id="title"><fmt:message key="courses.info.title"/> "<c:out value="${requestScope.course.activity.type}"/>"</p>
+        <p id="title"><fmt:message key="courses.info.title"/> "<c:out
+                value="${requestScope.course.activity.type}"/>"</p>
         <div>
             <div>
                 <c:choose>
@@ -44,7 +45,8 @@
                 <div><fmt:message key="courses.age_group"/>: <c:out value="${requestScope.course.ageGroup.minAge}"/>-
                     <c:out value="${requestScope.course.ageGroup.maxAge}"/>
                     <fmt:message key="courses.age.title"/></div>
-                <div><fmt:message key="courses.lesson_price"/>: <c:out value="${requestScope.course.lessonPrice}"/>р</div>
+                <div><fmt:message key="courses.lesson_price"/>: <c:out value="${requestScope.course.lessonPrice}"/>р
+                </div>
             </div>
             <div>
                 <div><fmt:message key="courses.description"/>:</div>
@@ -71,10 +73,11 @@
                     <c:when test="${sessionScope.role eq 'guest' || sessionScope.role eq 'user'}">
                         <input type="submit" value="<fmt:message key="courses.enroll"/>">
                     </c:when>
-                    <c:otherwise>
+                    <c:when test="${sessionScope.role eq 'admin' || (sessionScope.role eq 'teacher'&& sessionScope.user.surname
+                    eq requestScope.course.teacher.surname && sessionScope.user.name eq requestScope.course.teacher.name)}">
                         <input type="button" name="enrolled" value="<fmt:message key="courses.enrolled"/>"
-                        onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enrolled_on_course&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
-                    </c:otherwise>
+                               onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enrolled_on_course&chosen_course_id=`+document.querySelector('[name=chosen_course_id]').value">
+                    </c:when>
                 </c:choose>
                 <input type="button" value="<fmt:message key="courses.back"/>"
                        onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_courses'">

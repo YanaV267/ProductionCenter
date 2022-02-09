@@ -74,6 +74,7 @@ form > div > div:nth-child(4) {
 
 form > div > div:nth-child(4) :last-child {
     margin-left: 30px;
+    margin-right: 20px;
 }
 
 .timetable {

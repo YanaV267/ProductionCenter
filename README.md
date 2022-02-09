@@ -4,7 +4,7 @@ The web project provide various courses on different musical directions (vocal, 
 User can look through activities, courses & choose the most preferable, and after enrolling on some has convenient access
 to the timetable & all personal enrollments. Teacher in his turn has access to personal timetable. Admin have rights to 
 manage users & teachers, courses & enrollments etc. 4 access roles are provided: Guest, User, Teacher & Admin. Also 
-project is supplied with localization into 4 languages: English, Russian & Deutsch.
+project is supplied with localization into 3 languages: English, Russian & Deutsch.
 
 ### Admin
 

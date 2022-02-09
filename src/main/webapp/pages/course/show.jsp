@@ -65,11 +65,11 @@
                                    onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_update_course&chosen_course_id=`
                                            + document.querySelector('[name=chosen_course_id]').value">
                         </c:when>
-                        <c:otherwise>
+                        <c:when test="${sessionScope.role != 'teacher'}">
                             <input type="button" value="<fmt:message key="courses.enroll"/>" disabled
                                    onclick="location.href=`${pageContext.request.contextPath}/controller?command=go_to_enroll_on_course&chosen_course_id=`
                                            + document.querySelector('[name=chosen_course_id]').value">
-                        </c:otherwise>
+                        </c:when>
                     </c:choose>
                 </div>
             </div>
