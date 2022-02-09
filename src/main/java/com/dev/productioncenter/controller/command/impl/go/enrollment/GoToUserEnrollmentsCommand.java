@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import static com.dev.productioncenter.controller.command.RequestAttribute.ENROLLMENTS;
-import static com.dev.productioncenter.controller.command.RequestAttribute.LAST;
 
 /**
  * @project Production Center
@@ -36,9 +35,7 @@ public class GoToUserEnrollmentsCommand implements Command {
         try {
             if (enrollmentService.checkEnrollmentsReservationStatus()) {
                 Map<Enrollment, LocalDate> enrollments = enrollmentService.findEnrollments(user);
-                Map<Enrollment, LocalDate> nextEnrollments = enrollmentService.findEnrollments(user);
-                request.setAttribute(ENROLLMENTS, enrollments);
-                request.setAttribute(LAST, nextEnrollments);
+                session.setAttribute(ENROLLMENTS, enrollments);
                 return new Router(PagePath.SHOW_USER_ENROLLMENTS, Router.RouterType.FORWARD);
             }
         } catch (ServiceException exception) {

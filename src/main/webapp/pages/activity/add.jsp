@@ -24,7 +24,7 @@
                placeholder="<fmt:message key="activities.new_category.placeholder"/>"
                pattern="[а-яА-Я]{3,20}" title="<fmt:message key="activities.new_category.title"/>">
         <input type="text" name="type" autocomplete="off" value="<c:out value="${requestScope.activity.type}"/>"
-               placeholder="<fmt:message key="activities.type"/>"
+               placeholder="<fmt:message key="activities.type"/>" required
                pattern="[a-zA-Zа-яА-Я \\-&]{3,30}" title="<fmt:message key="activities.type.title"/>">
         <div id="buttons">
             <input type="button" value="<fmt:message key="activities.reset"/>">

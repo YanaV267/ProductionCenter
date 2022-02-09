@@ -36,12 +36,12 @@
                                value="<c:out value="${enrollment.key.lessonAmount}"/>"
                         <c:if test="${enrollment.key.enrollmentStatus.status eq 'expired'
                         or enrollment.key.enrollmentStatus.status eq 'paid' or enrollment.key.enrollmentStatus.status eq 'approved'}">
-                               disabled
+                               readonly
                         </c:if>>
                     </div>
                     <div><c:out value="${enrollment.key.lessonAmount * enrollment.key.course.lessonPrice}"/></div>
                     <div><c:out value="${enrollment.value}"/></div>
-                    <div id="status"><c:out value="${enrollment.key.enrollmentStatus.status}"/></div>
+                    <div class="status"><c:out value="${enrollment.key.enrollmentStatus.status}"/></div>
                 </c:forEach>
             </div>
         </c:if>

@@ -6,6 +6,15 @@ form {
     grid-template-columns: 260px 190px 140px 110px 160px 110px;
 }
 
+#all > div:nth-child(-n+7) {
+    height: 34px;
+    line-height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 #buttons {
     display: flex;
     justify-content: center;

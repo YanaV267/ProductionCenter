@@ -1,6 +1,6 @@
 form {
     height: 340px;
-    width: 500px;
+    width: 600px;
     border-radius: 10px;
     background: rgba(214, 233, 255, 0.65);
     margin: -430px 50px 50px 240px;
@@ -17,7 +17,7 @@ form {
 }
 
 #rect {
-    width: 580px;
+    width: 680px;
     height: 380px;
     margin: 50px 80px 80px 210px;
     position: relative;
@@ -40,7 +40,7 @@ form div {
 }
 
 form > div {
-    width: 500px;
+    width: 600px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -54,7 +54,7 @@ form > div > div {
 }
 
 form > div > div:nth-child(2n) {
-    margin-left: 40px;
+    margin-left: 90px;
 }
 
 form > div > div > div:first-child {
@@ -70,8 +70,8 @@ form > div > div > div {
 #amount {
     display: flex;
     flex-direction: column;
-    width: 200px;
-    margin-left: 70px;
+    width: 250px;
+    margin-left: 120px;
 }
 
 #amount > div:first-child {
@@ -81,11 +81,11 @@ form > div > div > div {
 .timetable {
     display: flex;
     flex-direction: column;
-    width: 220px;
+    width: 230px;
 }
 
 .timetable > div {
-    text-align: left;
+    text-align: left !important;
 }
 
 .timetable > div:not(:first-child) {

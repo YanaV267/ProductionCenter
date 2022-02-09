@@ -48,6 +48,20 @@ input[type=button]:hover {
     border-radius: 0;
 }
 
+#all > div:nth-child(-n+4) {
+    height: 34px !important;
+    line-height: 18px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#all > div:not(:nth-child(-n+4)) {
+    font-size: 14px !important;
+    font-weight: normal !important;
+}
+
 #all > div:nth-child(4n+1) {
     border-left: 1px solid rgb(11, 35, 78);
     border-radius: 15px 0 0 15px;
@@ -59,7 +73,7 @@ input[type=button]:hover {
     cursor: default;
 }
 
-#all > div:not(:nth-child(-n+7)) {
+#all > div:not(:nth-child(-n+4)) {
     line-height: unset;
     height: 21px;
 }

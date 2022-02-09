@@ -26,8 +26,8 @@ public class SessionAttributeFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
         excludingCommands = EnumSet.of(GO_TO_COURSE_INFO, SEARCH_COURSES, GO_TO_UPDATE_COURSE, UPDATE_COURSE,
-                GO_TO_ENROLL_ON_COURSE, ENROLL_ON_COURSE, GO_TO_ADD_ACTIVITY, ADD_ACTIVITY, GO_TO_REPLENISH_BALANCE,
-                REPLENISH_BALANCE);
+                GO_TO_ENROLL_ON_COURSE, ENROLL_ON_COURSE, GO_TO_ADD_ACTIVITY, ADD_ACTIVITY,
+                GO_TO_REPLENISH_BALANCE, REPLENISH_BALANCE);
     }
 
     @Override
@@ -46,8 +46,12 @@ public class SessionAttributeFilter implements Filter {
             session.removeAttribute(PICTURE);
             session.removeAttribute(COURSES);
         }
-        session.removeAttribute(ENROLLMENTS);
-        session.removeAttribute(COURSE);
+        if (commandType != RENEW_ENROLLMENT) {
+            session.removeAttribute(ENROLLMENTS);
+        }
+        if (commandType != UPDATE_COURSE) {
+            session.removeAttribute(COURSE);
+        }
         session.removeAttribute(USERS);
         session.removeAttribute(PAGE);
         session.removeAttribute(MESSAGE);

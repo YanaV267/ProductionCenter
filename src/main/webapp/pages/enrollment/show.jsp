@@ -21,27 +21,27 @@
             <div id="enr_status">
                 <label>
                     <input type="radio" name="status" value="reserved"
-                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                           <c:if test="${requestScope.selected_status eq 'reserved'}">checked</c:if>>
                     <fmt:message key="enrollment.status.reserved"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="expired"
-                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                           <c:if test="${requestScope.selected_status eq 'expired'}">checked</c:if>>
                     <fmt:message key="enrollment.status.expired"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="renewed"
-                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                           <c:if test="${requestScope.selected_status eq 'renewed'}">checked</c:if>>
                     <fmt:message key="enrollment.status.renewed"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="paid"
-                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                           <c:if test="${requestScope.selected_status eq 'paid'}">checked</c:if>>
                     <fmt:message key="enrollment.status.paid"/>
                 </label>
                 <label>
                     <input type="radio" name="status" value="approved"
-                           <c:if test="${not empty requestScope.teacher.status}">checked</c:if>>
+                           <c:if test="${requestScope.selected_status eq 'approved'}">checked</c:if>>
                     <fmt:message key="enrollment.status.approved"/>
                 </label>
             </div>
@@ -101,6 +101,7 @@
 </main>
 <script src="${pageContext.request.contextPath}/script/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/script/enrollment/show.js"></script>
+<script src="${pageContext.request.contextPath}/script/enrollment/height.js"></script>
 </body>
 <jsp:include page="../main/footer.jsp"/>
 </html>

@@ -61,6 +61,7 @@ p#title {
 #search #enr_status {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     width: 620px;
 }
 
@@ -70,6 +71,7 @@ p#title {
 
 #search #enr_status > label {
     margin-right: 20px;
+    width: 160px;
 }
 
 #search #status > label, #search #enr_status > label {

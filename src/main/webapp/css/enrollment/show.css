@@ -51,10 +51,20 @@ input:focus + .slider {
     box-shadow: 0 0 1px #167e19;
 }
 
+form:last-of-type input[type=submit] {
+    margin-top: 0;
+}
+
 #all > div:nth-child(-n+8) {
     font-size: 15px;
     font-weight: bold;
     cursor: default;
+    height: 34px;
+    line-height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 #all > div:not(:nth-child(-n+8)) {

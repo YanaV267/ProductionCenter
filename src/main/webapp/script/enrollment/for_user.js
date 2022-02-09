@@ -10,6 +10,7 @@ $('#all>div:not(:nth-child(-n+7))').on('click', function () {
             hasClass = true;
         $(`#all > div:nth-child(${7 * row + i})`).removeClass('color');
     }
+    $('input[type=button]').prop('disabled', true);
     if (!hasClass) {
         let counter = 1;
         $('input[name=enrollment_id]').each(function () {
@@ -21,12 +22,11 @@ $('#all>div:not(:nth-child(-n+7))').on('click', function () {
         for (let i = 1; i < 8; i++) {
             $(`#all > div:nth-child(${7 * row + i})`).toggleClass('color');
         }
-        if ($(`#status:eq(${row - 1})`).text() === 'expired')
+        if ($(`.status:eq(${row - 1})`).text() === 'expired') {
             $('input[name=renew]').prop('disabled', false);
-        else if ($(`#status:eq(${row - 1})`).text() !== 'paid' && $(`#status:eq(${row - 1})`).text() !== 'approved')
+        } else if ($(`.status:eq(${row - 1})`).text() !== 'paid' && $(`.status:eq(${row - 1})`).text() !== 'approved') {
             $('input[type=button]:not([name=renew])').prop('disabled', false);
-    } else {
-        $('input[type=button]').prop('disabled', true);
+        }
     }
 });
 
@@ -43,7 +43,7 @@ $('input[type=number]').on('click', function () {
             if ($(`#all > div:nth-child(${7 * (index + 1) + 5})`).addClass('color'))
                 if ($(this).data('price') === undefined)
                     $(this).data('price', $(`#all > div:nth-child(${7 * (index + 1) + 5})`).text() / $(this).data('val'));
-            $(`#all > div:nth-child(${7 * (index + 1) + 5})`).text($(this).data('price') * $(clicked).val());
+            $(`#all > div:nth-child(${7 * (index + 1) + 5})`).text(($(this).data('price') * $(clicked).val()).toFixed(2));
         }
     });
 });
